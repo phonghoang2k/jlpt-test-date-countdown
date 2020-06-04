@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jlpt_testdate_countdown/views/pages/home_page.dart';
+
+import 'views/pages/myhomepage.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,6 +15,6 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: HomePage());
+        home: MyHomePage());
   }
 }
