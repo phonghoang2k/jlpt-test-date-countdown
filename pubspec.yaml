@@ -32,6 +32,12 @@ dependencies:
   flutter_bloc: ^4.0.0
   equatable: ^1.2.0
   carousel_slider: ^2.1.0
+  fab_circular_menu: ^1.0.0
+  flutter_sound: ^5.0.1
+  path_provider: ^1.6.10
+  permission_handler: ^5.0.0+hotfix.8
+  audio_recorder: ^1.0.2
+  audioplayers: ^0.15.1
 
 dev_dependencies:
   flutter_test:

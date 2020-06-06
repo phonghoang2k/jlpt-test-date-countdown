@@ -2,12 +2,17 @@ import 'dart:async';
 
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jlpt_testdate_countdown/custom/config.dart';
 import 'package:jlpt_testdate_countdown/src/blocs/bloc.dart';
 import 'package:jlpt_testdate_countdown/src/models/date.dart';
+import 'package:jlpt_testdate_countdown/settings/configuration.dart';
+import 'package:jlpt_testdate_countdown/settings/sizeconfig.dart';
+import 'package:jlpt_testdate_countdown/src/resources/repository.dart';
+import 'package:jlpt_testdate_countdown/src/views/screens/detailscountdown.dart';
+import 'package:jlpt_testdate_countdown/src/views/screens/recordermessage.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -17,25 +22,16 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   CarouselController buttonCarouselController = CarouselController();
   String time = "08/08/2020";
-  int imageIndex = 0;
-  List<AssetImage> imageAssetsLink = <AssetImage>[];
 
   @override
   void initState() {
     super.initState();
     loadCountTime(context);
-    imageAssetsLink = [
-      AssetImage(
-        "assets/meo1.jpg",
-      ),
-      AssetImage(
-        "assets/meo2.jpg",
-      ),
-    ];
   }
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       body: Stack(children: <Widget>[
         Container(
@@ -163,21 +159,48 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ]),
+      floatingActionButton: FabCircularMenu(
+          ringColor: Colors.white,
+          fabOpenColor: Colors.white,
+          fabCloseColor: Colors.white,
+
+          // ringDiameter: 350,
+          animationCurve: Curves.easeInOut,
+          children: <Widget>[
+            // IconButton(icon: Icon(Icons.home), onPressed: () {}),
+            // IconButton(icon: Icon(Icons.share), onPressed: () {}),
+            // IconButton(icon: Icon(Icons.error_outline), onPressed: () {}),
+            IconButton(
+                icon: Icon(Icons.timer),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DetailCountDown()));
+                }),
+            IconButton(
+                icon: Icon(Icons.mic),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Recorder()));
+                })
+          ]),
     );
   }
 
   CarouselSlider buildCarouselSlider(BuildContext context, Date date) {
     return CarouselSlider(
       items: [
-        buildColumnWithData(context, date, "Ngày"),
-        buildColumnWithData(context, date, "Giờ"),
-        buildColumnWithData(context, date, "Phút"),
-        buildColumnWithData(context, date, "Giây"),
-        buildColumnWithData(context, date, "Tháng"),
-        buildColumnWithData(context, date, "Tuần"),
+        buildColumnWithData(context, date, "NGÀY"),
+        buildColumnWithData(context, date, "GIỜ"),
+        buildColumnWithData(context, date, "PHÚT"),
+        buildColumnWithData(context, date, "GIÂY"),
+        buildColumnWithData(context, date, "THÁNG"),
+        buildColumnWithData(context, date, "TUẦN"),
       ],
       carouselController: buttonCarouselController,
       options: CarouselOptions(
+
         autoPlay: false,
         enlargeCenterPage: true,
         viewportFraction: 0.9,
@@ -190,7 +213,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void loadCountTime(BuildContext context) {
     final dateBloc = BlocProvider.of<DateBloc>(context);
     Timer.periodic(Duration(seconds: 1), (timer) {
-      dateBloc.add(GetDate(Config.testDate));
+      dateBloc.add(GetDate(testDate));
     });
   }
 
@@ -212,29 +235,29 @@ class _MyHomePageState extends State<MyHomePage> {
 
   int counting(Date date, String type) {
     switch (type) {
-      case "Ngày":
+      case "NGÀY":
         {
           return date.timeLeft.inDays;
         }
-      case "Giờ":
+      case "GIỜ":
         {
           return date.timeLeft.inHours;
         }
-      case "Phút":
+      case "PHÚT":
         {
           return date.timeLeft.inMinutes;
         }
-      case "Giây":
+      case "GIÂY":
         {
           return date.timeLeft.inSeconds;
         }
-      case "Tháng":
+      case "THÁNG":
         {
-          return (date.timeLeft.inDays / 30).toInt();
+          return (date.timeLeft.inDays ~/ 30).toInt();
         }
-      case "Tuần":
+      case "TUẦN":
         {
-          return (date.timeLeft.inDays / 7).toInt();
+          return (date.timeLeft.inDays ~/ 7).toInt();
         }
     }
   }

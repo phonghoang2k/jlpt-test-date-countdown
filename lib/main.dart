@@ -11,15 +11,15 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Đếm ngược ngày thi JLPT',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: BlocProvider(
-          create: (context) => DateBloc(FakeDateRepository()),
-          child: MyHomePage(),
+    return BlocProvider(
+        create: (context) => DateBloc(FakeDateRepository()),
+        child: MaterialApp(
+          title: 'Đếm ngược ngày thi JLPT',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          home: MyHomePage(),
         ));
   }
 }
