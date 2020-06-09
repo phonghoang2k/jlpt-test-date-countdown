@@ -15,27 +15,9 @@ class DetailCountDown extends StatefulWidget {
 }
 
 class DetailCountDownState extends State<DetailCountDown> {
-  Timer timer;
-
   @override
   void initState() {
     super.initState();
-    loadCountTime(context);
-  }
-
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   // Immediately trigger the event
-  //   BlocProvider.of<DateBloc>(context)
-  //     .add(GetDate(testDate));
-  // }
-
-  void loadCountTime(BuildContext context) {
-    final CountBloc dateBloc = BlocProvider.of<CountBloc>(context);
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      dateBloc.add(GetDate(Config.testDate));
-    });
   }
 
   @override
@@ -53,8 +35,14 @@ class DetailCountDownState extends State<DetailCountDown> {
             ),
           ),
           Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
             padding: EdgeInsets.only(top: 40, left: 20),
             alignment: Alignment.topLeft,
             child: GestureDetector(
@@ -107,13 +95,13 @@ class DetailCountDownState extends State<DetailCountDown> {
                       return Row(
                         children: <Widget>[
                           const Expanded(child: SizedBox()),
-                          buildColumnWithData("$daysLeft", "NGÀY"),
+                          _buildColumnWithData("$daysLeft", "NGÀY"),
                           const SizedBox(width: 20),
-                          buildColumnWithData("$hoursleft", "GIỜ"),
+                          _buildColumnWithData("$hoursleft", "GIỜ"),
                           const SizedBox(width: 20),
-                          buildColumnWithData("$minutesLeft", "PHÚT"),
+                          _buildColumnWithData("$minutesLeft", "PHÚT"),
                           const SizedBox(width: 20),
-                          buildColumnWithData("$secondsLeft", "GIÂY"),
+                          _buildColumnWithData("$secondsLeft", "GIÂY"),
                           const Expanded(child: SizedBox()),
                         ],
                       );
@@ -130,7 +118,7 @@ class DetailCountDownState extends State<DetailCountDown> {
     );
   }
 
-  Widget buildColumnWithData(String time, String type) {
+  Widget _buildColumnWithData(String time, String type) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[

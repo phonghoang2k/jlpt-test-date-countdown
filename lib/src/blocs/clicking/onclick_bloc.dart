@@ -17,23 +17,23 @@ class OnclickBloc extends Bloc<OnclickEvent, OnclickState> {
     yield Loading();
 
     if (event is GetNewsBackground) {
-//      Config.imageIndex = Random().nextInt(Config.imageAssetsLink.length);
-//      yield BackgroundLoaded(Config.imageIndex);
-      yield* _mapEventUpdateBackgroundToState();
+      Config.imageIndex = Random().nextInt(Config.imageAssetsLink.length);
+      yield BackgroundLoaded(Config.imageIndex);
+//      yield* _mapEventUpdateBackgroundToState();
     } else if (event is GetNewsQuote) {
-      yield* _mapEventUpdateQuoteToState();
-//      Config.quoteIndex = Random().nextInt(Config.quoteString.length);
-//      yield QuoteLoaded(Config.imageIndex);
+//      yield* _mapEventUpdateQuoteToState();
+      Config.quoteIndex = Random().nextInt(Config.quoteString.length);
+      yield QuoteLoaded(Config.imageIndex);
     }
   }
 
-  Stream<OnclickState> _mapEventUpdateBackgroundToState() async* {
-    Config.imageIndex = Random().nextInt(Config.imageAssetsLink.length);
-    yield BackgroundLoaded(Config.imageIndex);
-  }
-
-  Stream<OnclickState> _mapEventUpdateQuoteToState() async* {
-    Config.quoteIndex = Random().nextInt(Config.quoteString.length);
-    yield QuoteLoaded(Config.imageIndex);
-  }
+//  Stream<OnclickState> _mapEventUpdateBackgroundToState() async* {
+//    Config.imageIndex = Random().nextInt(Config.imageAssetsLink.length);
+//    yield BackgroundLoaded(Config.imageIndex);
+//  }
+//
+//  Stream<OnclickState> _mapEventUpdateQuoteToState() async* {
+//    Config.quoteIndex = Random().nextInt(Config.quoteString.length);
+//    yield QuoteLoaded(Config.imageIndex);
+//  }
 }
