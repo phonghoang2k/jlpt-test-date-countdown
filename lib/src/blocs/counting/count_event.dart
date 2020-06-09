@@ -1,15 +1,14 @@
 import 'package:equatable/equatable.dart';
 
-abstract class DateEvent extends Equatable {
-  const DateEvent();
+abstract class CountEvent extends Equatable {
+  const CountEvent();
 }
 
-class GetDate extends DateEvent {
+class GetDate extends CountEvent {
   final DateTime testDate;
 
   const GetDate(this.testDate);
 
   @override
-  // TODO: implement props
   List<Object> get props => [testDate];
 }

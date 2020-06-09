@@ -2,12 +2,17 @@ import 'dart:async';
 
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jlpt_testdate_countdown/custom/config.dart';
-import 'package:jlpt_testdate_countdown/src/blocs/bloc.dart';
+import 'package:jlpt_testdate_countdown/settings/configuration.dart';
+import 'package:jlpt_testdate_countdown/settings/sizeconfig.dart';
+import 'package:jlpt_testdate_countdown/src/blocs/clicking/bloc.dart';
+import 'package:jlpt_testdate_countdown/src/blocs/counting/bloc.dart';
 import 'package:jlpt_testdate_countdown/src/models/date.dart';
+import 'package:jlpt_testdate_countdown/src/views/screens/detailscountdown.dart';
+import 'package:jlpt_testdate_countdown/src/views/screens/recordermessage.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -16,35 +21,35 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   CarouselController buttonCarouselController = CarouselController();
-  String time = "08/08/2020";
-  int imageIndex = 0;
-  List<AssetImage> imageAssetsLink = <AssetImage>[];
+  Timer timer;
 
   @override
   void initState() {
     super.initState();
     loadCountTime(context);
-    imageAssetsLink = [
-      AssetImage(
-        "assets/meo1.jpg",
-      ),
-      AssetImage(
-        "assets/meo2.jpg",
-      ),
-    ];
+    loadNewBackgroundImage(context);
+    loadNewQuote(context);
   }
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       body: Stack(children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: imageAssetsLink[imageIndex],
-              fit: BoxFit.cover,
-            ),
-          ),
+        BlocBuilder<OnclickBloc, OnclickState>(
+          condition: (previousState, state) {
+            return state is BackgroundLoaded;
+          },
+          builder: (context, state) {
+            return Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: Config.imageAssetsLink[Config.imageIndex],
+                  fit: BoxFit.cover,
+                ),
+              ),
+            );
+          },
         ),
         Container(
             width: MediaQuery.of(context).size.width - 20,
@@ -88,13 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         size: 25,
                       ),
                       onPressed: () {
-                        setState(() {
-                          if (imageIndex < imageAssetsLink.length - 1) {
-                            imageIndex++;
-                          } else if (imageIndex == imageAssetsLink.length - 1) {
-                            imageIndex = 0;
-                          }
-                        });
+                        loadNewBackgroundImage(context);
                       }),
                   SizedBox(width: 20),
                 ],
@@ -113,20 +112,26 @@ class _MyHomePageState extends State<MyHomePage> {
                         color: Colors.white,
                       ),
                     ),
-                    Container(
-                      child: BlocBuilder<DateBloc, DateState>(
+                    GestureDetector(
+                      child: BlocBuilder<CountBloc, CountState>(
                         builder: (context, state) {
-                          if (state is DateInitial) {
-                            return CircularProgressIndicator();
-                          } else if (state is DateLoading) {
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          } else if (state is DateLoaded) {
+                          if (state is CountLoaded) {
                             return buildCarouselSlider(context, state.date);
+                          } else {
+                            return Center(child: CircularProgressIndicator());
                           }
                         },
                       ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => BlocProvider.value(
+                                      value:
+                                          BlocProvider.of<CountBloc>(context),
+                                      child: DetailCountDown(),
+                                    )));
+                      },
                     ),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -134,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           Icon(Icons.timer, color: Colors.white, size: 25),
                           SizedBox(width: 5),
                           Text(
-                            "Ngày thi: $time",
+                            "Ngày thi: ${formatVietnameseDateStyle(Config.testDate)}",
                             style: TextStyle(color: Colors.white),
                           ),
                         ]),
@@ -148,13 +153,20 @@ class _MyHomePageState extends State<MyHomePage> {
                         size: 30,
                       ),
                       onPressed: () {
-                        // TODO: Implement function
+                        loadNewQuote(context);
                       },
                     ),
-                    Text(
-                      "Không làm mà đòi ăn, thì chỉ có ăn đầu buồi, ăn cứt",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white),
+                    BlocBuilder<OnclickBloc, OnclickState>(
+                      condition: (previousState, state) {
+                        return state is QuoteLoaded;
+                      },
+                      builder: (context, state) {
+                        return Text(
+                          Config.quoteString[Config.quoteIndex],
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -163,18 +175,48 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ]),
+      floatingActionButton: FabCircularMenu(
+          ringColor: Config.colorApp,
+          fabOpenColor: Config.colorApp,
+          fabCloseColor: Config.colorApp,
+
+          // ringDiameter: 350,
+          animationCurve: Curves.easeInOut,
+          children: <Widget>[
+            // IconButton(icon: Icon(Icons.home), onPressed: () {}),
+            // IconButton(icon: Icon(Icons.share), onPressed: () {}),
+            // IconButton(icon: Icon(Icons.error_outline), onPressed: () {}),
+            IconButton(
+              icon: Icon(Icons.timer),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => BlocProvider.value(
+                              value: BlocProvider.of<CountBloc>(context),
+                              child: DetailCountDown(),
+                            )));
+              },
+            ),
+            IconButton(
+                icon: Icon(Icons.mic),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Recorder()));
+                })
+          ]),
     );
   }
 
   CarouselSlider buildCarouselSlider(BuildContext context, Date date) {
     return CarouselSlider(
       items: [
-        buildColumnWithData(context, date, "Ngày"),
-        buildColumnWithData(context, date, "Giờ"),
-        buildColumnWithData(context, date, "Phút"),
-        buildColumnWithData(context, date, "Giây"),
-        buildColumnWithData(context, date, "Tháng"),
-        buildColumnWithData(context, date, "Tuần"),
+        buildColumnWithData(context, date, "NGÀY"),
+        buildColumnWithData(context, date, "GIỜ"),
+        buildColumnWithData(context, date, "PHÚT"),
+        buildColumnWithData(context, date, "GIÂY"),
+        buildColumnWithData(context, date, "THÁNG"),
+        buildColumnWithData(context, date, "TUẦN"),
       ],
       carouselController: buttonCarouselController,
       options: CarouselOptions(
@@ -188,10 +230,19 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void loadCountTime(BuildContext context) {
-    final dateBloc = BlocProvider.of<DateBloc>(context);
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    final dateBloc = BlocProvider.of<CountBloc>(context);
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       dateBloc.add(GetDate(Config.testDate));
+//    print("1");
     });
+  }
+
+  void loadNewBackgroundImage(BuildContext context) {
+    BlocProvider.of<OnclickBloc>(context)..add(GetNewsBackground());
+  }
+
+  void loadNewQuote(BuildContext context) {
+    BlocProvider.of<OnclickBloc>(context)..add(GetNewsQuote());
   }
 
   Column buildColumnWithData(BuildContext context, Date date, String type) {
@@ -212,30 +263,36 @@ class _MyHomePageState extends State<MyHomePage> {
 
   int counting(Date date, String type) {
     switch (type) {
-      case "Ngày":
+      case "NGÀY":
         {
           return date.timeLeft.inDays;
         }
-      case "Giờ":
+      case "GIỜ":
         {
           return date.timeLeft.inHours;
         }
-      case "Phút":
+      case "PHÚT":
         {
           return date.timeLeft.inMinutes;
         }
-      case "Giây":
+      case "GIÂY":
         {
           return date.timeLeft.inSeconds;
         }
-      case "Tháng":
+      case "THÁNG":
         {
-          return (date.timeLeft.inDays / 30).toInt();
+          return date.timeLeft.inDays ~/ 30;
         }
-      case "Tuần":
+      case "TUẦN":
         {
-          return (date.timeLeft.inDays / 7).toInt();
+          return date.timeLeft.inDays ~/ 7;
         }
     }
+  }
+
+  String formatVietnameseDateStyle(DateTime dateTime) {
+    return "${(dateTime.day < 10) ? "0${dateTime.day}" : dateTime.day}/"
+        "${(dateTime.month < 10) ? "0${dateTime.month}" : dateTime.month}/"
+        "${dateTime.year}";
   }
 }
