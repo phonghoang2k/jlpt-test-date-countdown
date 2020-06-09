@@ -4,11 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jlpt_testdate_countdown/settings/configuration.dart';
-import 'package:jlpt_testdate_countdown/src/blocs/bloc.dart';
-import 'package:jlpt_testdate_countdown/src/blocs/date_bloc.dart';
-import 'package:jlpt_testdate_countdown/src/blocs/date_state.dart';
-import 'package:jlpt_testdate_countdown/src/resources/repository.dart';
-import 'package:jlpt_testdate_countdown/src/views/screens/home_page.dart';
+import 'package:jlpt_testdate_countdown/src/blocs/counting/bloc.dart';
 
 class DetailCountDown extends StatefulWidget {
   @override
@@ -19,6 +15,8 @@ class DetailCountDown extends StatefulWidget {
 }
 
 class DetailCountDownState extends State<DetailCountDown> {
+  Timer timer;
+
   @override
   void initState() {
     super.initState();
@@ -34,102 +32,101 @@ class DetailCountDownState extends State<DetailCountDown> {
   // }
 
   void loadCountTime(BuildContext context) {
-    final dateBloc = BlocProvider.of<DateBloc>(context);
-    Timer.periodic(Duration(seconds: 1), (timer) {
-      dateBloc.add(GetDate(testDate));
+    final CountBloc dateBloc = BlocProvider.of<CountBloc>(context);
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      dateBloc.add(GetDate(Config.testDate));
     });
   }
 
   @override
-  Widget build(BuildContext context) {  
+  Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      body:Stack(
-          children: <Widget>[
-            Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: imageAssetsLink[imageIndex],
-                  fit: BoxFit.cover,
+      body: Stack(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: Config.imageAssetsLink[Config.imageIndex],
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            padding: EdgeInsets.only(top: 40, left: 20),
+            alignment: Alignment.topLeft,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                child: Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  ],
                 ),
               ),
             ),
-            Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.only(top: 40, left: 20),
-              alignment: Alignment.topLeft,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                    ],
-                  ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                "TỪ NAY ĐẾN HÔM THI CÒN:",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
                 ),
               ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  "TỪ NAY ĐẾN HÔM THI CÒN:",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                  ),
+              Container(
+                child: BlocBuilder<CountBloc, CountState>(
+                  builder: (context, state) {
+                    if (state is CountInitial) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (state is CountLoading) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is CountLoaded) {
+                      int daysLeft = state.date.timeLeft.inDays;
+                      int hoursleft =
+                          state.date.timeLeft.inHours - (daysLeft * 24);
+                      int minutesLeft = state.date.timeLeft.inMinutes -
+                          (daysLeft * 24 * 60) -
+                          (hoursleft * 60);
+                      int secondsLeft = state.date.timeLeft.inSeconds -
+                          (daysLeft * 24 * 60 * 60) -
+                          (hoursleft * 60 * 60) -
+                          (minutesLeft * 60);
+                      return Row(
+                        children: <Widget>[
+                          const Expanded(child: SizedBox()),
+                          buildColumnWithData("$daysLeft", "NGÀY"),
+                          const SizedBox(width: 20),
+                          buildColumnWithData("$hoursleft", "GIỜ"),
+                          const SizedBox(width: 20),
+                          buildColumnWithData("$minutesLeft", "PHÚT"),
+                          const SizedBox(width: 20),
+                          buildColumnWithData("$secondsLeft", "GIÂY"),
+                          const Expanded(child: SizedBox()),
+                        ],
+                      );
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
                 ),
-                Container(
-                  child: BlocBuilder<DateBloc, DateState>(
-                    builder: (context, state) {
-                      if (state is DateInitial) {
-                        return CircularProgressIndicator();
-                      } else if (state is DateLoading) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (state is DateLoaded) {
-                        int daysLeft = state.date.timeLeft.inDays;
-                        int hoursleft =
-                            state.date.timeLeft.inHours - (daysLeft * 24);
-                        int minutesLeft = state.date.timeLeft.inMinutes -
-                            (daysLeft * 24 * 60) -
-                            (hoursleft * 60);
-                        int secondsLeft = state.date.timeLeft.inSeconds -
-                            (daysLeft * 24 * 60 * 60) -
-                            (hoursleft * 60 * 60) -
-                            (minutesLeft * 60);
-                        return Row(
-                          children: <Widget>[
-                            Expanded(child: SizedBox()),
-                            buildColumnWithData("$daysLeft", "NGÀY"),
-                            SizedBox(width: 20),
-                            buildColumnWithData("$hoursleft", "GIỜ"),
-                            SizedBox(width: 20),
-                            buildColumnWithData("$minutesLeft", "PHÚT"),
-                            SizedBox(width: 20),
-                            buildColumnWithData("$secondsLeft", "GIÂY"),
-                            Expanded(child: SizedBox()),
-                          ],
-                        );
-                      } else {
-                        return Center(child: CircularProgressIndicator());
-                      }
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

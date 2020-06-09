@@ -1,37 +1,37 @@
 import 'package:equatable/equatable.dart';
 import 'package:jlpt_testdate_countdown/src/models/date.dart';
 
-abstract class DateState extends Equatable {
-  const DateState();
+abstract class CountState extends Equatable {
+  const CountState();
 }
 
-class DateInitial extends DateState {
-  const DateInitial();
+class CountInitial extends CountState {
+  const CountInitial();
 
   @override
   List<Object> get props => [];
 }
 
-class DateLoading extends DateState {
-  const DateLoading();
+class CountLoading extends CountState {
+  const CountLoading();
 
   @override
   List<Object> get props => [];
 }
 
-class DateLoaded extends DateState {
+class CountLoaded extends CountState {
   final Date date;
 
-  const DateLoaded(this.date);
+  const CountLoaded(this.date);
 
   @override
   List<Object> get props => [date];
 }
 
-class DateError extends DateState {
+class CountError extends CountState {
   final String message;
 
-  const DateError(this.message);
+  const CountError(this.message);
 
   @override
   List<Object> get props => [message];

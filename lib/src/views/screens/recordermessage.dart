@@ -1,13 +1,12 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:jlpt_testdate_countdown/settings/configuration.dart';
 import 'dart:io' as io;
 import 'dart:math';
 
 import 'package:audio_recorder/audio_recorder.dart';
 import 'package:file/file.dart';
 import 'package:file/local.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jlpt_testdate_countdown/settings/configuration.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -92,7 +91,7 @@ class RecorderState extends State<Recorder> {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: imageAssetsLink[imageIndex],
+                image: Config.imageAssetsLink[Config.imageIndex],
                 fit: BoxFit.cover,
               ),
             ),
@@ -100,7 +99,7 @@ class RecorderState extends State<Recorder> {
           Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.only(top:40, left: 20),
+            padding: EdgeInsets.only(top: 40, left: 20),
             alignment: Alignment.topLeft,
             child: GestureDetector(
               onTap: () {
@@ -114,8 +113,6 @@ class RecorderState extends State<Recorder> {
                       color: Colors.white,
                       size: 30,
                     ),
-                   
-                    
                   ],
                 ),
               ),
@@ -124,14 +121,14 @@ class RecorderState extends State<Recorder> {
           Column(
             children: <Widget>[
               SizedBox(height: 200),
-             FlatButton(
+              FlatButton(
                 onPressed: _isRecording ? null : _start,
-                child:  Text("Start"),
+                child: Text("Start"),
                 color: Colors.green,
               ),
-               FlatButton(
+              FlatButton(
                 onPressed: _isRecording ? _stop : null,
-                child:  Text("Stop"),
+                child: Text("Stop"),
                 color: Colors.red,
               ),
               TextField(
