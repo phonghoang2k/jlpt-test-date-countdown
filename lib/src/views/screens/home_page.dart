@@ -11,8 +11,8 @@ import 'package:jlpt_testdate_countdown/settings/sizeconfig.dart';
 import 'package:jlpt_testdate_countdown/src/blocs/clicking/bloc.dart';
 import 'package:jlpt_testdate_countdown/src/blocs/counting/bloc.dart';
 import 'package:jlpt_testdate_countdown/src/models/date.dart';
-import 'package:jlpt_testdate_countdown/src/views/screens/detailscountdown.dart';
-import 'package:jlpt_testdate_countdown/src/views/screens/recordermessage.dart';
+import 'package:jlpt_testdate_countdown/src/views/screens/details_countdown.dart';
+import 'package:jlpt_testdate_countdown/src/views/screens/recorder_message.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -146,25 +146,25 @@ class _MyHomePageState extends State<MyHomePage> {
                     SizedBox(
                       height: 20,
                     ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.chat,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                      onPressed: () {
-                        loadNewQuote(context);
-                      },
+                    Icon(
+                      Icons.chat,
+                      color: Colors.white,
+                      size: 30,
                     ),
                     BlocBuilder<OnclickBloc, OnclickState>(
                       condition: (previousState, state) {
                         return state is QuoteLoaded;
                       },
                       builder: (context, state) {
-                        return Text(
-                          Config.quoteString[Config.quoteIndex],
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white),
+                        return GestureDetector(
+                          child: Text(
+                            Config.quoteString[Config.quoteIndex],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onTap: () {
+                            loadNewQuote(context);
+                          },
                         );
                       },
                     ),

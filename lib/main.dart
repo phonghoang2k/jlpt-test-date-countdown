@@ -26,6 +26,9 @@ class MyApp extends StatelessWidget {
             ),
             BlocProvider<OnclickBloc>(
               create: (BuildContext context) => OnclickBloc(),
+            ),
+            BlocProvider<OnclickBloc>(
+              create: (BuildContext context) => OnclickBloc(),
             )
           ],
           child: MyHomePage(),

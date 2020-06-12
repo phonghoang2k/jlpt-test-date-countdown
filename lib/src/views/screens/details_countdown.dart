@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,14 +33,8 @@ class DetailCountDownState extends State<DetailCountDown> {
             ),
           ),
           Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height,
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
             padding: EdgeInsets.only(top: 40, left: 20),
             alignment: Alignment.topLeft,
             child: GestureDetector(
