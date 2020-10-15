@@ -1,40 +1,25 @@
 import 'dart:async';
 
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jlpt_testdate_countdown/settings/configuration.dart';
-import 'package:jlpt_testdate_countdown/settings/sizeconfig.dart';
-import 'package:jlpt_testdate_countdown/src/blocs/clicking/bloc.dart';
-import 'package:jlpt_testdate_countdown/src/blocs/counting/bloc.dart';
-import 'package:jlpt_testdate_countdown/src/models/date/date.dart';
-import 'package:jlpt_testdate_countdown/src/views/screens/details_countdown.dart';
-import 'package:jlpt_testdate_countdown/src/views/screens/recorder_message.dart';
 
-
-class MyHomePage extends StatefulWidget {
+class HomeWidget extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomeWidgetState createState() => _HomeWidgetState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomeWidgetState extends State<HomeWidget> {
   CarouselController buttonCarouselController = CarouselController();
-  Timer timer;
 
   @override
   void initState() {
     super.initState();
-    loadCountTime(context);
-    loadNewBackgroundImage(context);
-    loadNewQuote(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
     return Scaffold(
       body: Stack(children: <Widget>[
         BlocBuilder<OnclickBloc, OnclickState>(
@@ -128,9 +113,9 @@ class _MyHomePageState extends State<MyHomePage> {
                             context,
                             MaterialPageRoute(
                                 builder: (_) => BlocProvider.value(
-                                      value: BlocProvider.of<CountBloc>(context),
-                                      child: DetailCountDown(),
-                                    )));
+                                  value: BlocProvider.of<CountBloc>(context),
+                                  child: DetailCountDown(),
+                                )));
                       },
                     ),
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
@@ -191,9 +176,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     context,
                     MaterialPageRoute(
                         builder: (_) => BlocProvider.value(
-                              value: BlocProvider.of<CountBloc>(context),
-                              child: DetailCountDown(),
-                            )));
+                          value: BlocProvider.of<CountBloc>(context),
+                          child: DetailCountDown(),
+                        )));
               },
             ),
             IconButton(
@@ -226,21 +211,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void loadCountTime(BuildContext context) {
-    final dateBloc = BlocProvider.of<CountBloc>(context);
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      dateBloc.add(GetDate(Config.testDate));
-//    print("1");
-    });
-  }
-
-  void loadNewBackgroundImage(BuildContext context) {
-    BlocProvider.of<OnclickBloc>(context)..add(GetNewsBackground());
-  }
-
-  void loadNewQuote(BuildContext context) {
-    BlocProvider.of<OnclickBloc>(context)..add(GetNewsQuote());
-  }
 
   Column buildColumnWithData(BuildContext context, Date date, String type) {
     return Column(

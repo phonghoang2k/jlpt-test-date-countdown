@@ -1,16 +1,15 @@
 analyzer:
- strong-mode:
-  implicit-casts: false
- errors:
-  avoid_returning_null_for_future: warning
-  cancel_subscriptions: warning
-  dead_code: warning
-  override_on_non_overriding_method: warning
-  unused_element: warning
-  unused_import: warning
-  avoid_empty_else: warning
- exclude:
-  - test/**
+  strong-mode:
+    implicit-casts: false
+  errors:
+    avoid_returning_null_for_future: warning
+    cancel_subscriptions: warning
+    dead_code: warning
+    unused_element: warning
+    unused_import: warning
+    avoid_empty_else: warning
+  exclude:
+    - test/**
 linter:
   rules:
     - camel_case_types
@@ -25,7 +24,6 @@ linter:
     - curly_braces_in_flow_control_structures
     - slash_for_doc_comments
     - package_api_docs
-    - public_member_api_docs
     - comment_references
     - prefer_adjacent_string_concatenation
     - prefer_interpolation_to_compose_strings
@@ -43,3 +41,5 @@ linter:
     - unnecessary_new
     - unnecessary_await_in_return
     - avoid_void_async
+    - always_declare_return_types
+    - always_put_required_named_parameters_first

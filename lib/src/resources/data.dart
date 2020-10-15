@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Config {
+class DataConfig {
   static final List<AssetImage> imageAssetsLink = <AssetImage>[
     AssetImage(
       "assets/meo1.jpg",
@@ -20,8 +19,5 @@ class Config {
     "Không làm mà đòi ăn, thì chỉ có ăn đồng bằng, ăn cát"
   ];
 
-  static int imageIndex = 0;
-  static int quoteIndex = 0;
   static final testDate = DateTime(2020, 8, 8);
-  static final colorApp = Colors.blue;
 }

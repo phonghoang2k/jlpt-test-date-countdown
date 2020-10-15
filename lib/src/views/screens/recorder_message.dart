@@ -44,13 +44,11 @@ class RecorderState extends State<Recorder> {
         if (_controller.text != null && _controller.text != "") {
           String path = _controller.text;
           if (!_controller.text.contains('/')) {
-            io.Directory appDocDirectory =
-                await getApplicationDocumentsDirectory();
+            io.Directory appDocDirectory = await getApplicationDocumentsDirectory();
             path = appDocDirectory.path + '/' + _controller.text;
           }
           print("Start recording: $path");
-          await AudioRecorder.start(
-              path: path, audioOutputFormat: AudioOutputFormat.AAC);
+          await AudioRecorder.start(path: path, audioOutputFormat: AudioOutputFormat.AAC);
         } else {
           await AudioRecorder.start();
         }
@@ -60,8 +58,7 @@ class RecorderState extends State<Recorder> {
           _isRecording = isRecording;
         });
       } else {
-        _scaffoldKey.currentState.showSnackBar(
-            SnackBar(content: Text("You must accept permissions")));
+        _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("You must accept permissions")));
       }
     } catch (e) {
       print(e);
@@ -140,8 +137,7 @@ class RecorderState extends State<Recorder> {
               Text("File path of the record: ${_recording.path}"),
               Text("Format: ${_recording.audioOutputFormat}"),
               Text("Extension : ${_recording.extension}"),
-              Text(
-                  "Audio recording duration : ${_recording.duration.toString()}"),
+              Text("Audio recording duration : ${_recording.duration.toString()}"),
             ],
           )
         ],

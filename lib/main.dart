@@ -1,37 +1,17 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jlpt_testdate_countdown/src/blocs/clicking/bloc.dart';
-import 'package:jlpt_testdate_countdown/src/blocs/counting/bloc.dart';
-import 'package:jlpt_testdate_countdown/src/resources/repository.dart';
-import 'package:jlpt_testdate_countdown/src/views/screens/home_page.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:jlpt_testdate_countdown/src/app/app.module.dart';
+import 'package:jlpt_testdate_countdown/src/env/application.dart';
+import 'package:jlpt_testdate_countdown/src/utils/shared_preferences.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Đếm ngược ngày thi JLPT',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: MultiBlocProvider(
-//          create: (context) => DateBloc(FakeDateRepository()),
-          providers: [
-            BlocProvider<CountBloc>(
-              create: (BuildContext context) => CountBloc(FakeDateRepository()),
-            ),
-            BlocProvider<OnclickBloc>(
-              create: (BuildContext context) => OnclickBloc(),
-            ),
-            BlocProvider<OnclickBloc>(
-              create: (BuildContext context) => OnclickBloc(),
-            )
-          ],
-          child: MyHomePage(),
-        ));
-  }
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  GestureBinding.instance.resamplingEnabled = true;
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+  ));
+  Application.sharePreference = await SpUtil.getInstance();
+  runApp(ModularApp(module: AppModule()));
 }

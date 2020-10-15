@@ -75,11 +75,8 @@ class DetailCountDownState extends State<DetailCountDown> {
                       );
                     } else if (state is CountLoaded) {
                       int daysLeft = state.date.timeLeft.inDays;
-                      int hoursleft =
-                          state.date.timeLeft.inHours - (daysLeft * 24);
-                      int minutesLeft = state.date.timeLeft.inMinutes -
-                          (daysLeft * 24 * 60) -
-                          (hoursleft * 60);
+                      int hoursleft = state.date.timeLeft.inHours - (daysLeft * 24);
+                      int minutesLeft = state.date.timeLeft.inMinutes - (daysLeft * 24 * 60) - (hoursleft * 60);
                       int secondsLeft = state.date.timeLeft.inSeconds -
                           (daysLeft * 24 * 60 * 60) -
                           (hoursleft * 60 * 60) -

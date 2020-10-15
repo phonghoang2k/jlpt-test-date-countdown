@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:jlpt_testdate_countdown/src/models/date.dart';
+
+import 'file:///C:/Users/phong/Desktop/UI/jlpt-test-date-countdown/lib/src/models/date/date.dart';
 
 abstract class CountState extends Equatable {
   const CountState();
