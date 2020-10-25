@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 
 class DataConfig {
   static final List<AssetImage> imageAssetsLink = <AssetImage>[
-    AssetImage(
-      "assets/meo1.jpg",
-    ),
-    AssetImage(
-      "assets/meo2.jpg",
-    ),
+    AssetImage("assets/meo1.jpg"),
+    AssetImage("assets/meo2.jpg"),
   ];
 
   static final List<String> quoteString = <String>[
@@ -19,5 +15,5 @@ class DataConfig {
     "Không làm mà đòi ăn, thì chỉ có ăn đồng bằng, ăn cát"
   ];
 
-  static final testDate = DateTime(2020, 8, 8);
+  static final testDate = DateTime(2020, 12, 6);
 }

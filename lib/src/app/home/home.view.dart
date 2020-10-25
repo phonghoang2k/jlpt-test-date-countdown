@@ -1,9 +1,17 @@
-import 'dart:async';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:intl/intl.dart';
+import 'package:jlpt_testdate_countdown/src/app/home/cubit/counter.cubit.dart';
+import 'package:jlpt_testdate_countdown/src/app/home/cubit/home.cubit.dart';
+import 'package:jlpt_testdate_countdown/src/app/home/home.module.dart';
+import 'package:jlpt_testdate_countdown/src/models/date/date.dart';
+import 'package:jlpt_testdate_countdown/src/resources/data.dart';
+import 'package:jlpt_testdate_countdown/src/utils/sizeconfig.dart';
+import 'package:jlpt_testdate_countdown/src/utils/style.dart';
 
 class HomeWidget extends StatefulWidget {
   @override
@@ -12,254 +20,166 @@ class HomeWidget extends StatefulWidget {
 
 class _HomeWidgetState extends State<HomeWidget> {
   CarouselController buttonCarouselController = CarouselController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  HomeCubit _homeCubit = HomeCubit();
+  CounterCubit _counterCubit = Modular.get<CounterCubit>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(children: <Widget>[
-        BlocBuilder<OnclickBloc, OnclickState>(
-          condition: (previousState, state) {
-            return state is BackgroundLoaded;
-          },
-          builder: (context, state) {
-            return Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: Config.imageAssetsLink[Config.imageIndex],
-                  fit: BoxFit.cover,
-                ),
-              ),
-            );
-          },
-        ),
-        Container(
-            width: MediaQuery.of(context).size.width - 20,
-            height: MediaQuery.of(context).size.height - 20,
-            alignment: Alignment.bottomRight,
-            child: FloatingActionButton(
-                onPressed: () {},
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ))),
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 30),
-              Row(
-                children: <Widget>[
-                  SizedBox(width: 20),
-                  Column(
-                    children: <Widget>[
-                      Text(
-                        "Đếm ngược ngày thi",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
+      body: Stack(
+        children: <Widget>[
+          BlocBuilder<HomeCubit, HomeState>(
+              cubit: _homeCubit,
+              buildWhen: (prev, now) => now is BackgroundImageChanged,
+              builder: (context, state) => Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: DataConfig.imageAssetsLink[_homeCubit.imageIndex],
+                        fit: BoxFit.cover,
                       ),
-                      Text(
-                        "Kì thi THPT Quốc gia 2020",
-                        style: TextStyle(color: Colors.white, fontSize: 13),
+                    ),
+                  )),
+          Container(
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: SizeConfig.safeBlockVertical * 5),
+                Row(
+                  children: <Widget>[
+                    Spacer(),
+                    Column(
+                      children: <Widget>[
+                        Text("Đếm ngược ngày thi", style: TextStyle(fontSize: 18, color: Colors.white)),
+                        Text("Kì thi THPT Quốc gia 2020", style: TextStyle(color: Colors.white, fontSize: 13)),
+                      ],
+                    ),
+                    Spacer(flex: 6),
+                    IconButton(
+                      icon: Icon(Icons.image, color: Colors.white, size: 25),
+                      onPressed: () => _homeCubit.loadNewBackgroundImage(),
+                    ),
+                    Spacer(),
+                  ],
+                ),
+                SizedBox(height: SizeConfig.safeBlockVertical * 5),
+                Container(
+                  child: Column(
+                    children: <Widget>[
+                      Text("CÒN", style: TextStyle(fontSize: 18, color: Colors.white)),
+                      FlatButton(
+                        child: BlocBuilder<CounterCubit, CounterState>(
+                          cubit: _counterCubit,
+                          builder: (context, state) => (state is OneSecondPassed)
+                              ? buildCarouselSlider(state.dateCount)
+                              : Center(child: CircularProgressIndicator()),
+                        ),
+                        splashColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+                        onPressed: () => Modular.link.pushNamed(HomeModule.detailCountdown),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(Icons.timer, color: Colors.white, size: 25),
+                          SizedBox(width: SizeConfig.safeBlockHorizontal * 2),
+                          Text(
+                            "Ngày thi: ${DateFormat('dd-MM-yyyy').format(DataConfig.testDate)}",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: SizeConfig.safeBlockVertical * 3),
+                      Icon(Icons.chat, color: Colors.white, size: 30),
+                      SizedBox(height: SizeConfig.safeBlockVertical),
+                      BlocBuilder<HomeCubit, HomeState>(
+                        cubit: _homeCubit,
+                        buildWhen: (prev, now) => now is QuoteChanged,
+                        builder: (context, state) => state is QuoteChanged
+                            ? GestureDetector(
+                                child: Text(
+                                  state.quote,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                onTap: () => _homeCubit.loadNewQuote(),
+                              )
+                            : Center(child: CircularProgressIndicator()),
                       ),
                     ],
                   ),
-                  Expanded(child: SizedBox()),
-                  IconButton(
-                      icon: Icon(
-                        Icons.image,
-                        color: Colors.white,
-                        size: 25,
-                      ),
-                      onPressed: () {
-                        loadNewBackgroundImage(context);
-                      }),
-                  SizedBox(width: 20),
-                ],
-              ),
-              SizedBox(height: 20),
-              Container(
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      "CÒN",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
-                    ),
-                    GestureDetector(
-                      child: BlocBuilder<CountBloc, CountState>(
-                        builder: (context, state) {
-                          if (state is CountLoaded) {
-                            return buildCarouselSlider(context, state.date);
-                          } else {
-                            return Center(child: CircularProgressIndicator());
-                          }
-                        },
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => BlocProvider.value(
-                                  value: BlocProvider.of<CountBloc>(context),
-                                  child: DetailCountDown(),
-                                )));
-                      },
-                    ),
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                      Icon(Icons.timer, color: Colors.white, size: 25),
-                      SizedBox(width: 5),
-                      Text(
-                        "Ngày thi: ${formatVietnameseDateStyle(Config.testDate)}",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ]),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Icon(
-                      Icons.chat,
-                      color: Colors.white,
-                      size: 30,
-                    ),
-                    BlocBuilder<OnclickBloc, OnclickState>(
-                      condition: (previousState, state) {
-                        return state is QuoteLoaded;
-                      },
-                      builder: (context, state) {
-                        return GestureDetector(
-                          child: Text(
-                            Config.quoteString[Config.quoteIndex],
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onTap: () {
-                            loadNewQuote(context);
-                          },
-                        );
-                      },
-                    ),
-                  ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ]),
+        ],
+      ),
       floatingActionButton: FabCircularMenu(
-          ringColor: Config.colorApp,
-          fabOpenColor: Config.colorApp,
-          fabCloseColor: Config.colorApp,
-
-          // ringDiameter: 350,
+          ringColor: AppColor.appColor,
+          fabOpenColor: AppColor.appColor,
+          fabCloseColor: AppColor.appColor,
+          ringDiameter: 350,
           animationCurve: Curves.easeInOut,
           children: <Widget>[
-            // IconButton(icon: Icon(Icons.home), onPressed: () {}),
-            // IconButton(icon: Icon(Icons.share), onPressed: () {}),
-            // IconButton(icon: Icon(Icons.error_outline), onPressed: () {}),
+            IconButton(icon: Icon(Icons.home), onPressed: () {}),
+            IconButton(icon: Icon(Icons.share), onPressed: () {}),
+            IconButton(icon: Icon(Icons.error_outline), onPressed: () {}),
             IconButton(
               icon: Icon(Icons.timer),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => BlocProvider.value(
-                          value: BlocProvider.of<CountBloc>(context),
-                          child: DetailCountDown(),
-                        )));
-              },
+              onPressed: () => Modular.link.pushNamed(HomeModule.detailCountdown),
             ),
             IconButton(
                 icon: Icon(Icons.mic),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Recorder()));
+                  // Todo: Handle navigate to Record
                 })
           ]),
     );
   }
 
-  CarouselSlider buildCarouselSlider(BuildContext context, Date date) {
-    return CarouselSlider(
-      items: [
-        buildColumnWithData(context, date, "NGÀY"),
-        buildColumnWithData(context, date, "GIỜ"),
-        buildColumnWithData(context, date, "PHÚT"),
-        buildColumnWithData(context, date, "GIÂY"),
-        buildColumnWithData(context, date, "THÁNG"),
-        buildColumnWithData(context, date, "TUẦN"),
-      ],
-      carouselController: buttonCarouselController,
-      options: CarouselOptions(
-        autoPlay: false,
-        enlargeCenterPage: true,
-        viewportFraction: 0.9,
-        aspectRatio: 2.0,
-        initialPage: 2,
-      ),
-    );
-  }
+  CarouselSlider buildCarouselSlider(DateCount date) => CarouselSlider(
+        items: [
+          buildColumnWithData(date, "NGÀY"),
+          buildColumnWithData(date, "GIỜ"),
+          buildColumnWithData(date, "PHÚT"),
+          buildColumnWithData(date, "GIÂY"),
+          buildColumnWithData(date, "THÁNG"),
+          buildColumnWithData(date, "TUẦN"),
+        ],
+        carouselController: buttonCarouselController,
+        options: CarouselOptions(
+          autoPlay: false,
+          enlargeCenterPage: true,
+          viewportFraction: 0.9,
+          aspectRatio: 2.0,
+          initialPage: 2,
+        ),
+      );
 
-
-  Column buildColumnWithData(BuildContext context, Date date, String type) {
+  Column buildColumnWithData(DateCount date, String type) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(
-          "${counting(date, type)}",
-          style: TextStyle(color: Colors.white, fontSize: 50),
-        ),
-        Text(
-          type,
-          style: TextStyle(color: Colors.white, fontSize: 30),
-        ),
+        Text("${counting(date, type)}", style: TextStyle(color: Colors.white, fontSize: 50)),
+        Text(type, style: TextStyle(color: Colors.white, fontSize: 30)),
       ],
     );
   }
 
-  int counting(Date date, String type) {
+  int counting(DateCount date, String type) {
     switch (type) {
       case "NGÀY":
-        {
-          return date.timeLeft.inDays;
-        }
+        return date.timeLeft.inDays;
       case "GIỜ":
-        {
-          return date.timeLeft.inHours;
-        }
+        return date.timeLeft.inHours;
       case "PHÚT":
-        {
-          return date.timeLeft.inMinutes;
-        }
+        return date.timeLeft.inMinutes;
       case "GIÂY":
-        {
-          return date.timeLeft.inSeconds;
-        }
+        return date.timeLeft.inSeconds;
       case "THÁNG":
-        {
-          return date.timeLeft.inDays ~/ 30;
-        }
+        return date.timeLeft.inDays ~/ 30;
       case "TUẦN":
-        {
-          return date.timeLeft.inDays ~/ 7;
-        }
+        return date.timeLeft.inDays ~/ 7;
+      default:
+        return 0;
     }
-  }
-
-  String formatVietnameseDateStyle(DateTime dateTime) {
-    return "${(dateTime.day < 10) ? "0${dateTime.day}" : dateTime.day}/"
-        "${(dateTime.month < 10) ? "0${dateTime.month}" : dateTime.month}/"
-        "${dateTime.year}";
   }
 }

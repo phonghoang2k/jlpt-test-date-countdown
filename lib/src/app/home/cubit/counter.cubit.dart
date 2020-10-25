@@ -24,4 +24,10 @@ class CounterCubit extends Cubit<CounterState> {
       emit(OneSecondPassed(dateCount));
     });
   }
+
+  @override
+  void onChange(Change<CounterState> change) {
+    print(change.nextState);
+    super.onChange(change);
+  }
 }

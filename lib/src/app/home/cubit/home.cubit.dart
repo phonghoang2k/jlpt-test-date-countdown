@@ -12,15 +12,26 @@ class HomeCubit extends Cubit<HomeState> {
   int imageIndex = Application.sharePreference.getInt("imageIndex") ?? 0;
   int quoteIndex = Application.sharePreference.getInt("quoteIndex") ?? 0;
 
-  HomeCubit() : super(HomeInitial());
+  HomeCubit() : super(HomeInitial()) {
+    emit(BackgroundImageChanged(DataConfig.imageAssetsLink[imageIndex]));
+    emit(QuoteChanged(DataConfig.quoteString[quoteIndex]));
+  }
 
   void loadNewBackgroundImage() {
     imageIndex = Random().nextInt(DataConfig.imageAssetsLink.length);
-    emit(BackgroundImageChanged(imageIndex));
+    Application.sharePreference.putInt("imageIndex", imageIndex);
+    emit(BackgroundImageChanged(DataConfig.imageAssetsLink[imageIndex]));
   }
 
   void loadNewQuote() {
     quoteIndex = Random().nextInt(DataConfig.quoteString.length);
-    emit(BackgroundImageChanged(imageIndex));
+    Application.sharePreference.putInt("quoteIndex", quoteIndex);
+    emit(QuoteChanged(DataConfig.quoteString[quoteIndex]));
+  }
+
+  @override
+  void onChange(Change<HomeState> change) {
+    print(change.nextState);
+    super.onChange(change);
   }
 }

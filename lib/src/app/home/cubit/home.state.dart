@@ -20,19 +20,19 @@ class HomeLoading extends HomeState {
 }
 
 class BackgroundImageChanged extends HomeState {
-  final int imageIndex;
+  final AssetImage image;
 
-  BackgroundImageChanged(this.imageIndex);
+  BackgroundImageChanged(this.image);
 
   @override
-  List<Object> get props => [imageIndex];
+  List<Object> get props => [image];
 }
 
 class QuoteChanged extends HomeState {
-  final int quoteIndex;
+  final String quote;
 
-  QuoteChanged(this.quoteIndex);
+  QuoteChanged(this.quote);
 
   @override
-  List<Object> get props => [quoteIndex];
+  List<Object> get props => [quote];
 }
