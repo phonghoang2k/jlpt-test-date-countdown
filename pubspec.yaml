@@ -39,11 +39,11 @@ dependencies:
   shared_preferences: ^0.5.12+2
   carousel_slider: ^2.3.1
   fab_circular_menu: ^1.0.1
-  flutter_sound: ^6.2.0+1
-  path_provider: ^1.6.21
+#  flutter_sound: ^6.3.1+1
+  path_provider: ^1.6.22
   permission_handler: ^5.0.1+1
-  audio_recorder: ^1.0.2
-  audioplayers: ^0.16.1
+#  audio_recorder: ^1.0.2
+#  audioplayers: ^0.16.1
 
 dev_dependencies:
   flutter_test:

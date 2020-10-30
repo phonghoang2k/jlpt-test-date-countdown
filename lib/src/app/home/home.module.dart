@@ -1,8 +1,8 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/cubit/counter.cubit.dart';
+import 'package:jlpt_testdate_countdown/src/app/home/detail-countdown/detail-countdown.view.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/home.view.dart';
 import 'package:jlpt_testdate_countdown/src/repositories/counter.repository.dart';
-import 'package:jlpt_testdate_countdown/src/views/screens/details_countdown.dart';
 
 class HomeModule extends ChildModule {
   static Inject get to => Inject<HomeModule>.of();
@@ -20,6 +20,6 @@ class HomeModule extends ChildModule {
   @override
   List<ModularRouter> get routers => [
         ModularRouter('/', child: (context, args) => HomeWidget()),
-        ModularRouter(detailCountdown, child: (context, args) => DetailCountDown()),
+        ModularRouter(detailCountdown, child: (context, args) => DetailCountdown()),
       ];
 }
