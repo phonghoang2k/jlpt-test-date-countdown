@@ -49,7 +49,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                     Column(
                       children: <Widget>[
                         Text("Đếm ngược ngày thi", style: TextStyle(fontSize: 18, color: Colors.white)),
-                        Text("Kì thi THPT Quốc gia 2020", style: TextStyle(color: Colors.white, fontSize: 13)),
+                        Text("Kì thi JLPT mùa đông 2020", style: TextStyle(color: Colors.white, fontSize: 13)),
                       ],
                     ),
                     Spacer(flex: 6),

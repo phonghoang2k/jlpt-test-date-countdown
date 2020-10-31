@@ -23,7 +23,7 @@ class _DetailCountdownState extends State<DetailCountdown> {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: DataConfig.imageAssetsLink[Application.sharePreference.getInt("imageIndex")],
+                image: DataConfig.imageAssetsLink[Application.sharePreference.getInt("imageIndex") ?? 0],
                 fit: BoxFit.cover,
               ),
             ),

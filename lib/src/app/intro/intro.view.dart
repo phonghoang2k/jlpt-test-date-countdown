@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:jlpt_testdate_countdown/src/app/app.module.dart';
+import 'package:jlpt_testdate_countdown/src/env/application.dart';
 import 'package:jlpt_testdate_countdown/src/utils/sizeconfig.dart';
 
 class Introduction extends StatefulWidget {
@@ -15,6 +16,7 @@ class _IntroductionState extends State<Introduction> {
 
   @override
   void initState() {
+    print(Application.sharePreference.getKeys());
     super.initState();
     startTime();
   }
