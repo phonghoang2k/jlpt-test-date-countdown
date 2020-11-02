@@ -29,9 +29,4 @@ class HomeCubit extends Cubit<HomeState> {
     emit(QuoteChanged(DataConfig.quoteString[quoteIndex]));
   }
 
-  @override
-  void onChange(Change<HomeState> change) {
-    print(change.nextState);
-    super.onChange(change);
-  }
 }

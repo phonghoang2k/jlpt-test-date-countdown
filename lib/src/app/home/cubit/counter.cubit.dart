@@ -25,9 +25,4 @@ class CounterCubit extends Cubit<CounterState> {
     });
   }
 
-  @override
-  void onChange(Change<CounterState> change) {
-    print(change.nextState);
-    super.onChange(change);
-  }
 }
