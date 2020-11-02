@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:intl/intl.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/cubit/counter.cubit.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/cubit/home.cubit.dart';
@@ -64,7 +65,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                 Container(
                   child: Column(
                     children: <Widget>[
-                      Text("CÒN", style: TextStyle(fontSize: 18, color: Colors.white)),
+                      Text("CÒN", style: TextStyle(fontSize: 18, color: Colors.white,)),
                       FlatButton(
                         child: BlocBuilder<CounterCubit, CounterState>(
                           cubit: _counterCubit,
@@ -112,26 +113,39 @@ class _HomeWidgetState extends State<HomeWidget> {
           ),
         ],
       ),
-      floatingActionButton: FabCircularMenu(
-          ringColor: AppColor.appColor,
-          fabOpenColor: AppColor.appColor,
-          fabCloseColor: AppColor.appColor,
-          ringDiameter: 350,
-          animationCurve: Curves.easeInOut,
-          children: <Widget>[
-            IconButton(icon: Icon(Icons.home), onPressed: () {}),
-            IconButton(icon: Icon(Icons.share), onPressed: () {}),
-            IconButton(icon: Icon(Icons.error_outline), onPressed: () {}),
-            IconButton(
-              icon: Icon(Icons.timer),
-              onPressed: () => Modular.link.pushNamed(HomeModule.detailCountdown),
-            ),
-            IconButton(
-                icon: Icon(Icons.mic),
-                onPressed: () {
-                  // Todo: Handle navigate to Record
-                })
-          ]),
+      floatingActionButton: SpeedDial(
+      animatedIcon: AnimatedIcons.view_list,
+      animatedIconTheme: IconThemeData(size: 22.0),
+      backgroundColor: Colors.blueAccent,
+      visible: true,
+      curve: Curves.bounceIn,
+      children: [
+        SpeedDialChild(
+          child: Icon(Icons.home, color: Colors.white),
+          backgroundColor: Colors.deepOrange,
+          label: 'Home',
+          labelStyle: TextStyle(fontWeight: FontWeight.w500),
+          labelBackgroundColor: Colors.deepOrangeAccent,
+        ),
+        SpeedDialChild(
+          child: Icon(Icons.mic, color: Colors.white),
+          backgroundColor: Colors.green,
+          label: 'Recorder',
+          labelStyle: TextStyle(fontWeight: FontWeight.w500),
+          labelBackgroundColor: Colors.green,
+        ),
+        SpeedDialChild(
+          child: Icon(Icons.share, color: Colors.white),
+          backgroundColor: Colors.blue,
+          labelWidget: Container(
+            color: Colors.blue,
+            margin: EdgeInsets.only(right: 10),
+            padding: EdgeInsets.all(6),
+            child: Text('Share'),
+          ),
+        ),
+      ],
+    ),
     );
   }
 
