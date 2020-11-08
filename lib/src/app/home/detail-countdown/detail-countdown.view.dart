@@ -6,6 +6,7 @@ import 'package:jlpt_testdate_countdown/src/app/home/cubit/counter.cubit.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/detail-countdown/detail-countdown.cubit.dart';
 import 'package:jlpt_testdate_countdown/src/env/application.dart';
 import 'package:jlpt_testdate_countdown/src/resources/data.dart';
+import 'package:jlpt_testdate_countdown/src/utils/sizeconfig.dart';
 
 class DetailCountdown extends StatefulWidget {
   @override
@@ -23,7 +24,9 @@ class _DetailCountdownState extends State<DetailCountdown> {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: DataConfig.imageAssetsLink[Application.sharePreference.getInt("imageIndex") ?? 0],
+                colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
+                image: DataConfig.imageAssetsLink[
+                    Application.sharePreference.getInt("imageIndex") ?? 0],
                 fit: BoxFit.cover,
               ),
             ),
@@ -39,7 +42,12 @@ class _DetailCountdownState extends State<DetailCountdown> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text("TỪ NAY ĐẾN HÔM THI CÒN:", style: TextStyle(fontSize: 20, color: Colors.white)),
+              Text("TỪ NAY ĐẾN HÔM THI CÒN",
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600)),
+              SizedBox(height: SizeConfig.blockSizeVertical * 4),
               Container(
                 child: BlocBuilder<CounterCubit, CounterState>(
                   cubit: _counterCubit,
@@ -48,16 +56,20 @@ class _DetailCountdownState extends State<DetailCountdown> {
                           children: <Widget>[
                             Spacer(),
                             _buildColumnWithData(
-                                "${DetailCountdownData.fromDateCount(state.dateCount).daysLeft}", "NGÀY"),
-                            const SizedBox(width: 20),
+                                "${DetailCountdownData.fromDateCount(state.dateCount).daysLeft}",
+                                "NGÀY"),
+                            const SizedBox(width: 26),
                             _buildColumnWithData(
-                                "${DetailCountdownData.fromDateCount(state.dateCount).hoursLeft}", "GIỜ"),
-                            const SizedBox(width: 20),
+                                "${DetailCountdownData.fromDateCount(state.dateCount).hoursLeft}",
+                                "GIỜ"),
+                            const SizedBox(width: 26),
                             _buildColumnWithData(
-                                "${DetailCountdownData.fromDateCount(state.dateCount).minutesLeft}", "PHÚT"),
-                            const SizedBox(width: 20),
+                                "${DetailCountdownData.fromDateCount(state.dateCount).minutesLeft}",
+                                "PHÚT"),
+                            const SizedBox(width: 26),
                             _buildColumnWithData(
-                                "${DetailCountdownData.fromDateCount(state.dateCount).secondsLeft}", "GIÂY"),
+                                "${DetailCountdownData.fromDateCount(state.dateCount).secondsLeft}",
+                                "GIÂY"),
                             Spacer(),
                           ],
                         )
@@ -75,8 +87,17 @@ class _DetailCountdownState extends State<DetailCountdown> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(time, style: TextStyle(color: Colors.white, fontSize: 50)),
-        Center(child: Text(type, style: TextStyle(color: Colors.white, fontSize: 20))),
+        Text(time,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 60,
+                fontWeight: FontWeight.w600)),
+        Center(
+            child: Text(type,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600))),
       ],
     );
   }
