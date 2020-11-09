@@ -20,11 +20,11 @@ class NoteLoading extends NoteState {
 }
 
 class NoteCreate extends NoteState {
-  final String header,body,time;
+  final String header, body, time;
   final Color colorHeader, colorBody;
 
-  NoteCreate(this.header,this.body,this.time,this.colorHeader,this.colorBody);
+  NoteCreate(this.header, this.body, this.time, this.colorHeader, this.colorBody);
 
   @override
-  List<Object> get props => [header,body,time,colorHeader, colorBody];
+  List<Object> get props => [header, body, time, colorHeader, colorBody];
 }

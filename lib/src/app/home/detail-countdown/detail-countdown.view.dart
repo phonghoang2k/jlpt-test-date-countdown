@@ -25,8 +25,7 @@ class _DetailCountdownState extends State<DetailCountdown> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
-                image: DataConfig.imageAssetsLink[
-                    Application.sharePreference.getInt("imageIndex") ?? 0],
+                image: DataConfig.imageAssetsLink[Application.sharePreference.getInt("imageIndex") ?? 0],
                 fit: BoxFit.cover,
               ),
             ),
@@ -43,10 +42,7 @@ class _DetailCountdownState extends State<DetailCountdown> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text("TỪ NAY ĐẾN HÔM THI CÒN",
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600)),
+                  style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600)),
               SizedBox(height: SizeConfig.blockSizeVertical * 4),
               Container(
                 child: BlocBuilder<CounterCubit, CounterState>(
@@ -56,20 +52,16 @@ class _DetailCountdownState extends State<DetailCountdown> {
                           children: <Widget>[
                             Spacer(),
                             _buildColumnWithData(
-                                "${DetailCountdownData.fromDateCount(state.dateCount).daysLeft}",
-                                "NGÀY"),
+                                "${DetailCountdownData.fromDateCount(state.dateCount).daysLeft}", "NGÀY"),
                             const SizedBox(width: 26),
                             _buildColumnWithData(
-                                "${DetailCountdownData.fromDateCount(state.dateCount).hoursLeft}",
-                                "GIỜ"),
+                                "${DetailCountdownData.fromDateCount(state.dateCount).hoursLeft}", "GIỜ"),
                             const SizedBox(width: 26),
                             _buildColumnWithData(
-                                "${DetailCountdownData.fromDateCount(state.dateCount).minutesLeft}",
-                                "PHÚT"),
+                                "${DetailCountdownData.fromDateCount(state.dateCount).minutesLeft}", "PHÚT"),
                             const SizedBox(width: 26),
                             _buildColumnWithData(
-                                "${DetailCountdownData.fromDateCount(state.dateCount).secondsLeft}",
-                                "GIÂY"),
+                                "${DetailCountdownData.fromDateCount(state.dateCount).secondsLeft}", "GIÂY"),
                             Spacer(),
                           ],
                         )
@@ -87,17 +79,8 @@ class _DetailCountdownState extends State<DetailCountdown> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(time,
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 60,
-                fontWeight: FontWeight.w600)),
-        Center(
-            child: Text(type,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600))),
+        Text(time, style: TextStyle(color: Colors.white, fontSize: 60, fontWeight: FontWeight.w600)),
+        Center(child: Text(type, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600))),
       ],
     );
   }

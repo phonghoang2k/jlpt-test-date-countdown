@@ -3,11 +3,9 @@ import 'dart:math';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jlpt_testdate_countdown/src/env/application.dart';
 import 'package:jlpt_testdate_countdown/src/resources/data.dart';
 
 part 'music.state.dart';
-
 
 class MusicCubit extends Cubit<MusicState> {
   int imageIndex = 0;
@@ -30,5 +28,4 @@ class MusicCubit extends Cubit<MusicState> {
     // Application.sharePreference.putInt("quoteIndex", quoteIndex);
     emit(MusicSong(DataConfig.songMusic[songIndex]));
   }
-
 }

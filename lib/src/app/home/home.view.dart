@@ -33,10 +33,8 @@ class _HomeWidgetState extends State<HomeWidget> {
               builder: (context, state) => Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        colorFilter:
-                            ColorFilter.mode(Colors.black45, BlendMode.darken),
-                        image:
-                            DataConfig.imageAssetsLink[_homeCubit.imageIndex],
+                        colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
+                        image: DataConfig.imageAssetsLink[_homeCubit.imageIndex],
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -51,13 +49,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                     Column(
                       children: <Widget>[
                         Text("Đếm ngược ngày thi",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600)),
-                        Text("Kì thi JLPT mùa đông 2020",
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 15)),
+                            style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600)),
+                        Text("Kì thi JLPT mùa đông 2020", style: TextStyle(color: Colors.white, fontSize: 15)),
                       ],
                     ),
                     Spacer(flex: 6),
@@ -81,16 +74,13 @@ class _HomeWidgetState extends State<HomeWidget> {
                       FlatButton(
                         child: BlocBuilder<CounterCubit, CounterState>(
                           cubit: _counterCubit,
-                          builder: (context, state) =>
-                              (state is OneSecondPassed)
-                                  ? buildCarouselSlider(state.dateCount)
-                                  : Center(child: CircularProgressIndicator()),
+                          builder: (context, state) => (state is OneSecondPassed)
+                              ? buildCarouselSlider(state.dateCount)
+                              : Center(child: CircularProgressIndicator()),
                         ),
                         splashColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100)),
-                        onPressed: () =>
-                            Modular.link.pushNamed(HomeModule.detailCountdown),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+                        onPressed: () => Modular.link.pushNamed(HomeModule.detailCountdown),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -116,8 +106,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                             ? Text(
                                 state.quote,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 17),
+                                style: TextStyle(color: Colors.white, fontSize: 17),
                               )
                             : Center(child: CircularProgressIndicator()),
                       ),
@@ -142,16 +131,15 @@ class _HomeWidgetState extends State<HomeWidget> {
             backgroundColor: Colors.deepOrange,
             label: 'Đếm ngược chi tiết',
             onTap: () => Modular.link.pushNamed(HomeModule.detailCountdown),
-            labelStyle: TextStyle(
-                fontWeight: FontWeight.w500, color: Colors.white, fontSize: 16),
+            labelStyle: TextStyle(fontWeight: FontWeight.w500, color: Colors.white, fontSize: 16),
             labelBackgroundColor: Colors.deepOrangeAccent,
           ),
           SpeedDialChild(
             child: Icon(Icons.mic, color: Colors.white),
             backgroundColor: Colors.green,
             label: 'Recorder',
-            labelStyle: TextStyle(
-                fontWeight: FontWeight.w500, color: Colors.white, fontSize: 16),
+            onTap: () => Modular.link.pushNamed(HomeModule.recorder),
+            labelStyle: TextStyle(fontWeight: FontWeight.w500, color: Colors.white, fontSize: 16),
             labelBackgroundColor: Colors.green,
           ),
           SpeedDialChild(
@@ -159,16 +147,14 @@ class _HomeWidgetState extends State<HomeWidget> {
             backgroundColor: Colors.blue,
             labelBackgroundColor: Colors.blue,
             label: 'Share',
-            labelStyle: TextStyle(
-                fontWeight: FontWeight.w500, color: Colors.white, fontSize: 16),
+            labelStyle: TextStyle(fontWeight: FontWeight.w500, color: Colors.white, fontSize: 16),
           ),
           SpeedDialChild(
             child: Icon(Icons.music_note_outlined, color: Colors.white),
             backgroundColor: Colors.pinkAccent,
             onTap: () => Modular.link.pushNamed(HomeModule.music),
             label: 'Music',
-            labelStyle: TextStyle(
-                fontWeight: FontWeight.w500, color: Colors.white, fontSize: 16),
+            labelStyle: TextStyle(fontWeight: FontWeight.w500, color: Colors.white, fontSize: 16),
             labelBackgroundColor: Colors.pinkAccent,
           ),
           SpeedDialChild(
@@ -176,8 +162,7 @@ class _HomeWidgetState extends State<HomeWidget> {
             backgroundColor: Colors.yellow[800],
             onTap: () => Modular.link.pushNamed(HomeModule.note),
             label: 'Ghi chú của tôi',
-            labelStyle: TextStyle(
-                fontWeight: FontWeight.w500, color: Colors.white, fontSize: 16),
+            labelStyle: TextStyle(fontWeight: FontWeight.w500, color: Colors.white, fontSize: 16),
             labelBackgroundColor: Colors.yellow[800],
           ),
         ],
@@ -209,16 +194,9 @@ class _HomeWidgetState extends State<HomeWidget> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text("${counting(date, type)}",
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 60,
-                fontWeight: FontWeight.w600)),
+            style: TextStyle(color: Colors.white, fontSize: 60, fontWeight: FontWeight.w600)),
         SizedBox(height: SizeConfig.blockSizeVertical * 3),
-        Text(type,
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w600)),
+        Text(type, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600)),
       ],
     );
   }

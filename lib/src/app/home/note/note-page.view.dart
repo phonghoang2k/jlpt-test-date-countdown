@@ -43,16 +43,15 @@ class _NotePageState extends State<NotePage> {
             builder: (context, state) => Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      colorFilter:
-                          ColorFilter.mode(Colors.black45, BlendMode.darken),
+                      colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
                       image: DataConfig.imageAssetsLink[_homeCubit.imageIndex],
                       fit: BoxFit.cover,
                     ),
                   ),
                 )),
         Container(
-            margin: EdgeInsets.fromLTRB(SizeConfig.blockSizeHorizontal * 6, 100,
-                SizeConfig.blockSizeHorizontal * 6, 20),
+            margin:
+                EdgeInsets.fromLTRB(SizeConfig.blockSizeHorizontal * 6, 100, SizeConfig.blockSizeHorizontal * 6, 20),
             child: BlocBuilder<NoteCubit, NoteState>(
                 cubit: _noteCubit,
                 buildWhen: (prev, now) => now is NoteCreate,
@@ -69,8 +68,7 @@ class _NotePageState extends State<NotePage> {
                   return GridView.builder(
                       itemCount: _notes.length,
                       padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
                       itemBuilder: (BuildContext context, int index) => _note(
                           header: _notes[index]["header"] as String,
                           body: _notes[index]["body"] as String,
@@ -84,16 +82,12 @@ class _NotePageState extends State<NotePage> {
             child: Row(
               children: [
                 IconButton(
-                  icon:
-                      Icon(Icons.arrow_back_ios_outlined, color: Colors.white),
+                  icon: Icon(Icons.arrow_back_ios_outlined, color: Colors.white),
                   iconSize: 25,
                   onPressed: () => Navigator.pop(context),
                 ),
                 Text("Ghi chú của tôi",
-                    style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600)),
+                    style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.w600)),
               ],
             )),
         Positioned(
@@ -105,29 +99,23 @@ class _NotePageState extends State<NotePage> {
                 builder: (BuildContext context) {
                   return Container(
                     child: AlertDialog(
-                      actionsPadding: EdgeInsets.only(
-                          bottom: SizeConfig.safeBlockVertical * 5),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0)),
+                      actionsPadding: EdgeInsets.only(bottom: SizeConfig.safeBlockVertical * 5),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
                       title: Center(
                           child: Text("Tạo ghi chú mới",
                               style: TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize:
-                                      SizeConfig.safeBlockVertical * 2.5))),
+                                  fontWeight: FontWeight.w800, fontSize: SizeConfig.safeBlockVertical * 2.5))),
                       content: FormBuilder(
                           key: _formBuilderKey,
                           child: Column(children: [
                             FormBuilderTextField(
                                 attribute: "header",
                                 validators: [FormBuilderValidators.required()],
-                                decoration: InputDecoration(
-                                    labelText: "Tiêu đề ghi chú")),
+                                decoration: InputDecoration(labelText: "Tiêu đề ghi chú")),
                             FormBuilderTextField(
                                 attribute: "body",
                                 validators: [FormBuilderValidators.required()],
-                                decoration: InputDecoration(
-                                    labelText: "Nội dung ghi chú"))
+                                decoration: InputDecoration(labelText: "Nội dung ghi chú"))
                           ])),
                       actions: <Widget>[
                         SizedBox(width: SizeConfig.blockSizeHorizontal * 1),
@@ -138,17 +126,14 @@ class _NotePageState extends State<NotePage> {
                               height: SizeConfig.safeBlockVertical * 5,
                               child: Text(
                                 'Lưu lại',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16),
+                                style: TextStyle(color: Colors.white, fontSize: 16),
                               ),
                             ),
                             color: Color(0xFFE3161D),
                             onPressed: () {
-                              if (_formBuilderKey.currentState
-                                  .saveAndValidate()) {
+                              if (_formBuilderKey.currentState.saveAndValidate()) {
                                 _noteCubit.addNote(
-                                    Map<String, String>.from(
-                                        _formBuilderKey.currentState.value),
+                                    Map<String, String>.from(_formBuilderKey.currentState.value),
                                     "${DateFormat.yMd().format(DateTime.now()).toString()} ${DateFormat.Hm().format(DateTime.now()).toString()}",
                                     Colors.green,
                                     Colors.greenAccent);
@@ -164,8 +149,7 @@ class _NotePageState extends State<NotePage> {
                             height: SizeConfig.safeBlockVertical * 5,
                             child: Text(
                               'Đóng',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
+                              style: TextStyle(color: Colors.white, fontSize: 16),
                             ),
                           ),
                           color: Color(0xFF464646),
@@ -184,12 +168,7 @@ class _NotePageState extends State<NotePage> {
     ));
   }
 
-  Widget _note(
-      {String header,
-      String time,
-      String body,
-      Color colorHeader,
-      Color colorBody}) {
+  Widget _note({String header, String time, String body, Color colorHeader, Color colorBody}) {
     return Container(
       width: SizeConfig.blockSizeHorizontal * 40,
       child: Column(
@@ -214,15 +193,8 @@ class _NotePageState extends State<NotePage> {
             child: Column(children: [
               Text(header,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.black)),
-              Text(body,
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.black)),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.black)),
+              Text(body, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.black)),
             ]),
           )
         ],

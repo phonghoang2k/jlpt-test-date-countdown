@@ -73,13 +73,10 @@ class _MusicAppState extends State<MusicApp> {
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Colors.black,
-                    Colors.red[600],
-                  ]),
+              gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
+                Colors.black,
+                Colors.red[600],
+              ]),
             ),
             child: Padding(
               padding: EdgeInsets.only(
@@ -96,10 +93,7 @@ class _MusicAppState extends State<MusicApp> {
                         margin: EdgeInsets.only(left: 90),
                         child: Text(
                           'Music Beats',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 35,
-                              fontWeight: FontWeight.w500),
+                          style: TextStyle(color: Colors.white, fontSize: 35, fontWeight: FontWeight.w500),
                         ),
                       ),
                     ),
@@ -108,10 +102,7 @@ class _MusicAppState extends State<MusicApp> {
                       child: Center(
                         child: Text(
                           'Listen to my favorite song',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 23,
-                              fontWeight: FontWeight.w300),
+                          style: TextStyle(color: Colors.white, fontSize: 23, fontWeight: FontWeight.w300),
                         ),
                       ),
                     ),
@@ -124,8 +115,7 @@ class _MusicAppState extends State<MusicApp> {
                         builder: (context, state) => Center(
                               child: CircleAvatar(
                                 radius: 150,
-                                backgroundImage: DataConfig
-                                    .imageMusic[_musicCubit.imageIndex],
+                                backgroundImage: DataConfig.imageMusic[_musicCubit.imageIndex],
                               ),
                             )),
                     SizedBox(
@@ -168,17 +158,11 @@ class _MusicAppState extends State<MusicApp> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
-                                      "${position.inMinutes}: ${position.inSeconds.remainder(60)}",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w600)),
+                                  Text("${position.inMinutes}: ${position.inSeconds.remainder(60)}",
+                                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600)),
                                   slider(),
-                                  Text(
-                                      "${musicLength.inMinutes}: ${musicLength.inSeconds.remainder(60)}",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w600)),
+                                  Text("${musicLength.inMinutes}: ${musicLength.inSeconds.remainder(60)}",
+                                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600)),
                                 ],
                               ),
                             ),
@@ -201,8 +185,7 @@ class _MusicAppState extends State<MusicApp> {
                                         icon: Icon(playBtn),
                                         onPressed: () {
                                           if (!playing) {
-                                            _cache.play(DataConfig.songMusic[
-                                                _musicCubit.songIndex]);
+                                            _cache.play(DataConfig.songMusic[_musicCubit.songIndex]);
                                             setState(() {
                                               playBtn = Icons.pause;
                                               playing = true;
