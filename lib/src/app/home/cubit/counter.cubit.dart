@@ -24,5 +24,4 @@ class CounterCubit extends Cubit<CounterState> {
       emit(OneSecondPassed(dateCount));
     });
   }
-
 }

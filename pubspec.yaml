@@ -38,8 +38,11 @@ dependencies:
   fluttertoast: ^7.1.1
   shared_preferences: ^0.5.12+2
   carousel_slider: ^2.3.1
-  fab_circular_menu: ^1.0.1
-#  flutter_sound: ^6.3.1+1
+  audioplayers: ^0.16.2
+  flutter_form_builder: ^3.14.0
+  intl: any
+  audio_recorder: ^1.0.2
+  #  flutter_sound: ^6.3.1+1
   path_provider: ^1.6.22
   permission_handler: ^5.0.1+1
   flutter_speed_dial: ^1.2.5
@@ -65,7 +68,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/
+    - assets/background/
+    - assets/music_song/
+    - assets/music_image/
     - assets/fonts/
   # assets:
   #   - images/a_dot_burr.jpeg

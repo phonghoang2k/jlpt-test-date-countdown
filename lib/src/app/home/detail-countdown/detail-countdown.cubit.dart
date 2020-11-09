@@ -1,6 +1,5 @@
 import 'package:jlpt_testdate_countdown/src/models/date/date.dart';
 
-
 class DetailCountdownData {
   int daysLeft;
   int hoursLeft;

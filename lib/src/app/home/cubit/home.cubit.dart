@@ -28,5 +28,4 @@ class HomeCubit extends Cubit<HomeState> {
     Application.sharePreference.putInt("quoteIndex", quoteIndex);
     emit(QuoteChanged(DataConfig.quoteString[quoteIndex]));
   }
-
 }
