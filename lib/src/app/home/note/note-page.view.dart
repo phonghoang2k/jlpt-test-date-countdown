@@ -16,24 +16,36 @@ class NotePage extends StatefulWidget {
   }
 }
 
-class _NotePageState extends State<NotePage> {
+class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin {
   HomeCubit _homeCubit = HomeCubit();
   NoteCubit _noteCubit = NoteCubit();
-  GlobalKey<FormBuilderState> _formBuilderKey = GlobalKey<FormBuilderState>();
+  AnimationController _controller;
+  Animation<double> offsetAnimation;
 
-  List<Map<String, dynamic>> _notes = [
-    {
-      "header": "Làm đề thi",
-      "body": "Làm đề thi với crush",
-      "time": "11/08/2020 10:49",
-      "colorHeader": Colors.green[300],
-      "colorBody": Colors.green[100]
-    }
-  ];
+  bool deleteMode = true;
+  final TextEditingController textController = TextEditingController();
+  GlobalKey<FormBuilderState> _formBuilderKey = GlobalKey<FormBuilderState>();
+  final _colors = [0xffd4d9e1, 0xffd3ccc7, 0xff000000, 0xffd0484e, 0xffFFFFFF];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    offsetAnimation = Tween(begin: 0.0, end: 5.0).chain(CurveTween(curve: Curves.elasticIn)).animate(_controller)
+      ..addStatusListener((status) {
+        // while(deleteMode){
+        if (status == AnimationStatus.completed) {
+          _controller.reverse();
+        }
+        // }
+      });
     return Scaffold(
         body: Stack(
       children: <Widget>[
@@ -54,27 +66,17 @@ class _NotePageState extends State<NotePage> {
                 EdgeInsets.fromLTRB(SizeConfig.blockSizeHorizontal * 6, 100, SizeConfig.blockSizeHorizontal * 6, 20),
             child: BlocBuilder<NoteCubit, NoteState>(
                 cubit: _noteCubit,
-                buildWhen: (prev, now) => now is NoteCreate,
                 builder: (context, state) {
-                  if (state is NoteCreate) {
-                    _notes.add({
-                      "header": state.header,
-                      "body": state.body,
-                      "time": state.time,
-                      "colorHeader": state.colorHeader,
-                      "colorBody": state.colorBody
-                    });
-                  }
                   return GridView.builder(
-                      itemCount: _notes.length,
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      itemCount: _noteCubit.headerList.length,
+                      padding: EdgeInsets.zero,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
                       itemBuilder: (BuildContext context, int index) => _note(
-                          header: _notes[index]["header"] as String,
-                          body: _notes[index]["body"] as String,
-                          time: _notes[index]["time"] as String,
-                          colorHeader: _notes[index]["colorHeader"] as Color,
-                          colorBody: _notes[index]["colorBody"] as Color));
+                          index: index,
+                          header: _noteCubit.headerList[index],
+                          body: _noteCubit.bodyList[index],
+                          time: _noteCubit.timeList[index],
+                          color: _noteCubit.colorList[index]));
                 })),
         Positioned(
             left: 10,
@@ -88,6 +90,26 @@ class _NotePageState extends State<NotePage> {
                 ),
                 Text("Ghi chú của tôi",
                     style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.w600)),
+                BlocBuilder<NoteCubit, NoteState>(
+                    cubit: _noteCubit,
+                    builder: (context, state) => IconButton(
+                        icon:
+                            Icon(state is EditMode ? Icons.delete : Icons.delete_forever, color: Colors.red, size: 30),
+                        onPressed: () {
+                          state is EditMode ? _noteCubit.changeToDeleteMode() : _noteCubit.changeToEditMode();
+                          _controller.forward(from: 0.0);
+                        })),
+                BlocBuilder<NoteCubit, NoteState>(
+                    cubit: _noteCubit,
+                    builder: (context, state) => state is! EditMode
+                        ? GestureDetector(
+                            onTap: () {
+                                _noteCubit.deleteSelectedList();
+                              _noteCubit.changeToEditMode();
+                            },
+                            child: Text("Xoá",
+                                style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.w600)))
+                        : SizedBox())
               ],
             )),
         Positioned(
@@ -110,12 +132,51 @@ class _NotePageState extends State<NotePage> {
                           child: Column(children: [
                             FormBuilderTextField(
                                 attribute: "header",
+                                style: TextStyle(color: Colors.black, fontSize: 16),
                                 validators: [FormBuilderValidators.required()],
                                 decoration: InputDecoration(labelText: "Tiêu đề ghi chú")),
                             FormBuilderTextField(
                                 attribute: "body",
+                                style: TextStyle(color: Colors.black, fontSize: 16),
                                 validators: [FormBuilderValidators.required()],
-                                decoration: InputDecoration(labelText: "Nội dung ghi chú"))
+                                decoration: InputDecoration(
+                                  labelText: "Nội dung ghi chú",
+                                  hintStyle: TextStyle(color: Colors.black, fontSize: 16),
+                                )),
+                            SizedBox(height: SizeConfig.blockSizeVertical * 3),
+                            BlocBuilder<NoteCubit, NoteState>(
+                                cubit: _noteCubit,
+                                builder: (context, state) => Container(
+                                        child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Màu ghi chú :', style: TextStyle(color: Colors.black, fontSize: 13)),
+                                        SizedBox(height: SizeConfig.blockSizeVertical * 2),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          children: _colors
+                                              .map((color) => InkWell(
+                                                    onTap: () => _noteCubit.setColorIndex(_colors.indexOf(color)),
+                                                    child: AnimatedContainer(
+                                                      duration: Duration(milliseconds: 300),
+                                                      width: (_colors.indexOf(color) == _noteCubit.colorIndex)
+                                                          ? SizeConfig.safeBlockHorizontal * 10
+                                                          : SizeConfig.safeBlockHorizontal * 8,
+                                                      height: (_colors.indexOf(color) == _noteCubit.colorIndex)
+                                                          ? SizeConfig.safeBlockHorizontal * 10
+                                                          : SizeConfig.safeBlockHorizontal * 8,
+                                                      decoration: BoxDecoration(
+                                                          color: Color(color),
+                                                          border: (_colors.indexOf(color) == 4)
+                                                              ? Border.all(color: Colors.black38)
+                                                              : null,
+                                                          borderRadius: BorderRadius.circular(5)),
+                                                    ),
+                                                  ))
+                                              .toList(),
+                                        )
+                                      ],
+                                    ))),
                           ])),
                       actions: <Widget>[
                         SizedBox(width: SizeConfig.blockSizeHorizontal * 1),
@@ -135,8 +196,7 @@ class _NotePageState extends State<NotePage> {
                                 _noteCubit.addNote(
                                     Map<String, String>.from(_formBuilderKey.currentState.value),
                                     "${DateFormat.yMd().format(DateTime.now()).toString()} ${DateFormat.Hm().format(DateTime.now()).toString()}",
-                                    Colors.green,
-                                    Colors.greenAccent);
+                                    _colors[_noteCubit.colorIndex].toString());
                                 Navigator.of(context).pop();
                               }
                             }),
@@ -168,37 +228,68 @@ class _NotePageState extends State<NotePage> {
     ));
   }
 
-  Widget _note({String header, String time, String body, Color colorHeader, Color colorBody}) {
-    return Container(
-      width: SizeConfig.blockSizeHorizontal * 40,
-      child: Column(
-        children: [
-          Container(
-            width: SizeConfig.blockSizeHorizontal * 40,
-            padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-            child: Text(
-              time,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              textAlign: TextAlign.center,
-            ),
-            decoration: BoxDecoration(
-              color: colorHeader,
-            ),
-          ),
-          Container(
-            height: 100,
-            width: SizeConfig.blockSizeHorizontal * 40,
-            decoration: BoxDecoration(color: colorBody),
-            padding: EdgeInsets.only(left: 5, top: 5),
-            child: Column(children: [
-              Text(header,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.black)),
-              Text(body, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.black)),
-            ]),
-          )
-        ],
-      ),
-    );
+  Widget _note({int index, String header, String time, String body, String color}) {
+    return BlocBuilder<NoteCubit, NoteState>(
+        cubit: _noteCubit,
+        builder: (context, state) => AnimatedBuilder(
+            animation: offsetAnimation,
+            builder: (buildContext, child) {
+              return GestureDetector(
+                onTap: () => state is! EditMode ? setState(() => _noteCubit.changeSelectedIndex(index)) : null,
+                child: Container(
+                  width: SizeConfig.blockSizeHorizontal * 40,
+                  padding: EdgeInsets.only(
+                      left: offsetAnimation.value != 0 ? offsetAnimation.value + 5.0 : 0,
+                      right: offsetAnimation.value != 0 ? 5 - offsetAnimation.value : 0),
+                  child: Stack(
+                    children: [
+                      Column(
+                        children: [
+                          Container(
+                              width: SizeConfig.blockSizeHorizontal * 40,
+                              padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                              child: Text(
+                                time,
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                textAlign: TextAlign.center,
+                              ),
+                              decoration: BoxDecoration(color: Color(int.parse(color)))),
+                          Container(
+                              height: 100,
+                              width: SizeConfig.blockSizeHorizontal * 40,
+                              decoration: BoxDecoration(color: Color(int.parse(color))),
+                              child: Stack(children: [
+                                Container(
+                                    height: 100,
+                                    width: SizeConfig.blockSizeHorizontal * 40,
+                                    decoration: BoxDecoration(color: Colors.white.withOpacity(0.5))),
+                                Column(children: [
+                                  Center(
+                                      child: Text(header,
+                                          maxLines: 1,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 16, fontWeight: FontWeight.w800, color: Colors.black))),
+                                  Text(body,
+                                      maxLines: 3,
+                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.black)),
+                                ])
+                              ]))
+                        ],
+                      ),
+                      state is! EditMode
+                          ? Positioned(
+                              child: Checkbox(
+                                  value: _noteCubit.selectedIndex.contains(index),
+                                  onChanged: (value) => setState(() => _noteCubit.changeSelectedIndex(index))),
+                              right: 0,
+                              top: 0,
+                            )
+                          : SizedBox()
+                    ],
+                  ),
+                ),
+              );
+            }));
   }
 }

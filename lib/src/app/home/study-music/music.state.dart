@@ -29,7 +29,7 @@ class MusicImage extends MusicState {
 }
 
 class MusicSong extends MusicState {
-  final String song;
+  final Music song;
 
   MusicSong(this.song);
 
