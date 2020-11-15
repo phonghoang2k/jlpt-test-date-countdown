@@ -20,11 +20,46 @@ class NoteLoading extends NoteState {
 }
 
 class NoteCreate extends NoteState {
-  final String header, body, time;
-  final Color colorHeader, colorBody;
+  final String header, body, time,color;
 
-  NoteCreate(this.header, this.body, this.time, this.colorHeader, this.colorBody);
+  NoteCreate(this.header, this.body, this.time, this.color);
 
   @override
-  List<Object> get props => [header, body, time, colorHeader, colorBody];
+  List<Object> get props => [header, body, time, color];
+}
+
+class NoteDelete extends NoteState {
+
+  const NoteDelete();
+
+  @override
+  List<Object> get props => [];
+}
+
+class ColorChange extends NoteState {
+  final int colorIndex;
+  ColorChange(this.colorIndex);
+
+  @override
+  List<Object> get props => [colorIndex];
+}
+
+class DeleteMode extends NoteState {
+  const DeleteMode();
+
+  @override
+  List<Object> get props => [];
+}
+class EditMode extends NoteState {
+  const EditMode();
+
+  @override
+  List<Object> get props => [];
+}
+
+class ChangeSelectedIndex extends NoteState {
+  const ChangeSelectedIndex();
+
+  @override
+  List<Object> get props => [];
 }

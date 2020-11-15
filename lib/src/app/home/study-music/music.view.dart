@@ -1,25 +1,31 @@
+import 'dart:async';
+
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_lyric/lyric_util.dart';
+import 'package:flutter_lyric/lyric_widget.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/study-music/music.cubit.dart';
 import 'package:jlpt_testdate_countdown/src/resources/data.dart';
+import 'package:jlpt_testdate_countdown/src/utils/sizeconfig.dart';
 
 class MusicApp extends StatefulWidget {
   @override
   _MusicAppState createState() => _MusicAppState();
 }
 
-class _MusicAppState extends State<MusicApp> {
+class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
   bool playing = false;
   IconData playBtn = Icons.play_arrow; //khi chua phat nhac
-
+  Timer _countdownTimer;
+  Duration start = Duration(seconds: 0);
   AudioPlayer _player;
   AudioCache _cache;
   Duration position = Duration();
   Duration musicLength = Duration();
-
+  int _countdownNum = 3000000;
   MusicCubit _musicCubit = MusicCubit();
 
   Widget slider() {
@@ -45,11 +51,23 @@ class _MusicAppState extends State<MusicApp> {
   //
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    //Todo: Init Lyrics
+    if (_countdownTimer != null) {
+      return;
+    }
+    _countdownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        _countdownNum--;
+        start = start + Duration(seconds: 10);
+        if (_countdownNum == 0) {
+          _countdownTimer.cancel();
+        }
+      });
+    });
+    //Todo: Init AudioPlayer
     _player = AudioPlayer();
     _cache = AudioCache(fixedPlayer: _player);
-
     //handle audioplayer time
     _player.durationHandler = (d) {
       setState(() {
@@ -63,10 +81,16 @@ class _MusicAppState extends State<MusicApp> {
     };
   }
 
-  //ui design
+  @override
+  void dispose() {
+    _player.dispose();
+    _countdownTimer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    var lyrics = LyricUtil.formatLyric(DataConfig.musicList[_musicCubit.songIndex].lyric);
     return Scaffold(
       body: Stack(
         children: [
@@ -87,23 +111,16 @@ class _MusicAppState extends State<MusicApp> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 12),
-                      child: Container(
-                        margin: EdgeInsets.only(left: 90),
-                        child: Text(
-                          'Music Beats',
-                          style: TextStyle(color: Colors.white, fontSize: 35, fontWeight: FontWeight.w500),
-                        ),
+                    Center(
+                      child: Text(
+                        'Music Beats',
+                        style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w500),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 12),
-                      child: Center(
-                        child: Text(
-                          'Listen to my favorite song',
-                          style: TextStyle(color: Colors.white, fontSize: 23, fontWeight: FontWeight.w300),
-                        ),
+                    Center(
+                      child: Text(
+                        'Listen to my favorite song',
+                        style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w300),
                       ),
                     ),
                     SizedBox(
@@ -115,7 +132,7 @@ class _MusicAppState extends State<MusicApp> {
                         builder: (context, state) => Center(
                               child: CircleAvatar(
                                 radius: 150,
-                                backgroundImage: DataConfig.imageMusic[_musicCubit.imageIndex],
+                                backgroundImage: DataConfig.musicList[_musicCubit.songIndex].songImage,
                               ),
                             )),
                     SizedBox(
@@ -123,21 +140,26 @@ class _MusicAppState extends State<MusicApp> {
                     ),
                     Center(
                       child: Text(
-                        'Daddy Challenge',
+                        DataConfig.musicList[_musicCubit.songIndex].songName,
                         style: TextStyle(color: Colors.white, fontSize: 32),
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 8),
-                      child: Center(
-                        child: Text(
-                          'LIU GRACE x KAYLIN x HELIX',
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                        Text(
+                          DataConfig.musicList[_musicCubit.songIndex].artists,
                           style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30,
+                        LyricWidget(
+                          lyricStyle: TextStyle(fontSize: 18, color: Colors.black54),
+                          currLyricStyle: TextStyle(fontSize: 16, color: Colors.white),
+                          size: Size(MediaQuery.of(context).size.width, 50),
+                          lyrics: lyrics,
+                          vsync: this,
+                          currentProgress: position.inMilliseconds.toDouble(),
+                        )
+                      ]),
                     ),
                     Expanded(
                       child: Container(
@@ -153,7 +175,7 @@ class _MusicAppState extends State<MusicApp> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              width: 500,
+                              width: SizeConfig.screenWidth,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -171,7 +193,7 @@ class _MusicAppState extends State<MusicApp> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 IconButton(
-                                    iconSize: 40,
+                                    iconSize: 30,
                                     color: Colors.black,
                                     icon: Icon(Icons.skip_previous),
                                     onPressed: () {}),
@@ -180,12 +202,12 @@ class _MusicAppState extends State<MusicApp> {
                                     buildWhen: (prev, now) => now is MusicSong,
                                     // ignore: missing_return
                                     builder: (context, state) => IconButton(
-                                        iconSize: 60,
+                                        iconSize: 40,
                                         color: Colors.black,
                                         icon: Icon(playBtn),
                                         onPressed: () {
                                           if (!playing) {
-                                            _cache.play(DataConfig.songMusic[_musicCubit.songIndex]);
+                                            _cache.play(DataConfig.musicList[_musicCubit.songIndex].songAsset);
                                             setState(() {
                                               playBtn = Icons.pause;
                                               playing = true;
@@ -199,12 +221,11 @@ class _MusicAppState extends State<MusicApp> {
                                           }
                                         })),
                                 IconButton(
-                                    iconSize: 40,
+                                    iconSize: 30,
                                     color: Colors.black,
                                     icon: Icon(Icons.skip_next),
                                     onPressed: () {
                                       _musicCubit.loadNewSong();
-                                      _musicCubit.loadNewSongImage();
                                     }),
                               ],
                             )

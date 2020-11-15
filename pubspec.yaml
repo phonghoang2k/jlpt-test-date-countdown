@@ -42,7 +42,7 @@ dependencies:
   flutter_form_builder: ^3.14.0
   intl: any
   audio_recorder: ^1.0.2
-  #  flutter_sound: ^6.3.1+1
+  flutter_lyric: ^1.0.2
   path_provider: ^1.6.22
   permission_handler: ^5.0.1+1
   flutter_speed_dial: ^1.2.5
