@@ -42,7 +42,7 @@ class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
     );
   }
 
-  // create   seek function
+  // create seek function
   void seekToSec(int sec) {
     Duration newPos = Duration(seconds: sec);
     _player.seek(newPos);
@@ -97,15 +97,11 @@ class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
-                Colors.black,
-                Colors.red[600],
-              ]),
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Colors.black, Colors.red[600]]),
             ),
             child: Padding(
-              padding: EdgeInsets.only(
-                top: 48,
-              ),
+              padding: EdgeInsets.only(top: 48),
               child: Container(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -123,9 +119,7 @@ class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
                         style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w300),
                       ),
                     ),
-                    SizedBox(
-                      height: 24,
-                    ),
+                    SizedBox(height: 24),
                     BlocBuilder<MusicCubit, MusicState>(
                         cubit: _musicCubit,
                         buildWhen: (prev, now) => now is MusicImage,
@@ -135,9 +129,7 @@ class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
                                 backgroundImage: DataConfig.musicList[_musicCubit.songIndex].songImage,
                               ),
                             )),
-                    SizedBox(
-                      height: 18,
-                    ),
+                    SizedBox(height: 18),
                     Center(
                       child: Text(
                         DataConfig.musicList[_musicCubit.songIndex].songName,

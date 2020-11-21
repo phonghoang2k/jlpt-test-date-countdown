@@ -3,34 +3,40 @@ import 'package:jlpt_testdate_countdown/src/models/music/music.dart';
 
 class DataConfig {
   static final List<AssetImage> imageAssetsLink = <AssetImage>[
-    AssetImage("assets/background/meo1.jpg"),
-    AssetImage("assets/background/meo2.jpg"),
+    AssetImage("assets/background/meo3.jpg"),
+    AssetImage("assets/background/meo4.jpg"),
+    AssetImage("assets/background/meo5.jpg"),
+    AssetImage("assets/background/meo6.jpg"),
+    AssetImage("assets/background/meo8.jpg"),
+    AssetImage("assets/background/meo9.jpg"),
+    AssetImage("assets/background/meo10.jpg"),
+    AssetImage("assets/background/meo11.jpg"),
+    AssetImage("assets/background/meo12.jpg"),
   ];
 
-  // static final List<AssetImage> imageMusic = <AssetImage>[
-  //   AssetImage("assets/music_image/girlimage.jfif"),
-  //   AssetImage("assets/music_image/candyimage.jpg"),
-  //   AssetImage("assets/music_image/image.jpg"),
-  // ];
 
   static final List<Music> musicList = <Music>[
     Music(
-        songImage: AssetImage("assets/music_image/girlimage.jfif"),
+        songImage: AssetImage("assets/music_image/image2.jpg"),
         songAsset: "music_song/music.mp3",
-        songName: "Daddy Challenge",
-        artists: "LIU GRACE x KAYLIN x HELIX",
+        songName: "Ông bà già tao lo hết",
+        artists: "BÌNH GOLD ft. SHADY",
         lyric:
-            "[00:25.06]Whos ya daddy x 3.14\n[00:37.14]Yeah i sold my soul to you evil daddy\n[00:39.63]Biết là trap nhưng vẫn làm ngơ ya music fuckin catchy\n[00:43.01]Goin everywhere with my naughty đá đì\n[00:45.34]Mini skirt no underwear nhưng nếu mà thích thì pick all of em stussy\n[00:48.29]Well i know he love me so much call me kitty kitty kitty bae\n[00:51.36]Solve all of my problem shity shity shity go away\n[00:54.64]Communicate when pinky pussy wet like milkyway\n[00:57.37]Cummin inside Baby Show me ya fetishistic face\n[01:00.35]Lil Krazieee\n[01:01.02]You know the price is priceless\n[01:02.49]Common daddy i like it\n[01:03.96]Shake it shake it while naked\n[01:05.64]Cant help cant hold can not replace me\n[01:07.03]U see the flow is Waving\n[01:08.44]I know u love when u say hate it\n[01:09.87]Do every thang for you dady just check it\n[01:11.49]Check it check it check it\n[01:54.57]Dè Lay down\n[01:54.77]Ko lẽ lại để cho đá đi mình phải muộn phiền hay sao\n[01:55.57]Cuộc chơi là win win\n[01:56.35]U dont need to pay now\n[01:58.02]Nhìn ngắm mặt hồ nhún nhảy\n[01:58.43]Mình tan chảy cùng mây sao\n[01:59.11]Nếu mà chán đổi layout\n[02:00.14]Đâm xe vào ngõ mình thay bao\n[02:01.19]Who's ya đa đa đa đa!!???!!\n")
+            "[00:12.38]Ông bà già tao lo\n[00:15.12]Ông bà già tao lo\n[00:18.07]Ông bà già tao lo\n[00:20.96]Ông bà già tao lo\n[00:24.05]Ông bà già tao lo hết-chúng mày chỉ cần bay thôi, bay đê\n[00:27.02]Ông bà già tao lo hết-chúng mày chỉ cần phê thôi, phê đê\n[00:29.87]Ông bà già tao lo hết-chúng mày chỉ cần vui thôi, vui đê\n[00:32.72]Ông bà già tao lo hết-chúng mày chỉ cần chơi thôi, chơi đê\n[00:36.06]Băng qua mưa rơi trên con xe hơi ông bà già tao lo-băng băng\n[00:39.10]Đưa anh em sang bên Dubai chơi ông bà già tao lo-Dubai\n[00:41.69]Lamboghini, phone Vertu yeah ông bà già tao lo-Lambo\n[00:44.80]Ông bà già tao lo\n[00:46.15]Yeah ông bà già tao lo\n[00:47.63]Tao chơi ke tao bay luôn trên xe ông bà già tao lo\n[00:50.81]Party overnight trên Taboo ông bà già tao lo-party overnight\n[00:54.04]Chơi cho vơi đi bao nhiêu money ông bà già tao cho-homie\n[00:56.61]Ôm bao nhiêu girl xinh mông to vây quanh đầy đường tao bo-vây quanh baby\n[00:59.91]Đeo trên tay diamond four kara chân đi Dolce\n[01:02.66]Gucci Louis Vuition Prada ok đi bae-ok ok\n[01:05.71]Chơi cho bay đi xa luôn đêm nay không phê không về-oh\n[01:08.64]Không phê không về\n[01:10.62]Yeah, không phê không về\n[01:12.22]Lo cho bao ông can cho anh em bay ngay phim giang hồ\n[01:15.11]Trên kia bao nhiêu em dancer đang mê tao điên dồ-crazy\n[01:17.71]Phang em 2k3 đôi mông em to như Liên Xô-doggy\n[01:20.62]Chơi cocain xong nghe vinahouse cho lên đồ-omg\n[01:23.55]Ông bà già tao lo hết-chúng mày chỉ cần bay thôi, bay đê\n[01:27.11]Ông bà già tao lo hết-chúng mày chỉ cần phê thôi, phê đê\n[01:29.80]Ông bà già tao lo hết-chúng mày chỉ cần vui thôi, vui đê\n[01:32.69]Ông bà già tao lo hết-chúng mày chỉ cần chơi thôi, chơi đê\n[01:35.83]Băng qua mưa rơi trên con xe hơi ông bà già tao lo-băng băng\n[01:39.08]Đưa anh em sang bên Dubai chơi ông bà già tao lo-Dubai\n[01:41.62]Lamboghini, phone Vertu yeah ông bà già tao lo-Lambo\n[01:44.52]Ông bà già tao lo\n[01:46.15]Yeah ông bà già tao lo\n[01:47.80]Đến cả hoa hậu Mai Phương Thuý có khi còn thích tao\n[01:50.39]Mấy cái thằng anh hùng bàn phím gặp tao là sitdown-mấy cái thằng vớ vẩn\n[01:53.56]Đến đấy mà đốt trong show hiphop này như là big thâu\n[01:56.56]Làm vài con tem rồi cùng Shady lượn vài ba vòng xích đạo\n[01:59.23]Mang vali ra bung cho đô la bay như mưa rơi trong cabin anh em ta phê xong lên bay vivu trên Bently\n[02:02.49]Anh em ta đông, anh em ta ngông, anh em ta chơi như Donal Trump\n[02:07.67]Anh em ta không quan tâm ai đâu baby so much money\n[02:11.57]Hot còn chào tao check xếp hàng xa tít từ đằng sau-chờ đến lượt\n[02:15.12]Mấy cái thằng cùi bắp vẫn còn mơ ước được bằng tao-ước đê\n[02:17.56]Muốn tao nghèo khổ lắm nhưng mà đấy cơ mà khổ lắm\n[02:20.75]Tao đẻ con mẹ nó ở vạch đích rồi bây giờ biết phải làm sao\n[02:23.60]Ông bà già tao lo hết-chúng mày chỉ cần bay thôi, bay đê\n[02:26.83]Ông bà già tao lo hết-chúng mày chỉ cần phê thôi, phê đê\n[02:29.53]Ông bà già tao lo hết-chúng mày chỉ cần vui thôi, vui đê\n[02:32.37]Ông bà già tao lo hết-chúng mày chỉ cần chơi thôi, chơi đê\n[02:35.15]Băng qua mưa rơi trên con xe hơi ông bà già tao lo-băng băng\n[02:38.61]Đưa anh em sang bên Dubai chơi ông bà già tao lo-Dubai\n[02:41.79]Lamboghini, phone Vertu yeah ông bà già tao lo-Lambo\n[02:44.24]Ông bà già tao lo\n[02:45.94]Yeah ông bà già tao lo\n[02:47.56]Bọn anh kinh tế, bọn anh chơi tinh tế-yeah, yeah\n[02:50.59]Mấy em gái nhảy nhót mỏi chân thì lên để anh bế\n[02:53.29]Bọn anh nổi tiếng\n[02:54.61]Không cần lăng xê\n[02:55.80]Gọi anh là công tử còn đang mải chơi quên đường về\n[02:59.36]Rượu mà không uống hết thì em cứ đổ ra mà tắm\n[03:02.30]Với cả đống trang sức này em cứ bỏ ra mà ngắm\n[03:05.29]Đừng nói chuyện tình yêu because I wish I don't care\n[03:08.42]Nhưng mà ok, nếu em thích thì anh sẽ vạch ra và bắn-chiu chiu\n[03:11.20]Body girl, hạ mông thấp thôi-hạ mông thấp thôi\n[03:14.06]Uống đi em đừng có nhấp môi-đừng chơi nhấp môi\n[03:17.09]Mẹ em gọi à, bảo con bận lắm-bảo đang bận!\n[03:20.16]Em mà làm anh cáu là phạt em gấp đôi-phạt vào đít!\n[03:23.38]Ông bà già tao lo hết-chúng mày chỉ cần bay thôi, bay đê\n[03:26.57]Ông bà già tao lo hết-chúng mày chỉ cần phê thôi, phê đê\n[03:28.93]Ông bà già tao lo hết-chúng mày chỉ cần vui thôi, vui đê\n[03:32.61]Ông bà già tao lo hết-chúng mày chỉ cần chơi thôi, chơi đê\n[03:35.77]Băng qua mưa rơi trên con xe hơi ông bà già tao lo-băng băng\n[03:38.70]Đưa anh em sang bên Dubai chơi ông bà già tao lo-Dubai\n[03:41.42]Lamboghini, phone Vertu yeah ông bà già tao lo-Lambo\n[03:44.49]Ông bà già tao lo\n[03:46.51]Yeah ông bà già tao lo\n"
+    )
   ];
 
 
   static final List<String> quoteString = <String>[
-    "Em cắt tóc giống anh, Bố em đấm em không trượt phát lào!",
-    "Tà lăng, tà lăng, tà lăng tả lẳng tà lăng.",
-    "Tóc Bảnh như lông l.",
-    "Vứt cả tỷ vào việc chính đáng.",
-    "Trên đời này đếch có chuyện đúng sai, chỉ có kẻ yếu và kẻ mạnh.",
-    "Không làm mà đòi ăn, thì chỉ có ăn đồng bằng, ăn cát"
+    "Nếu yêu nhau là do duyên số, thì lấy nhau là do sự cố xảy ra.",
+    "Trai thời nay kiên cường, bất khuất. Đầu đội trời chân đạp đất nhưng vợ dọa là ngất.",
+    "Yêu đương gì tầm này, nhà bao việc. Đi ăn cái gì, nhà bao việc. Đi chơi cái gì, nhà bao việc.",
+    "Béo không phải là một cái tội mà chỉ là sự vượt trội về thể xác.",
+    "Gọt xoài đừng để xoài chua! Chọn bạn đừng để bạn cua bồ mình.",
+    "Trong tình yêu, tình cảm là thứ bất tử chỉ có một điều duy nhất có thể thay đổi là thay người yêu.",
+    "Thanh xuân như một ly trà, không ai dám húp nên trà còn nguyên",
+    "Còn hơn 1 tuần nữa thôi bu em ạ, toang thật rồi bu em ạ ...",
+    "Đường lên đại học thì xa.. đường ra ruộng lúa thì: Ah! đây rồi",
   ];
 
   static final testDate = DateTime(2020, 12, 6);
