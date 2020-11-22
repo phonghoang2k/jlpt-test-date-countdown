@@ -11,6 +11,7 @@ import 'package:jlpt_testdate_countdown/src/app/home/home.module.dart';
 import 'package:jlpt_testdate_countdown/src/models/date/date.dart';
 import 'package:jlpt_testdate_countdown/src/resources/data.dart';
 import 'package:jlpt_testdate_countdown/src/utils/sizeconfig.dart';
+import 'package:share/share.dart';
 
 class HomeWidget extends StatefulWidget {
   @override
@@ -50,7 +51,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                       children: <Widget>[
                         Text("Đếm ngược ngày thi",
                             style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600)),
-                        Text("Kì thi JLPT mùa đông 2020", style: TextStyle(color: Colors.white, fontSize: 15)),
+                        Text("Kì thi Trung học phổ thông Quốc gia 2021",
+                            style: TextStyle(color: Colors.white, fontSize: 15)),
                       ],
                     ),
                     Spacer(flex: 6),
@@ -65,12 +67,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                 Container(
                   child: Column(
                     children: <Widget>[
-                      Text("CÒN",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          )),
+                      Text("CÒN", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white)),
                       FlatButton(
                         child: BlocBuilder<CounterCubit, CounterState>(
                           cubit: _counterCubit,
@@ -142,7 +139,7 @@ class _HomeWidgetState extends State<HomeWidget> {
             child: Icon(Icons.article_outlined, color: Colors.white),
             backgroundColor: Colors.green,
             label: 'Tài liệu học tập',
-            onTap: () => Modular.link.pushNamed(HomeModule.recorder),
+            onTap: () => Modular.link.pushNamed(HomeModule.learningMaterial),
             labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
             labelBackgroundColor: Colors.green,
           ),
@@ -150,14 +147,16 @@ class _HomeWidgetState extends State<HomeWidget> {
             child: Icon(Icons.share, color: Colors.white),
             backgroundColor: Colors.blue,
             labelBackgroundColor: Colors.blue,
-            label: 'Share',
+            label: 'Chia sẻ',
             labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
+            onTap: () => Share.share('check out my new Facebook page https://www.facebook.com/dudidauthatngau',
+                subject: 'See yaa'),
           ),
           SpeedDialChild(
             child: Icon(Icons.music_note_outlined, color: Colors.white),
             backgroundColor: Colors.pinkAccent,
             onTap: () => Modular.link.pushNamed(HomeModule.music),
-            label: 'Music',
+            label: 'Âm nhạc',
             labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
             labelBackgroundColor: Colors.pinkAccent,
           ),

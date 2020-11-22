@@ -5,8 +5,6 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_lyric/lyric_util.dart';
-import 'package:flutter_lyric/lyric_widget.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/study-music/music.cubit.dart';
 import 'package:jlpt_testdate_countdown/src/resources/data.dart';
 import 'package:jlpt_testdate_countdown/src/utils/sizeconfig.dart';
@@ -90,7 +88,7 @@ class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    var lyrics = LyricUtil.formatLyric(DataConfig.musicList[_musicCubit.songIndex].lyric);
+    // var lyrics = LyricUtil.formatLyric(DataConfig.musicList[_musicCubit.songIndex].lyric);
     return Scaffold(
       body: Stack(
         children: [
@@ -143,14 +141,14 @@ class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
                           DataConfig.musicList[_musicCubit.songIndex].artists,
                           style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
-                        LyricWidget(
-                          lyricStyle: TextStyle(fontSize: 18, color: Colors.black54),
-                          currLyricStyle: TextStyle(fontSize: 16, color: Colors.white),
-                          size: Size(MediaQuery.of(context).size.width, 50),
-                          lyrics: lyrics,
-                          vsync: this,
-                          currentProgress: position.inMilliseconds.toDouble(),
-                        )
+                        // LyricWidget(
+                        //   lyricStyle: TextStyle(fontSize: 18, color: Colors.black54),
+                        //   currLyricStyle: TextStyle(fontSize: 16, color: Colors.white),
+                        //   size: Size(MediaQuery.of(context).size.width, 50),
+                        //   lyrics: lyrics,
+                        //   vsync: this,
+                        //   currentProgress: position.inMilliseconds.toDouble(),
+                        // )
                       ]),
                     ),
                     Expanded(

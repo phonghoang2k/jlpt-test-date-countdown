@@ -11,7 +11,6 @@ import 'package:jlpt_testdate_countdown/src/utils/sizeconfig.dart';
 class NotePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _NotePageState();
   }
 }
@@ -29,7 +28,6 @@ class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin
 
   @override
   void initState() {
-    // TODO: implement initState
     _controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
 
     super.initState();
@@ -37,7 +35,6 @@ class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     offsetAnimation = Tween(begin: 0.0, end: 5.0).chain(CurveTween(curve: Curves.elasticIn)).animate(_controller)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
@@ -263,7 +260,9 @@ class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin
             builder: (buildContext, child) {
               return GestureDetector(
                 onTap: () {
-                  state is DeleteMode || state is ChangeSelectedIndex ? setState(() => _noteCubit.changeSelectedIndex(index)) : null;
+                  state is DeleteMode || state is ChangeSelectedIndex
+                      ? setState(() => _noteCubit.changeSelectedIndex(index))
+                      : null;
                 },
                 onLongPress: () {
                   _controller.forward(from: 0.0);

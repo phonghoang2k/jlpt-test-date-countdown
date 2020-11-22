@@ -33,15 +33,15 @@ class NoteCubit extends Cubit<NoteState> {
   }
 
   void addAll() {
-    if(selectedIndex.length < headerList.length){
-      for(int i = 0; i < headerList.length; i++){
+    if (selectedIndex.length < headerList.length) {
+      for (int i = 0; i < headerList.length; i++) {
         if (!selectedIndex.contains(i)) {
           print("add $i");
           selectedIndex.add(i);
           print("list: $selectedIndex");
         }
       }
-    }else {
+    } else {
       selectedIndex.clear();
     }
     emit(ChangeSelectedIndex());

@@ -20,7 +20,7 @@ class NoteLoading extends NoteState {
 }
 
 class NoteCreate extends NoteState {
-  final String header, body, time,color;
+  final String header, body, time, color;
 
   NoteCreate(this.header, this.body, this.time, this.color);
 
@@ -29,7 +29,6 @@ class NoteCreate extends NoteState {
 }
 
 class NoteDelete extends NoteState {
-
   const NoteDelete();
 
   @override
@@ -50,6 +49,7 @@ class DeleteMode extends NoteState {
   @override
   List<Object> get props => [];
 }
+
 class EditMode extends NoteState {
   const EditMode();
 
