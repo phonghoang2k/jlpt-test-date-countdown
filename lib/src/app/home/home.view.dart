@@ -103,11 +103,15 @@ class _HomeWidgetState extends State<HomeWidget> {
                         cubit: _homeCubit,
                         buildWhen: (prev, now) => now is QuoteChanged,
                         builder: (context, state) => state is QuoteChanged
-                            ? Text(
-                                state.quote,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.white, fontSize: 17),
-                              )
+                            ? Padding(
+                                padding: EdgeInsets.only(
+                                    left: SizeConfig.blockSizeHorizontal * 5,
+                                    right: SizeConfig.blockSizeHorizontal * 5),
+                                child: Text(
+                                  state.quote,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white, fontSize: 17),
+                                ))
                             : Center(child: CircularProgressIndicator()),
                       ),
                     ],

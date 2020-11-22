@@ -32,6 +32,21 @@ class NoteCubit extends Cubit<NoteState> {
     emit(ChangeSelectedIndex());
   }
 
+  void addAll() {
+    if(selectedIndex.length < headerList.length){
+      for(int i = 0; i < headerList.length; i++){
+        if (!selectedIndex.contains(i)) {
+          print("add $i");
+          selectedIndex.add(i);
+          print("list: $selectedIndex");
+        }
+      }
+    }else {
+      selectedIndex.clear();
+    }
+    emit(ChangeSelectedIndex());
+  }
+
   void setColorIndex(int value) {
     colorIndex = value;
     print(colorIndex);
