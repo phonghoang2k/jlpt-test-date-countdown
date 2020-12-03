@@ -1,11 +1,13 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/learning-material/component/item.component.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/learning-material/learning-material.cubit.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/learning-material/learning-material.module.dart';
 import 'package:jlpt_testdate_countdown/src/env/application.dart';
+import 'package:jlpt_testdate_countdown/src/repositories/learning-material.repository.dart';
 import 'package:jlpt_testdate_countdown/src/resources/data.dart';
 import 'package:jlpt_testdate_countdown/src/utils/sizeconfig.dart';
 
@@ -15,7 +17,7 @@ class LearningMaterial extends StatefulWidget {
 }
 
 class _LearningMaterialState extends State<LearningMaterial> {
-  LearningMaterialCubit _cubit = LearningMaterialCubit();
+  LearningMaterialCubit _cubit = LearningMaterialCubit(LearningMaterialRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +55,9 @@ class _LearningMaterialState extends State<LearningMaterial> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text("Tài liệu ôn thi",
-                          style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold))
-                    ],
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text("Tài liệu ôn thi", style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold)),
                   ),
                   SizedBox(height: SizeConfig.safeBlockVertical * 3),
                   buildSlidableCategory("Tài liệu luyện thi theo môn học", _cubit.subjects),
@@ -67,14 +66,19 @@ class _LearningMaterialState extends State<LearningMaterial> {
                   SizedBox(height: SizeConfig.safeBlockVertical * 3),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Tài liệu mới cập nhật",
-                      style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
+                    child: Text("Tài liệu mới cập nhật", style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
                   ),
                   SizedBox(height: SizeConfig.safeBlockVertical),
-                  ...List.generate(
-                      5, (index) => buildCategoryItem("Tài liệu môn toán", link: "https://www.google.com")),
+                  BlocBuilder<LearningMaterialCubit, LearningMaterialState>(
+                    cubit: _cubit,
+                    builder: (context, state) => state is LearningMaterialDataLoaded
+                        ? Column(
+                            children: List.generate(
+                                state.data.length,
+                                (index) => buildCategoryItem("${state.data.elementAt(index).name}",
+                                    link: state.data.elementAt(index).link, source: state.data.elementAt(index).source)))
+                        : CircularProgressIndicator(),
+                  ),
                 ],
               ),
             ),
@@ -100,17 +104,12 @@ class _LearningMaterialState extends State<LearningMaterial> {
                         margin: EdgeInsets.symmetric(horizontal: SizeConfig.safeBlockHorizontal),
                         width: SizeConfig.safeBlockHorizontal * 25,
                         height: SizeConfig.safeBlockVertical * 8,
-                        decoration:
-                            BoxDecoration(borderRadius: BorderRadius.circular(20), color: _cubit.colorList[index]),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: _cubit.colorList[index]),
                         child: FlatButton(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                          onPressed: () => Modular.link
-                              .pushNamed(LearningMaterialModule.detailLearning, arguments: data.elementAt(index)),
+                          onPressed: () => Modular.link.pushNamed(LearningMaterialModule.detailLearning, arguments: data.elementAt(index)),
                           child: Center(
-                            child: Text(
-                              "${data.elementAt(index)}",
-                              style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
-                            ),
+                            child: Text("${data.elementAt(index)}", style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
                           ),
                         ),
                       )),

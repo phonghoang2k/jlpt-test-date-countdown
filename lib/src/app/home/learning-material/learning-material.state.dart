@@ -19,11 +19,20 @@ class LearningMaterialLoading extends LearningMaterialState {
   List<Object> get props => [];
 }
 
-// class LearningMaterialImage extends LearningMaterialState {
-//   final AssetImage image;
-//
-//   LearningMaterialImage(this.image);
-//
-//   @override
-//   List<Object> get props => [image];
-// }
+class LearningMaterialDataLoaded extends LearningMaterialState {
+  final List<Data> data;
+
+  LearningMaterialDataLoaded(this.data);
+
+  @override
+  List<Object> get props => [data];
+}
+
+class LearningMaterialError extends LearningMaterialState {
+  final String message;
+
+  const LearningMaterialError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}

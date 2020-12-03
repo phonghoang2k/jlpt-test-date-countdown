@@ -1,3 +1,4 @@
+import 'package:jlpt_testdate_countdown/src/utils/api.dart';
 import 'package:jlpt_testdate_countdown/src/utils/shared_preferences.dart';
 
 // ignore: constant_identifier_names
@@ -6,7 +7,7 @@ enum ENV { PRODUCTION, DEV }
 class Application {
   static ENV env = ENV.DEV;
   static SpUtil sharePreference;
-  static bool pageIsOpen = false;
+  static API api;
 
   // static API api;
 

@@ -6,9 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 Widget buildCategoryItem(String title, {String source, String link}) {
   return FlatButton(
     padding: EdgeInsets.symmetric(vertical: SizeConfig.safeBlockVertical),
-    onPressed: () async => (await canLaunch(link))
-        ? launch(link)
-        : Fluttertoast.showToast(msg: "Có lỗi xảy ra\nkhông thể mở được tài liệu"),
+    onPressed: () async => (await canLaunch(link)) ? launch(link) : Fluttertoast.showToast(msg: "Có lỗi xảy ra\nkhông thể mở được tài liệu"),
     child: Row(
       children: [
         Container(
@@ -24,12 +22,14 @@ Widget buildCategoryItem(String title, {String source, String link}) {
           ),
         ),
         SizedBox(width: SizeConfig.safeBlockHorizontal * 4),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("$title", style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold)),
-            Text("$source", style: TextStyle(fontSize: 18, color: Colors.white)),
-          ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("$title", style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold)),
+              Text("$source", style: TextStyle(fontSize: 18, color: Colors.white)),
+            ],
+          ),
         )
       ],
     ),
