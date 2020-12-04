@@ -21,11 +21,12 @@ class HomeLoading extends HomeState {
 
 class BackgroundImageChanged extends HomeState {
   final AssetImage image;
+  final bool isChangedImage;
 
-  BackgroundImageChanged(this.image);
+  BackgroundImageChanged(this.image, this.isChangedImage);
 
   @override
-  List<Object> get props => [image];
+  List<Object> get props => [image, isChangedImage];
 }
 
 class QuoteChanged extends HomeState {
