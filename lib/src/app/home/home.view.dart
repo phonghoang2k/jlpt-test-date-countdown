@@ -13,6 +13,9 @@ import 'package:jlpt_testdate_countdown/src/resources/data.dart';
 import 'package:jlpt_testdate_countdown/src/utils/sizeconfig.dart';
 import 'package:share/share.dart';
 
+import '../../env/application.dart';
+import 'cubit/home.cubit.dart';
+
 class HomeWidget extends StatefulWidget {
   @override
   _HomeWidgetState createState() => _HomeWidgetState();
@@ -22,155 +25,167 @@ class _HomeWidgetState extends State<HomeWidget> {
   CarouselController buttonCarouselController = CarouselController();
   HomeCubit _homeCubit = HomeCubit();
   CounterCubit _counterCubit = Modular.get<CounterCubit>();
+  bool _isChangeBackground = false;
+  int _currentImageIndex = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _currentImageIndex = Application.sharePreference.getInt("imageIndex");
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          BlocBuilder<HomeCubit, HomeState>(
-              cubit: _homeCubit,
-              buildWhen: (prev, now) => now is BackgroundImageChanged,
-              builder: (context, state) => Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
-                        image: DataConfig.imageAssetsLink[_homeCubit.imageIndex],
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  )),
-          Container(
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: SizeConfig.safeBlockVertical * 5),
-                Row(
-                  children: <Widget>[
-                    Spacer(),
-                    Column(
-                      children: <Widget>[
-                        Text("Đếm ngược ngày thi",
-                            style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600)),
-                        Text("Kì thi Trung học phổ thông Quốc gia 2021",
-                            style: TextStyle(color: Colors.white, fontSize: 15)),
-                      ],
-                    ),
-                    Spacer(flex: 6),
-                    IconButton(
-                      icon: Icon(Icons.image, color: Colors.white, size: 25),
-                      onPressed: () => _homeCubit.loadNewBackgroundImage(),
-                    ),
-                    Spacer(),
-                  ],
-                ),
-                SizedBox(height: SizeConfig.safeBlockVertical * 5),
-                Container(
-                  child: Column(
+        body: Stack(
+          children: <Widget>[
+            BlocBuilder<HomeCubit, HomeState>(
+                cubit: _homeCubit,
+                buildWhen: (prev, now) => now is BackgroundImageChanged,
+                builder: (context, state) => state is BackgroundImageChanged
+                    ? AnimatedOpacity(
+                        opacity: state.isChangedImage ? 1 : 0.2,
+                        duration: Duration(milliseconds: 1000),
+                        child: Container(
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                          colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
+                          image: DataConfig.imageAssetsLink[_homeCubit.imageIndex],
+                          fit: BoxFit.cover,
+                        ))))
+                    : SizedBox()),
+            Container(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(height: SizeConfig.safeBlockVertical * 5),
+                  Row(
                     children: <Widget>[
-                      Text("CÒN", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white)),
-                      FlatButton(
-                        child: BlocBuilder<CounterCubit, CounterState>(
-                          cubit: _counterCubit,
-                          builder: (context, state) => (state is OneSecondPassed)
-                              ? buildCarouselSlider(state.dateCount)
-                              : Center(child: CircularProgressIndicator()),
-                        ),
-                        splashColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-                        onPressed: () => Modular.link.pushNamed(HomeModule.detailCountdown),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      Spacer(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Icon(Icons.timer, color: Colors.white, size: 25),
-                          SizedBox(width: SizeConfig.safeBlockHorizontal * 2),
-                          Text(
-                            "Ngày thi: ${DateFormat('dd-MM-yyyy').format(DataConfig.testDate)}",
-                            style: TextStyle(color: Colors.white, fontSize: 17),
-                          ),
+                          Text("Đếm ngược ngày thi",
+                              style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600)),
+                          Text("Kì thi Trung học phổ thông Quốc gia 2021",
+                              style: TextStyle(color: Colors.white, fontSize: 15)),
                         ],
                       ),
-                      SizedBox(height: SizeConfig.safeBlockVertical * 3),
-                      GestureDetector(
-                        child: Icon(Icons.chat, color: Colors.white, size: 30),
-                        onTap: () => _homeCubit.loadNewQuote(),
-                      ),
-                      SizedBox(height: SizeConfig.safeBlockVertical),
-                      BlocBuilder<HomeCubit, HomeState>(
-                        cubit: _homeCubit,
-                        buildWhen: (prev, now) => now is QuoteChanged,
-                        builder: (context, state) => state is QuoteChanged
-                            ? Padding(
-                                padding: EdgeInsets.only(
-                                    left: SizeConfig.blockSizeHorizontal * 5,
-                                    right: SizeConfig.blockSizeHorizontal * 5),
-                                child: Text(
-                                  state.quote,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white, fontSize: 17),
-                                ))
-                            : Center(child: CircularProgressIndicator()),
-                      ),
+                      Spacer(flex: 6),
+                      IconButton(
+                          icon: Icon(Icons.image, color: Colors.white, size: 25),
+                          onPressed: () {
+                            _homeCubit.loadNewBackgroundImage();
+                          }),
+                      Spacer(),
                     ],
                   ),
-                ),
-              ],
+                  SizedBox(height: SizeConfig.safeBlockVertical * 5),
+                  Container(
+                    child: Column(
+                      children: <Widget>[
+                        Text("CÒN", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white)),
+                        FlatButton(
+                          child: BlocBuilder<CounterCubit, CounterState>(
+                            cubit: _counterCubit,
+                            builder: (context, state) => (state is OneSecondPassed)
+                                ? buildCarouselSlider(state.dateCount)
+                                : Center(child: CircularProgressIndicator()),
+                          ),
+                          splashColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+                          onPressed: () => Modular.link.pushNamed(HomeModule.detailCountdown),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.timer, color: Colors.white, size: 25),
+                            SizedBox(width: SizeConfig.safeBlockHorizontal * 2),
+                            Text(
+                              "Ngày thi: ${DateFormat('dd-MM-yyyy').format(DataConfig.testDate)}",
+                              style: TextStyle(color: Colors.white, fontSize: 17),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: SizeConfig.safeBlockVertical * 3),
+                        GestureDetector(
+                          child: Icon(Icons.chat, color: Colors.white, size: 30),
+                          onTap: () => _homeCubit.loadNewQuote(),
+                        ),
+                        SizedBox(height: SizeConfig.safeBlockVertical),
+                        BlocBuilder<HomeCubit, HomeState>(
+                          cubit: _homeCubit,
+                          buildWhen: (prev, now) => now is QuoteChanged,
+                          builder: (context, state) =>
+                              Padding(
+                                  padding: EdgeInsets.only(
+                                      left: SizeConfig.blockSizeHorizontal * 5,
+                                      right: SizeConfig.blockSizeHorizontal * 5),
+                                  child: Text(
+                                    DataConfig.quoteString[_homeCubit.quoteIndex],
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(color: Colors.white, fontSize: 17),
+                                  ))
+
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-      floatingActionButton: SpeedDial(
-        animatedIcon: AnimatedIcons.view_list,
-        animatedIconTheme: IconThemeData(size: 22.0, color: Colors.white),
-        backgroundColor: Colors.deepOrange,
-        overlayColor: Colors.transparent,
-        visible: true,
-        curve: Curves.bounceIn,
-        children: [
-          SpeedDialChild(
-            child: Icon(Icons.alarm, color: Colors.white),
+          ],
+        ),
+        floatingActionButton: SpeedDial(
+            animatedIcon: AnimatedIcons.view_list,
+            animatedIconTheme: IconThemeData(size: 22.0, color: Colors.white),
             backgroundColor: Colors.deepOrange,
-            label: 'Đếm ngược chi tiết',
-            onTap: () => Modular.link.pushNamed(HomeModule.detailCountdown),
-            labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
-            labelBackgroundColor: Colors.deepOrangeAccent,
-          ),
-          SpeedDialChild(
-            child: Icon(Icons.article_outlined, color: Colors.white),
-            backgroundColor: Colors.green,
-            label: 'Tài liệu học tập',
-            onTap: () => Modular.link.pushNamed(HomeModule.learningMaterial),
-            labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
-            labelBackgroundColor: Colors.green,
-          ),
-          SpeedDialChild(
-            child: Icon(Icons.share, color: Colors.white),
-            backgroundColor: Colors.blue,
-            labelBackgroundColor: Colors.blue,
-            label: 'Chia sẻ',
-            labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
-            onTap: () => Share.share('check out my new Facebook page https://www.facebook.com/dudidauthatngau',
-                subject: 'See yaa'),
-          ),
-          SpeedDialChild(
-            child: Icon(Icons.music_note_outlined, color: Colors.white),
-            backgroundColor: Colors.pinkAccent,
-            onTap: () => Modular.link.pushNamed(HomeModule.music),
-            label: 'Âm nhạc',
-            labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
-            labelBackgroundColor: Colors.pinkAccent,
-          ),
-          SpeedDialChild(
-            child: Icon(Icons.paste, color: Colors.white),
-            backgroundColor: Colors.yellow[800],
-            onTap: () => Modular.link.pushNamed(HomeModule.note),
-            label: 'Ghi chú của tôi',
-            labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
-            labelBackgroundColor: Colors.yellow[800],
-          ),
-        ],
-      ),
-    );
+            overlayColor: Colors.transparent,
+            visible: true,
+            curve: Curves.bounceIn,
+            children: [
+              SpeedDialChild(
+                child: Icon(Icons.alarm, color: Colors.white),
+                backgroundColor: Colors.deepOrange,
+                label: 'Đếm ngược chi tiết',
+                onTap: () => Modular.link.pushNamed(HomeModule.detailCountdown),
+                labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
+                labelBackgroundColor: Colors.deepOrangeAccent,
+              ),
+              SpeedDialChild(
+                child: Icon(Icons.article_outlined, color: Colors.white),
+                backgroundColor: Colors.green,
+                label: 'Tài liệu học tập',
+                onTap: () => Modular.link.pushNamed(HomeModule.learningMaterial),
+                labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
+                labelBackgroundColor: Colors.green,
+              ),
+              SpeedDialChild(
+                child: Icon(Icons.share, color: Colors.white),
+                backgroundColor: Colors.blue,
+                labelBackgroundColor: Colors.blue,
+                label: 'Chia sẻ',
+                labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
+                onTap: () => Share.share('check out my new Facebook page https://www.facebook.com/dudidauthatngau',
+                    subject: 'See yaa'),
+              ),
+              SpeedDialChild(
+                child: Icon(Icons.music_note_outlined, color: Colors.white),
+                backgroundColor: Colors.pinkAccent,
+                onTap: () => Modular.link.pushNamed(HomeModule.music),
+                label: 'Âm nhạc',
+                labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
+                labelBackgroundColor: Colors.pinkAccent,
+              ),
+              SpeedDialChild(
+                child: Icon(Icons.paste, color: Colors.white),
+                backgroundColor: Colors.yellow[800],
+                onTap: () => Modular.link.pushNamed(HomeModule.note),
+                label: 'Ghi chú của tôi',
+                labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
+                labelBackgroundColor: Colors.yellow[800],
+              )
+            ]));
   }
 
   CarouselSlider buildCarouselSlider(DateCount date) => CarouselSlider(
