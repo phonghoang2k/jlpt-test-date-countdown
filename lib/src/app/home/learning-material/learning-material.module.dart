@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/learning-material/detailed-learning/detailed-learning.view.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/learning-material/learning-material.view.dart';
+import 'package:jlpt_testdate_countdown/src/app/home/learning-material/type.dart';
 
 class LearningMaterialModule extends ChildModule {
   static Inject get to => Inject<LearningMaterialModule>.of();
@@ -15,6 +16,6 @@ class LearningMaterialModule extends ChildModule {
   @override
   List<ModularRouter> get routers => [
         ModularRouter('/', child: (context, args) => LearningMaterial()),
-        ModularRouter(detailLearning, child: (context, args) => DetailLearningData(args.data as String)),
+        ModularRouter(detailLearning, child: (context, args) => DetailLearningData(args.data as Params)),
       ];
 }

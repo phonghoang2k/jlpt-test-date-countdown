@@ -7,4 +7,9 @@ class LearningMaterialRepository {
     final response = await LearningMaterialService.getAllLearningMaterial();
     return response.statusCode == 200 ? (response.data as List).map((e) => Data.fromJson(e as Map<String, dynamic>)).toList() : throw NetworkException;
   }
+
+  Future<List<Data>> fetchLearningBaseOnParams(Map<String, dynamic> params) async {
+    final response = await LearningMaterialService.getLearningMaterial(params);
+    return response.statusCode == 200 ? (response.data as List).map((e) => Data.fromJson(e as Map<String, dynamic>)).toList() : throw NetworkException;
+  }
 }

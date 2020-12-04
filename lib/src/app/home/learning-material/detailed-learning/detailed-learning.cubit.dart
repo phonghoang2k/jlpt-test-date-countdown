@@ -5,27 +5,25 @@ import 'package:jlpt_testdate_countdown/src/models/learning_data/learning_data.d
 import 'package:jlpt_testdate_countdown/src/repositories/learning-material.repository.dart';
 import 'package:jlpt_testdate_countdown/src/utils/exception.dart';
 
-part 'learning-material.state.dart';
+part 'detailed-learning.state.dart';
 
-class LearningMaterialCubit extends Cubit<LearningMaterialState> {
+class DetailLearningCubit extends Cubit<DetailedLearningState> {
   final LearningMaterialRepository _repository;
   List<Data> learningData = <Data>[];
 
-  LearningMaterialCubit(this._repository) : super(LearningMaterialInitial()) {
-    loadLearningData();
-  }
+  DetailLearningCubit(this._repository) : super(DetailedLearningInitial());
 
   List<Color> colorList = [...Colors.accents];
   List<String> subjects = ["Toán", "Lý", "Hóa", "Sinh", "Văn", "Anh", "Sử", "Địa", "GDCD"];
-  List<String> subjectNoCapitals = ["toan", "ly", "hoa", "sinh", "van", "anh", "su", "dia", "gdcd"];
 
-  Future<void> loadLearningData() async {
+  Future<void> loadLearningDataBaseOnParam({String subject, String type}) async {
+    Map<String, dynamic> params = {"subject": subject, "type": type};
     try {
-      emit(LearningMaterialLoading());
-      learningData = await _repository.fetchAllLearningMaterial();
-      emit(LearningMaterialDataLoaded(learningData));
+      emit(DetailedLearningLoading());
+      learningData = await _repository.fetchLearningBaseOnParams(params);
+      emit(DetailedLearningDataLoaded(learningData));
     } on NetworkException {
-      emit(LearningMaterialError("Couldn't fetch data. Is the device online?"));
+      emit(DetailedLearningError("Couldn't fetch data. Is the device online?"));
     }
   }
 }

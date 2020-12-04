@@ -18,7 +18,6 @@ class MusicCubit extends Cubit<MusicState> {
   void loadNewSong() {
     print(songIndex);
     songIndex = Random().nextInt(DataConfig.musicList.length);
-    // Application.sharePreference.putInt("quoteIndex", quoteIndex);
     emit(MusicSong(DataConfig.musicList[songIndex]));
   }
 }

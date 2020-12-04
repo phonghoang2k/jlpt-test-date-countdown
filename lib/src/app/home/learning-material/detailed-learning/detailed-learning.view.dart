@@ -1,21 +1,36 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/learning-material/component/item.component.dart';
+import 'package:jlpt_testdate_countdown/src/app/home/learning-material/detailed-learning/detailed-learning.cubit.dart';
+import 'package:jlpt_testdate_countdown/src/app/home/learning-material/type.dart';
 import 'package:jlpt_testdate_countdown/src/env/application.dart';
+import 'package:jlpt_testdate_countdown/src/repositories/learning-material.repository.dart';
 import 'package:jlpt_testdate_countdown/src/resources/data.dart';
 import 'package:jlpt_testdate_countdown/src/utils/sizeconfig.dart';
 
 class DetailLearningData extends StatefulWidget {
-  final String title;
+  final Params params;
 
-  const DetailLearningData(this.title) : super();
+  const DetailLearningData(this.params) : super();
 
   @override
   _DetailLearningDataState createState() => _DetailLearningDataState();
 }
 
 class _DetailLearningDataState extends State<DetailLearningData> {
+  DetailLearningCubit _cubit = DetailLearningCubit(LearningMaterialRepository());
+
+  @override
+  void initState() {
+    _cubit.loadLearningDataBaseOnParam(
+      subject: widget.params.subject,
+      type: widget.params.type,
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,8 +60,7 @@ class _DetailLearningDataState extends State<DetailLearningData> {
                   onPressed: () => Navigator.pop(context),
                 ),
                 SizedBox(width: SizeConfig.safeBlockHorizontal * 2),
-                Text("${widget.title}",
-                    style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold))
+                Text("${widget.params.title}", style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold))
               ],
             ),
           ),
@@ -60,9 +74,19 @@ class _DetailLearningDataState extends State<DetailLearningData> {
               child: Column(
                 children: [
                   SizedBox(height: SizeConfig.safeBlockVertical * 2),
-                  // Todo: Based on Api
-                  ...List.generate(
-                      12, (index) => buildCategoryItem("${widget.title} ${++index}", link: "https://www.google.com"))
+                  BlocBuilder<DetailLearningCubit, DetailedLearningState>(
+                      cubit: _cubit,
+                      builder: (context, state) => state is DetailedLearningDataLoaded
+                          ? Column(
+                              children: List.generate(
+                                  state.data.length,
+                                  (index) => buildCategoryItem(
+                                        "${state.data.elementAt(index).name}",
+                                        link: state.data.elementAt(index).link,
+                                        source: state.data.elementAt(index).source,
+                                      )),
+                            )
+                          : CircularProgressIndicator())
                 ],
               ),
             ),

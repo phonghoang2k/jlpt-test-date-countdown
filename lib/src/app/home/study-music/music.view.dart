@@ -13,7 +13,6 @@ class MusicApp extends StatefulWidget {
   @override
   _MusicAppState createState() => _MusicAppState();
 }
-
 class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
   bool playing = false;
   IconData playBtn = Icons.play_arrow; //khi chua phat nhac
@@ -29,10 +28,11 @@ class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
   Widget slider() {
     return Container(
       width: 300,
+      height: 100,
       child: Slider.adaptive(
-          activeColor: Colors.black87,
+          activeColor: Colors.white,
           inactiveColor: Colors.grey[500],
-          value: position.inSeconds.toDouble(),
+          value: (position.inSeconds / musicLength.inSeconds).toDouble(),
           max: musicLength.inSeconds.toDouble(),
           onChanged: (value) {
             seekToSec(value.toInt());
@@ -50,7 +50,6 @@ class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    //Todo: Init Lyrics
     if (_countdownTimer != null) {
       return;
     }
@@ -66,17 +65,19 @@ class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
     //Todo: Init AudioPlayer
     _player = AudioPlayer();
     _cache = AudioCache(fixedPlayer: _player);
-    //handle audioplayer time
-    _player.durationHandler = (d) {
+    _player.onDurationChanged.listen((Duration d) {
       setState(() {
         musicLength = d;
       });
-    };
-    _player.positionHandler = (p) {
+    });
+
+    _player.onAudioPositionChanged.listen((Duration p) {
       setState(() {
         position = p;
       });
-    };
+    });
+    print(position);
+    print(musicLength);
   }
 
   @override
@@ -88,15 +89,13 @@ class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    // var lyrics = LyricUtil.formatLyric(DataConfig.musicList[_musicCubit.songIndex].lyric);
     return Scaffold(
       body: Stack(
         children: [
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Colors.black, Colors.red[600]]),
+              gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Colors.black, Colors.red[600]]),
             ),
             child: Padding(
               padding: EdgeInsets.only(top: 48),
@@ -117,13 +116,13 @@ class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
                         style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w300),
                       ),
                     ),
-                    SizedBox(height: 24),
+                    SizedBox(height: 20),
                     BlocBuilder<MusicCubit, MusicState>(
                         cubit: _musicCubit,
                         buildWhen: (prev, now) => now is MusicImage,
                         builder: (context, state) => Center(
                               child: CircleAvatar(
-                                radius: 150,
+                                radius: 120,
                                 backgroundImage: DataConfig.musicList[_musicCubit.songIndex].songImage,
                               ),
                             )),
@@ -137,18 +136,12 @@ class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
                     Container(
                       margin: EdgeInsets.only(top: 8),
                       child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                        Text(
-                          DataConfig.musicList[_musicCubit.songIndex].artists,
-                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        Center(
+                          child: Text(
+                            DataConfig.musicList[_musicCubit.songIndex].artists,
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
                         ),
-                        // LyricWidget(
-                        //   lyricStyle: TextStyle(fontSize: 18, color: Colors.black54),
-                        //   currLyricStyle: TextStyle(fontSize: 16, color: Colors.white),
-                        //   size: Size(MediaQuery.of(context).size.width, 50),
-                        //   lyrics: lyrics,
-                        //   vsync: this,
-                        //   currentProgress: position.inMilliseconds.toDouble(),
-                        // )
                       ]),
                     ),
                     Expanded(
@@ -170,11 +163,11 @@ class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text("${position.inMinutes}: ${position.inSeconds.remainder(60)}",
-                                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600)),
-                                  slider(),
-                                  Text("${musicLength.inMinutes}: ${musicLength.inSeconds.remainder(60)}",
-                                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600)),
+                                  // Text("${position.inMinutes}: ${position.inSeconds.remainder(60)}",
+                                  //     style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600)),
+                                  // slider(),
+                                  // Text("${musicLength.inMinutes}: ${musicLength.inSeconds.remainder(60)}",
+                                  //     style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600)),
                                 ],
                               ),
                             ),
@@ -182,11 +175,7 @@ class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                IconButton(
-                                    iconSize: 30,
-                                    color: Colors.black,
-                                    icon: Icon(Icons.skip_previous),
-                                    onPressed: () {}),
+                                IconButton(iconSize: 30, color: Colors.black, icon: Icon(Icons.skip_previous), onPressed: () {}),
                                 BlocBuilder<MusicCubit, MusicState>(
                                     cubit: _musicCubit,
                                     buildWhen: (prev, now) => now is MusicSong,

@@ -6,6 +6,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/learning-material/component/item.component.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/learning-material/learning-material.cubit.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/learning-material/learning-material.module.dart';
+import 'package:jlpt_testdate_countdown/src/app/home/learning-material/type.dart';
 import 'package:jlpt_testdate_countdown/src/env/application.dart';
 import 'package:jlpt_testdate_countdown/src/repositories/learning-material.repository.dart';
 import 'package:jlpt_testdate_countdown/src/resources/data.dart';
@@ -60,9 +61,9 @@ class _LearningMaterialState extends State<LearningMaterial> {
                     child: Text("Tài liệu ôn thi", style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold)),
                   ),
                   SizedBox(height: SizeConfig.safeBlockVertical * 3),
-                  buildSlidableCategory("Tài liệu luyện thi theo môn học", _cubit.subjects),
+                  buildSlidableCategory("Tài liệu luyện thi theo môn học", _cubit.subjects, "tai lieu"),
                   SizedBox(height: SizeConfig.safeBlockVertical * 3),
-                  buildSlidableCategory("Đề thi thử theo môn học", _cubit.subjects),
+                  buildSlidableCategory("Đề thi thử theo môn học", _cubit.subjects, "de thi"),
                   SizedBox(height: SizeConfig.safeBlockVertical * 3),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -88,7 +89,7 @@ class _LearningMaterialState extends State<LearningMaterial> {
     );
   }
 
-  Widget buildSlidableCategory(String title, List data) => Column(
+  Widget buildSlidableCategory(String title, List<String> data, String type) => Column(
         children: [
           Align(
             alignment: Alignment.centerLeft,
@@ -107,7 +108,8 @@ class _LearningMaterialState extends State<LearningMaterial> {
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: _cubit.colorList[index]),
                         child: FlatButton(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                          onPressed: () => Modular.link.pushNamed(LearningMaterialModule.detailLearning, arguments: data.elementAt(index)),
+                          onPressed: () => Modular.link
+                              .pushNamed(LearningMaterialModule.detailLearning, arguments: Params(title: title, subject: _cubit.subjectNoCapitals[index])),
                           child: Center(
                             child: Text("${data.elementAt(index)}", style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
                           ),
@@ -121,7 +123,7 @@ class _LearningMaterialState extends State<LearningMaterial> {
               SizedBox(width: SizeConfig.safeBlockHorizontal),
               FlatButton(
                 // Todo: Navigate and call api
-                onPressed: () => Modular.link.pushNamed(LearningMaterialModule.detailLearning, arguments: title),
+                onPressed: () => Modular.link.pushNamed(LearningMaterialModule.detailLearning, arguments: Params(title: title, type: type)),
                 padding: EdgeInsets.zero,
                 child: Row(
                   children: [

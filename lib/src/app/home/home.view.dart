@@ -25,15 +25,6 @@ class _HomeWidgetState extends State<HomeWidget> {
   CarouselController buttonCarouselController = CarouselController();
   HomeCubit _homeCubit = HomeCubit();
   CounterCubit _counterCubit = Modular.get<CounterCubit>();
-  bool _isChangeBackground = false;
-  int _currentImageIndex = 0;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _currentImageIndex = Application.sharePreference.getInt("imageIndex");
-  }
 
   @override
   Widget build(BuildContext context) {
