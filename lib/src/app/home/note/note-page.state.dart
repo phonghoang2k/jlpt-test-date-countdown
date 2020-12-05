@@ -37,6 +37,7 @@ class NoteDelete extends NoteState {
 
 class ColorChange extends NoteState {
   final int colorIndex;
+
   ColorChange(this.colorIndex);
 
   @override

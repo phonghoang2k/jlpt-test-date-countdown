@@ -13,7 +13,6 @@ import 'package:jlpt_testdate_countdown/src/resources/data.dart';
 import 'package:jlpt_testdate_countdown/src/utils/sizeconfig.dart';
 import 'package:share/share.dart';
 
-import '../../env/application.dart';
 import 'cubit/home.cubit.dart';
 
 class HomeWidget extends StatefulWidget {
@@ -56,10 +55,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Đếm ngược ngày thi",
-                              style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600)),
-                          Text("Kì thi Trung học phổ thông Quốc gia 2021",
-                              style: TextStyle(color: Colors.white, fontSize: 15)),
+                          Text("Đếm ngược ngày thi", style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600)),
+                          Text("Kì thi Trung học phổ thông Quốc gia 2021", style: TextStyle(color: Colors.white, fontSize: 15)),
                         ],
                       ),
                       Spacer(flex: 6),
@@ -79,9 +76,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                         FlatButton(
                           child: BlocBuilder<CounterCubit, CounterState>(
                             cubit: _counterCubit,
-                            builder: (context, state) => (state is OneSecondPassed)
-                                ? buildCarouselSlider(state.dateCount)
-                                : Center(child: CircularProgressIndicator()),
+                            builder: (context, state) =>
+                                (state is OneSecondPassed) ? buildCarouselSlider(state.dateCount) : Center(child: CircularProgressIndicator()),
                           ),
                           splashColor: Colors.transparent,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
@@ -105,20 +101,15 @@ class _HomeWidgetState extends State<HomeWidget> {
                         ),
                         SizedBox(height: SizeConfig.safeBlockVertical),
                         BlocBuilder<HomeCubit, HomeState>(
-                          cubit: _homeCubit,
-                          buildWhen: (prev, now) => now is QuoteChanged,
-                          builder: (context, state) =>
-                              Padding(
-                                  padding: EdgeInsets.only(
-                                      left: SizeConfig.blockSizeHorizontal * 5,
-                                      right: SizeConfig.blockSizeHorizontal * 5),
-                                  child: Text(
-                                    DataConfig.quoteString[_homeCubit.quoteIndex],
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(color: Colors.white, fontSize: 17),
-                                  ))
-
-                        ),
+                            cubit: _homeCubit,
+                            buildWhen: (prev, now) => now is QuoteChanged,
+                            builder: (context, state) => Padding(
+                                padding: EdgeInsets.only(left: SizeConfig.blockSizeHorizontal * 5, right: SizeConfig.blockSizeHorizontal * 5),
+                                child: Text(
+                                  DataConfig.quoteString[_homeCubit.quoteIndex],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white, fontSize: 17),
+                                ))),
                       ],
                     ),
                   ),
@@ -157,8 +148,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                 labelBackgroundColor: Colors.blue,
                 label: 'Chia sẻ',
                 labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
-                onTap: () => Share.share('check out my new Facebook page https://www.facebook.com/dudidauthatngau',
-                    subject: 'See yaa'),
+                onTap: () => Share.share('check out my new Facebook page https://www.facebook.com/dudidauthatngau', subject: 'See yaa'),
               ),
               SpeedDialChild(
                 child: Icon(Icons.music_note_outlined, color: Colors.white),
@@ -202,8 +192,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text("${counting(date, type)}",
-            style: TextStyle(color: Colors.white, fontSize: 60, fontWeight: FontWeight.w600)),
+        Text("${counting(date, type)}", style: TextStyle(color: Colors.white, fontSize: 60, fontWeight: FontWeight.w600)),
         SizedBox(height: SizeConfig.blockSizeVertical * 3),
         Text(type, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600)),
       ],

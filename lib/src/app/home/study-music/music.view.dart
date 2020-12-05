@@ -13,6 +13,7 @@ class MusicApp extends StatefulWidget {
   @override
   _MusicAppState createState() => _MusicAppState();
 }
+
 class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
   bool playing = false;
   IconData playBtn = Icons.play_arrow; //khi chua phat nhac

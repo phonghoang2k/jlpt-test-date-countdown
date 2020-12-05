@@ -41,8 +41,7 @@ class _DetailCountdownState extends State<DetailCountdown> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text("TỪ NAY ĐẾN HÔM THI CÒN",
-                  style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600)),
+              Text("TỪ NAY ĐẾN HÔM THI CÒN", style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600)),
               SizedBox(height: SizeConfig.blockSizeVertical * 4),
               Container(
                 child: BlocBuilder<CounterCubit, CounterState>(
@@ -51,17 +50,13 @@ class _DetailCountdownState extends State<DetailCountdown> {
                       ? Row(
                           children: <Widget>[
                             Spacer(),
-                            _buildColumnWithData(
-                                "${DetailCountdownData.fromDateCount(state.dateCount).daysLeft}", "NGÀY"),
+                            _buildColumnWithData("${DetailCountdownData.fromDateCount(state.dateCount).daysLeft}", "NGÀY"),
                             const SizedBox(width: 26),
-                            _buildColumnWithData(
-                                "${DetailCountdownData.fromDateCount(state.dateCount).hoursLeft}", "GIỜ"),
+                            _buildColumnWithData("${DetailCountdownData.fromDateCount(state.dateCount).hoursLeft}", "GIỜ"),
                             const SizedBox(width: 26),
-                            _buildColumnWithData(
-                                "${DetailCountdownData.fromDateCount(state.dateCount).minutesLeft}", "PHÚT"),
+                            _buildColumnWithData("${DetailCountdownData.fromDateCount(state.dateCount).minutesLeft}", "PHÚT"),
                             const SizedBox(width: 26),
-                            _buildColumnWithData(
-                                "${DetailCountdownData.fromDateCount(state.dateCount).secondsLeft}", "GIÂY"),
+                            _buildColumnWithData("${DetailCountdownData.fromDateCount(state.dateCount).secondsLeft}", "GIÂY"),
                             Spacer(),
                           ],
                         )

@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/learning-material/component/item.component.dart';
@@ -9,6 +11,7 @@ import 'package:jlpt_testdate_countdown/src/env/application.dart';
 import 'package:jlpt_testdate_countdown/src/repositories/learning-material.repository.dart';
 import 'package:jlpt_testdate_countdown/src/resources/data.dart';
 import 'package:jlpt_testdate_countdown/src/utils/sizeconfig.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DetailLearningData extends StatefulWidget {
   final Params params;
@@ -20,15 +23,26 @@ class DetailLearningData extends StatefulWidget {
 }
 
 class _DetailLearningDataState extends State<DetailLearningData> {
-  DetailLearningCubit _cubit = DetailLearningCubit(LearningMaterialRepository());
+  DetailLearningCubit _cubit;
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   @override
   void initState() {
-    _cubit.loadLearningDataBaseOnParam(
-      subject: widget.params.subject,
-      type: widget.params.type,
-    );
+    _cubit = DetailLearningCubit(LearningMaterialRepository(), params: widget.params);
     super.initState();
+  }
+
+  void onRefresh() {
+    Future.delayed(Duration(milliseconds: 1000), () {
+      _refreshController.refreshCompleted();
+    });
+  }
+
+  void onLoading() {
+    Future.delayed(Duration(milliseconds: 1000), () {
+      _cubit.pull();
+      _refreshController.loadComplete();
+    });
   }
 
   @override
@@ -65,29 +79,57 @@ class _DetailLearningDataState extends State<DetailLearningData> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(
-              left: SizeConfig.safeBlockHorizontal * 4,
+            height: SizeConfig.screenHeight,
+            padding: EdgeInsets.only(
+              left: SizeConfig.safeBlockHorizontal * 3,
               top: SizeConfig.safeBlockVertical * 12,
-              right: SizeConfig.safeBlockHorizontal * 4,
+              right: SizeConfig.safeBlockHorizontal * 3,
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(height: SizeConfig.safeBlockVertical * 2),
-                  BlocBuilder<DetailLearningCubit, DetailedLearningState>(
-                      cubit: _cubit,
-                      builder: (context, state) => state is DetailedLearningDataLoaded
-                          ? Column(
-                              children: List.generate(
-                                  state.data.length,
-                                  (index) => buildCategoryItem(
-                                        "${state.data.elementAt(index).name}",
+            child: Scrollbar(
+              child: SmartRefresher(
+                enablePullDown: false,
+                enablePullUp: true,
+                header: WaterDropMaterialHeader(),
+                footer: ClassicFooter(
+                  loadStyle: LoadStyle.ShowWhenLoading,
+                  completeDuration: Duration(milliseconds: 500),
+                  canLoadingIcon: const Icon(Icons.autorenew, color: Colors.white),
+                  textStyle: TextStyle(color: Colors.white),
+                  loadingIcon: SizedBox(
+                    width: 25.0,
+                    height: 25.0,
+                    child: defaultTargetPlatform == TargetPlatform.iOS
+                        ? Theme(
+                            data: ThemeData(cupertinoOverrideTheme: CupertinoThemeData(brightness: Brightness.dark)),
+                            child: CupertinoActivityIndicator(),
+                          )
+                        : const CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+                  ),
+                ),
+                onRefresh: onRefresh,
+                onLoading: onLoading,
+                controller: _refreshController,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(height: SizeConfig.safeBlockVertical * 2),
+                      BlocBuilder<DetailLearningCubit, DetailedLearningState>(
+                          cubit: _cubit,
+                          buildWhen: (prev, now) => now is DetailedLearningDataLoaded,
+                          builder: (context, state) => state is DetailedLearningDataLoaded
+                              ? Column(
+                                  children: List.generate(
+                                    state.data.length,
+                                    (index) => buildCategoryItem("${state.data.elementAt(index).name}",
                                         link: state.data.elementAt(index).link,
                                         source: state.data.elementAt(index).source,
-                                      )),
-                            )
-                          : CircularProgressIndicator())
-                ],
+                                        imageLink: state.data.elementAt(index).linkavt),
+                                  ),
+                                )
+                              : CircularProgressIndicator())
+                    ],
+                  ),
+                ),
               ),
             ),
           )

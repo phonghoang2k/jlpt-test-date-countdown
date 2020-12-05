@@ -11,9 +11,7 @@ Data _$DataFromJson(Map<String, dynamic> json) {
     name: json['name'] as String,
     link: json['link'] as String,
     linkavt: json['linkavt'] as String,
-    createTime: json['createTime'] == null
-        ? null
-        : DateTime.parse(json['createTime'] as String),
+    createTime: json['createTime'] == null ? null : DateTime.parse(json['createTime'] as String),
     source: json['source'] as String,
     subject: json['subject'] as String,
     type: json['type'] as String,

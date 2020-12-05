@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -11,6 +13,7 @@ import 'package:jlpt_testdate_countdown/src/env/application.dart';
 import 'package:jlpt_testdate_countdown/src/repositories/learning-material.repository.dart';
 import 'package:jlpt_testdate_countdown/src/resources/data.dart';
 import 'package:jlpt_testdate_countdown/src/utils/sizeconfig.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class LearningMaterial extends StatefulWidget {
   @override
@@ -19,6 +22,20 @@ class LearningMaterial extends StatefulWidget {
 
 class _LearningMaterialState extends State<LearningMaterial> {
   LearningMaterialCubit _cubit = LearningMaterialCubit(LearningMaterialRepository());
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
+
+  void onRefresh() {
+    Future.delayed(Duration(milliseconds: 1000), () {
+      _refreshController.refreshCompleted();
+    });
+  }
+
+  void onLoading() {
+    Future.delayed(Duration(milliseconds: 1000), () {
+      _cubit.pull();
+      _refreshController.loadComplete();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,41 +65,13 @@ class _LearningMaterialState extends State<LearningMaterial> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(
-              left: SizeConfig.safeBlockHorizontal * 4,
+            height: SizeConfig.screenHeight,
+            padding: EdgeInsets.only(
+              left: SizeConfig.safeBlockHorizontal * 3,
               top: SizeConfig.safeBlockVertical * 12,
-              right: SizeConfig.safeBlockHorizontal * 4,
+              right: SizeConfig.safeBlockHorizontal * 3,
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Text("Tài liệu ôn thi", style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold)),
-                  ),
-                  SizedBox(height: SizeConfig.safeBlockVertical * 3),
-                  buildSlidableCategory("Tài liệu luyện thi theo môn học", _cubit.subjects, "tai lieu"),
-                  SizedBox(height: SizeConfig.safeBlockVertical * 3),
-                  buildSlidableCategory("Đề thi thử theo môn học", _cubit.subjects, "de thi"),
-                  SizedBox(height: SizeConfig.safeBlockVertical * 3),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text("Tài liệu mới cập nhật", style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
-                  ),
-                  SizedBox(height: SizeConfig.safeBlockVertical),
-                  BlocBuilder<LearningMaterialCubit, LearningMaterialState>(
-                    cubit: _cubit,
-                    builder: (context, state) => state is LearningMaterialDataLoaded
-                        ? Column(
-                            children: List.generate(
-                                state.data.length,
-                                (index) => buildCategoryItem("${state.data.elementAt(index).name}",
-                                    link: state.data.elementAt(index).link, source: state.data.elementAt(index).source)))
-                        : CircularProgressIndicator(),
-                  ),
-                ],
-              ),
-            ),
+            child: listCategoryItem(),
           )
         ],
       ),
@@ -122,7 +111,6 @@ class _LearningMaterialState extends State<LearningMaterial> {
             children: [
               SizedBox(width: SizeConfig.safeBlockHorizontal),
               FlatButton(
-                // Todo: Navigate and call api
                 onPressed: () => Modular.link.pushNamed(LearningMaterialModule.detailLearning, arguments: Params(title: title, type: type)),
                 padding: EdgeInsets.zero,
                 child: Row(
@@ -137,4 +125,69 @@ class _LearningMaterialState extends State<LearningMaterial> {
           )
         ],
       );
+
+  Widget listCategoryItem() {
+    return Scrollbar(
+      child: SmartRefresher(
+        enablePullDown: false,
+        enablePullUp: true,
+        header: WaterDropMaterialHeader(),
+        footer: ClassicFooter(
+          loadStyle: LoadStyle.ShowWhenLoading,
+          completeDuration: Duration(milliseconds: 500),
+          canLoadingIcon: const Icon(Icons.autorenew, color: Colors.white),
+          textStyle: TextStyle(color: Colors.white),
+          loadingIcon: SizedBox(
+            width: 25.0,
+            height: 25.0,
+            child: defaultTargetPlatform == TargetPlatform.iOS
+                ? Theme(
+                    data: ThemeData(cupertinoOverrideTheme: CupertinoThemeData(brightness: Brightness.dark)),
+                    child: CupertinoActivityIndicator(),
+                  )
+                : const CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+          ),
+        ),
+        onRefresh: onRefresh,
+        onLoading: onLoading,
+        controller: _refreshController,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text("Tài liệu ôn thi", style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold)),
+              ),
+              SizedBox(height: SizeConfig.safeBlockVertical * 3),
+              buildSlidableCategory("Tài liệu luyện thi theo môn học", _cubit.subjects, "tai lieu"),
+              SizedBox(height: SizeConfig.safeBlockVertical * 3),
+              buildSlidableCategory("Đề thi thử theo môn học", _cubit.subjects, "de thi"),
+              SizedBox(height: SizeConfig.safeBlockVertical * 3),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text("Tài liệu mới cập nhật", style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
+              ),
+              SizedBox(height: SizeConfig.safeBlockVertical),
+              BlocBuilder<LearningMaterialCubit, LearningMaterialState>(
+                cubit: _cubit,
+                buildWhen: (prev, now) => now is LearningMaterialDataLoaded,
+                builder: (context, state) => state is LearningMaterialDataLoaded
+                    ? Column(
+                        children: List.generate(
+                            state.data.length,
+                            (index) => buildCategoryItem(
+                                  "${state.data.elementAt(index).name}",
+                                  link: state.data.elementAt(index).link,
+                                  source: state.data.elementAt(index).source,
+                                  imageLink: state.data.elementAt(index).linkavt,
+                                )),
+                      )
+                    : CircularProgressIndicator(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
