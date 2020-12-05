@@ -28,6 +28,20 @@ class LearningMaterialDataLoaded extends LearningMaterialState {
   List<Object> get props => [data];
 }
 
+class LearningMaterialDeleted extends LearningMaterialState {
+  const LearningMaterialDeleted();
+
+  @override
+  List<Object> get props => [];
+}
+
+class LearningMaterialDeleting extends LearningMaterialState {
+  const LearningMaterialDeleting();
+
+  @override
+  List<Object> get props => [];
+}
+
 class LearningMaterialError extends LearningMaterialState {
   final String message;
 

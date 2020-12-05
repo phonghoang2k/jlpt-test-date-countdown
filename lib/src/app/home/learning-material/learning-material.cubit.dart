@@ -32,6 +32,20 @@ class LearningMaterialCubit extends Cubit<LearningMaterialState> {
     }
   }
 
+  Future<void> deleteMaterial(String id) async {
+    Map<String, dynamic> params = {"id": id};
+    try {
+      emit(LearningMaterialDeleting());
+      if (await _repository.deleteMaterial(params)) {
+        emit(LearningMaterialDeleted());
+      } else {
+        emit(LearningMaterialError("Change failed"));
+      }
+    } on NetworkException {
+      emit(LearningMaterialError("Error Changing data"));
+    }
+  }
+
   void pull() {
     ++_page;
     loadLearningData(_page);

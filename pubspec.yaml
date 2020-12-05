@@ -48,6 +48,7 @@ dependencies:
   url_launcher: ^5.7.10
   dio: ^3.0.10
   pull_to_refresh: ^1.6.3
+  animations: ^1.1.2
 #  flutter_lyric: ^1.0.2
 
 

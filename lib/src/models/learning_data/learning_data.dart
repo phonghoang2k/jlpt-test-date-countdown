@@ -4,6 +4,7 @@ part 'learning_data.g.dart';
 
 @JsonSerializable(nullable: true)
 class Data {
+  String id;
   String name;
   String link;
   String linkavt;
@@ -12,7 +13,7 @@ class Data {
   String subject;
   String type;
 
-  Data({this.name, this.link, this.linkavt, this.createTime, this.source, this.subject, this.type});
+  Data({this.name, this.id, this.link, this.linkavt, this.createTime, this.source, this.subject, this.type});
 
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
 

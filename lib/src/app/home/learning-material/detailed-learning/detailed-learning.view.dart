@@ -118,13 +118,7 @@ class _DetailLearningDataState extends State<DetailLearningData> {
                           buildWhen: (prev, now) => now is DetailedLearningDataLoaded,
                           builder: (context, state) => state is DetailedLearningDataLoaded
                               ? Column(
-                                  children: List.generate(
-                                    state.data.length,
-                                    (index) => buildCategoryItem("${state.data.elementAt(index).name}",
-                                        link: state.data.elementAt(index).link,
-                                        source: state.data.elementAt(index).source,
-                                        imageLink: state.data.elementAt(index).linkavt),
-                                  ),
+                                  children: List.generate(state.data.length, (index) => buildCategoryItem(state.data.elementAt(index), context)),
                                 )
                               : CircularProgressIndicator())
                     ],

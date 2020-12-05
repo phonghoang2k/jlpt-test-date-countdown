@@ -19,6 +19,8 @@ class DetailedLearningLoading extends DetailedLearningState {
   List<Object> get props => [];
 }
 
+
+
 class DetailedLearningDataLoaded extends DetailedLearningState {
   final List<Data> data;
 

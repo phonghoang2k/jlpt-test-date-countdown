@@ -1,10 +1,12 @@
 import 'dart:ui';
 
+import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:jlpt_testdate_countdown/src/app/home/learning-material/add-learning-material/add-learning-material.view.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/learning-material/component/item.component.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/learning-material/learning-material.cubit.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/learning-material/learning-material.module.dart';
@@ -21,7 +23,7 @@ class LearningMaterial extends StatefulWidget {
 }
 
 class _LearningMaterialState extends State<LearningMaterial> {
-  LearningMaterialCubit _cubit = LearningMaterialCubit(LearningMaterialRepository());
+  LearningMaterialCubit _cubit = Modular.get<LearningMaterialCubit>();
   RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   void onRefresh() {
@@ -74,6 +76,20 @@ class _LearningMaterialState extends State<LearningMaterial> {
             child: listCategoryItem(),
           )
         ],
+      ),
+      floatingActionButton: OpenContainer(
+        openColor: Colors.deepOrange,
+        transitionType: ContainerTransitionType.fade,
+        openBuilder: (BuildContext context, VoidCallback _) => AddLearningMaterial(),
+        closedElevation: 6.0,
+        closedShape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(28))),
+        closedColor: Colors.deepOrange,
+        onClosed: (obj) => _cubit.loadLearningData(1),
+        closedBuilder: (BuildContext context, VoidCallback openContainer) => SizedBox(
+          height: 56,
+          width: 56,
+          child: Center(child: Icon(Icons.add, color: Theme.of(context).colorScheme.onSecondary)),
+        ),
       ),
     );
   }
@@ -173,14 +189,7 @@ class _LearningMaterialState extends State<LearningMaterial> {
                 buildWhen: (prev, now) => now is LearningMaterialDataLoaded,
                 builder: (context, state) => state is LearningMaterialDataLoaded
                     ? Column(
-                        children: List.generate(
-                            state.data.length,
-                            (index) => buildCategoryItem(
-                                  "${state.data.elementAt(index).name}",
-                                  link: state.data.elementAt(index).link,
-                                  source: state.data.elementAt(index).source,
-                                  imageLink: state.data.elementAt(index).linkavt,
-                                )),
+                        children: List.generate(state.data.length, (index) => buildCategoryItem(state.data.elementAt(index), context)),
                       )
                     : CircularProgressIndicator(),
               ),

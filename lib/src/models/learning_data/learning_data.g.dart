@@ -8,6 +8,7 @@ part of 'learning_data.dart';
 
 Data _$DataFromJson(Map<String, dynamic> json) {
   return Data(
+    id: json['id'] as String,
     name: json['name'] as String,
     link: json['link'] as String,
     linkavt: json['linkavt'] as String,
@@ -19,6 +20,7 @@ Data _$DataFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'link': instance.link,
       'linkavt': instance.linkavt,
