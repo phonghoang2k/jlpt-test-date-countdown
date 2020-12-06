@@ -44,6 +44,7 @@ dependencies:
   table_calendar: ^2.3.1
   permission_handler: ^5.0.1+1
   flutter_speed_dial: ^1.2.5
+  flutter_spinning_wheel: ^1.1.0
   share: ^0.6.5+4
   url_launcher: ^5.7.10
   dio: ^3.0.10

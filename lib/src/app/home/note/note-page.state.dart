@@ -29,10 +29,11 @@ class NoteCreate extends NoteState {
 }
 
 class NoteDelete extends NoteState {
-  const NoteDelete();
+  Map<DateTime, List<Event>> events;
+  NoteDelete(this.events);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [events];
 }
 
 class ColorChange extends NoteState {
@@ -63,4 +64,12 @@ class ChangeSelectedIndex extends NoteState {
 
   @override
   List<Object> get props => [];
+}
+
+class ChangeSelectedEvent extends NoteState {
+  final List<Event> events;
+  const ChangeSelectedEvent(this.events);
+
+  @override
+  List<Object> get props => [events];
 }
