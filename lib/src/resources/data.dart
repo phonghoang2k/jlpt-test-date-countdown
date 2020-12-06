@@ -3,15 +3,12 @@ import 'package:jlpt_testdate_countdown/src/models/music/music.dart';
 
 class DataConfig {
   static final List<AssetImage> imageAssetsLink = <AssetImage>[
-    AssetImage("assets/background/meo3.jpg"),
-    AssetImage("assets/background/meo4.jpg"),
-    AssetImage("assets/background/meo5.jpg"),
-    AssetImage("assets/background/meo6.jpg"),
-    AssetImage("assets/background/meo8.jpg"),
-    AssetImage("assets/background/meo9.jpg"),
     AssetImage("assets/background/meo10.jpg"),
     AssetImage("assets/background/meo11.jpg"),
-    AssetImage("assets/background/meo12.jpg"),
+    AssetImage("assets/background/meo12.jfif"),
+    AssetImage("assets/background/meo13.jfif"),
+    AssetImage("assets/background/blink.gif"),
+
   ];
 
   static final List<Music> musicList = <Music>[
