@@ -21,15 +21,16 @@ class NoteLoading extends NoteState {
 
 class NoteCreate extends NoteState {
   final String header, body, time, color;
+  final List<Event> events;
 
-  NoteCreate(this.header, this.body, this.time, this.color);
+  NoteCreate(this.header, this.body, this.time, this.color,{this.events});
 
   @override
-  List<Object> get props => [header, body, time, color];
+  List<Object> get props => [header, body, time, color,events];
 }
 
 class NoteDelete extends NoteState {
-  Map<DateTime, List<Event>> events;
+  final  List<Event>events;
   NoteDelete(this.events);
 
   @override

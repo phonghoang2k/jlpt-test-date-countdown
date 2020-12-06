@@ -135,22 +135,27 @@ class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin
                 ? Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
-                      width: SizeConfig.blockSizeHorizontal * 26,
-                      height: SizeConfig.blockSizeVertical * 6,
-                      margin: EdgeInsets.only(bottom: 12),
+                      width: SizeConfig.screenWidth,
+                      height: SizeConfig.blockSizeVertical * 8,
                       child: RaisedButton(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                        color: Colors.red,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                        )),
+                        color: Colors.red.withOpacity(0.8),
                         onPressed: () {
                           _noteCubit.deleteSelectedList();
                           _noteCubit.changeToEditMode();
                         },
                         child: Row(
                           children: [
-                            Icon(Icons.delete, color: Colors.white),
                             Expanded(child: SizedBox()),
+                            Icon(Icons.delete, color: Colors.white,size: 25),
+                            SizedBox(width: 10),
                             Text("Xoá",
-                                style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.w600))
+                                style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.w600)),
+                            Expanded(child: SizedBox()),
                           ],
                         ),
                       ),
@@ -336,13 +341,13 @@ class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin
                         attribute: "header",
                         initialValue: event?.header ?? "",
                         style: TextStyle(color: Colors.black, fontSize: 16),
-                        validators: [FormBuilderValidators.required()],
+                        validators: [FormBuilderValidators.required(errorText: "Trường này không được để trống!")],
                         decoration: InputDecoration(labelText: "Tiêu đề ghi chú")),
                     FormBuilderTextField(
                         attribute: "body",
                         initialValue: event?.body ?? "",
                         style: TextStyle(color: Colors.black, fontSize: 16),
-                        validators: [FormBuilderValidators.required()],
+                        validators: [FormBuilderValidators.required(errorText: "Trường này không được để trống!")],
                         decoration: InputDecoration(
                           labelText: "Nội dung ghi chú",
                           hintStyle: TextStyle(color: Colors.black, fontSize: 16),
@@ -391,15 +396,18 @@ class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin
                     width: SizeConfig.safeBlockHorizontal * 22,
                     height: SizeConfig.safeBlockVertical * 5,
                     child: Text(
-                      'Lưu',
+                      event != null ? 'Sửa' : 'Lưu',
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),
                   color: Color(0xFFE3161D),
                   onPressed: () {
                     if (_formBuilderKey.currentState.saveAndValidate()) {
-                      _noteCubit.addNote(Map<String, String>.from(_formBuilderKey.currentState.value),
-                          _noteCubit.selectedDay.toString(), _colors[_noteCubit.colorIndex].toString());
+                      event != null
+                          ? _noteCubit.updateNote(Map<String, String>.from(_formBuilderKey.currentState.value),
+                              _noteCubit.selectedDay.toString(), _colors[_noteCubit.colorIndex].toString(), event.index)
+                          : _noteCubit.addNote(Map<String, String>.from(_formBuilderKey.currentState.value),
+                              _noteCubit.selectedDay.toString(), _colors[_noteCubit.colorIndex].toString());
                       Navigator.of(context).pop();
                     }
                   }),
@@ -442,15 +450,15 @@ class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin
                 margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                 child: Stack(children: [
                   ListTile(
+                    leading: Image.asset('assets/note_icon.png', height: 25, color: Colors.white),
                     title: Text(event.header, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
                   ),
                   state is! EditMode && state is! ColorChange && state is! ChangeSelectedEvent
-                      ? Positioned(
+                      ? Align(
                           child: Checkbox(
                               value: _noteCubit.selectedIndex.contains(index),
                               onChanged: (value) => setState(() => _noteCubit.changeSelectedIndex(index))),
-                          right: 7,
-                          top: -10,
+                          alignment: Alignment.centerRight,
                         )
                       : SizedBox()
                 ]))));

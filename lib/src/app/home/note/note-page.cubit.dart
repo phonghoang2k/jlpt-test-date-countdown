@@ -82,8 +82,14 @@ class NoteCubit extends Cubit<NoteState> {
     emit(ColorChange(colorIndex));
   }
 
+  void updateNote(Map<String, String> information, String time, String color,int index) {
+    deleteNode(index);
+    addNote(information, time, color);
+    emit(NoteDelete(selectedEvents));
+    emit(EditMode());
+  }
+
   void addNote(Map<String, String> information, String time, String color) {
-    print("$information, $time, $color");
     headerList.add(information["header"]);
     Application.sharePreference.putStringList("header", headerList);
     bodyList.add(information["body"]);
@@ -109,7 +115,7 @@ class NoteCubit extends Cubit<NoteState> {
               index: bodyList.length - 1)
         ]);
     selectedEvents = events[selectedDay];
-    emit(NoteCreate(information["header"], information["body"], time, color));
+    emit(NoteCreate(information["header"], information["body"], time, color,events: selectedEvents));
     emit(EditMode());
   }
 
@@ -137,7 +143,7 @@ class NoteCubit extends Cubit<NoteState> {
           : events.putIfAbsent(DateTime.parse(timeList[i]),
               () => [Event(header: headerList[i], body: bodyList[i], color: int.parse(colorList[i]), index: i)]);
     }
-    emit(NoteDelete(events));
+    emit(NoteDelete(selectedEvents));
   }
 
   void changeToDeleteMode() {
