@@ -10,22 +10,21 @@ part 'learning-material.state.dart';
 class LearningMaterialCubit extends Cubit<LearningMaterialState> {
   final LearningMaterialRepository _repository;
   List<Data> learningData = <Data>[];
-  int _page = 1;
+  int _take = 5;
 
   LearningMaterialCubit(this._repository) : super(LearningMaterialInitial()) {
-    loadLearningData(_page);
+    loadLearningData(_take);
   }
 
   List<Color> colorList = [...Colors.accents];
   List<String> subjects = ["Toán", "Lý", "Hóa", "Sinh", "Văn", "Anh", "Sử", "Địa", "GDCD"];
   List<String> subjectNoCapitals = ["toan", "ly", "hoa", "sinh", "van", "anh", "su", "dia", "gdcd"];
 
-  Future<void> loadLearningData(int page) async {
-    Map<String, dynamic> params = {"page": page};
+  Future<void> loadLearningData(int take) async {
+    Map<String, dynamic> params = {"take": take};
     try {
       emit(LearningMaterialLoading());
-      List<Data> data = await _repository.fetchLearningBaseOnParams(params);
-      learningData = [...learningData, ...data];
+      learningData = await _repository.fetchLearningBaseOnParams(params);
       emit(LearningMaterialDataLoaded(learningData));
     } on NetworkException {
       emit(LearningMaterialError("Couldn't fetch data. Is the device online?"));
@@ -33,10 +32,9 @@ class LearningMaterialCubit extends Cubit<LearningMaterialState> {
   }
 
   Future<void> deleteMaterial(String id) async {
-    Map<String, dynamic> params = {"id": id};
     try {
       emit(LearningMaterialDeleting());
-      if (await _repository.deleteMaterial(params)) {
+      if (await _repository.deleteMaterial(id)) {
         emit(LearningMaterialDeleted());
       } else {
         emit(LearningMaterialError("Change failed"));
@@ -47,11 +45,11 @@ class LearningMaterialCubit extends Cubit<LearningMaterialState> {
   }
 
   void pull() {
-    ++_page;
-    loadLearningData(_page);
+    _take += 5;
+    loadLearningData(_take);
   }
 
   void reset() {
-    _page = 1;
+    _take = 5;
   }
 }

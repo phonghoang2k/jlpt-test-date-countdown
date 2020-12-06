@@ -48,8 +48,8 @@ class API {
     return dio.post(url, data: params);
   }
 
-  Future put(String url, [Map<String, dynamic> query, Map<String, dynamic> params]) async {
-    return dio.put(url, queryParameters: query, data: params);
+  Future put(String url, [Map<String, dynamic> params]) async {
+    return dio.put(url, data: params);
   }
 
   Future delete(String url, [Map<String, dynamic> params]) async {

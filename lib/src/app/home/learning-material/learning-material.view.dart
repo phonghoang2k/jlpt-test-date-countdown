@@ -12,7 +12,6 @@ import 'package:jlpt_testdate_countdown/src/app/home/learning-material/learning-
 import 'package:jlpt_testdate_countdown/src/app/home/learning-material/learning-material.module.dart';
 import 'package:jlpt_testdate_countdown/src/app/home/learning-material/type.dart';
 import 'package:jlpt_testdate_countdown/src/env/application.dart';
-import 'package:jlpt_testdate_countdown/src/repositories/learning-material.repository.dart';
 import 'package:jlpt_testdate_countdown/src/resources/data.dart';
 import 'package:jlpt_testdate_countdown/src/utils/sizeconfig.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -189,7 +188,13 @@ class _LearningMaterialState extends State<LearningMaterial> {
                 buildWhen: (prev, now) => now is LearningMaterialDataLoaded,
                 builder: (context, state) => state is LearningMaterialDataLoaded
                     ? Column(
-                        children: List.generate(state.data.length, (index) => buildCategoryItem(state.data.elementAt(index), context)),
+                        children: List.generate(
+                            state.data.length,
+                            (index) => buildCategoryItem(
+                                  state.data.elementAt(index),
+                                  context,
+                                  onEventEmitted: () => _cubit.loadLearningData(5),
+                                )),
                       )
                     : CircularProgressIndicator(),
               ),

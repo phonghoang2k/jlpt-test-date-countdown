@@ -71,7 +71,7 @@ class _AddLearningMaterialState extends State<AddLearningMaterial> {
                   FormBuilderTextField(
                     attribute: "name",
                     initialValue: widget.data?.name,
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
                     validators: [FormBuilderValidators.required()],
                     decoration: InputDecoration(
                       labelText: "Tên học liệu",
@@ -83,7 +83,7 @@ class _AddLearningMaterialState extends State<AddLearningMaterial> {
                   FormBuilderTextField(
                     attribute: "link",
                     initialValue: widget.data?.link,
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
                     validators: [FormBuilderValidators.required()],
                     decoration: InputDecoration(
                       labelText: "Đường dẫn học liệu",
@@ -95,8 +95,9 @@ class _AddLearningMaterialState extends State<AddLearningMaterial> {
                   FormBuilderTextField(
                     attribute: "linkavt",
                     initialValue: widget.data?.linkavt,
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
                     validators: [FormBuilderValidators.required()],
+
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       errorStyle: TextStyle(color: Colors.yellowAccent, fontWeight: FontWeight.bold),
@@ -107,7 +108,7 @@ class _AddLearningMaterialState extends State<AddLearningMaterial> {
                   FormBuilderTextField(
                     attribute: "source",
                     initialValue: widget.data?.source,
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
                     validators: [FormBuilderValidators.required()],
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -126,10 +127,10 @@ class _AddLearningMaterialState extends State<AddLearningMaterial> {
                             border: InputBorder.none,
                             errorStyle: TextStyle(color: Colors.yellowAccent, fontWeight: FontWeight.bold),
                             labelText: "Môn học",
-                            labelStyle: TextStyle(color: Colors.white, fontSize: 16),
+                            labelStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                           dropdownColor: Colors.transparent,
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
                           validators: [FormBuilderValidators.required()],
                           items: _cubit.subjectConvert.map((SubjectTypeConvert item) => DropdownMenuItem(value: item, child: Text("${item.input}"))).toList(),
                         ),
@@ -140,12 +141,12 @@ class _AddLearningMaterialState extends State<AddLearningMaterial> {
                           attribute: "type",
                           initialValue: widget.data != null ? _cubit.typeConvert.firstWhere((element) => element.output == widget.data.type) : null,
                           dropdownColor: Colors.transparent,
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             errorStyle: TextStyle(color: Colors.yellowAccent, fontWeight: FontWeight.bold),
                             labelText: "Thể loại",
-                            labelStyle: TextStyle(color: Colors.white, fontSize: 16),
+                            labelStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                           validators: [FormBuilderValidators.required()],
                           items: _cubit.typeConvert.map((SubjectTypeConvert item) => DropdownMenuItem(value: item, child: Text("${item.input}"))).toList(),

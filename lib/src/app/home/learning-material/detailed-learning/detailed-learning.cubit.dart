@@ -12,21 +12,20 @@ class DetailLearningCubit extends Cubit<DetailedLearningState> {
   final LearningMaterialRepository _repository;
   final Params params;
   List<Data> learningData = <Data>[];
-  int _page = 1;
+  int _take = 5;
 
   DetailLearningCubit(this._repository, {this.params}) : super(DetailedLearningInitial()) {
-    loadLearningDataBaseOnParam(subject: params.subject, type: params.type, page: _page);
+    loadLearningDataBaseOnParam(subject: params.subject, type: params.type, take: _take);
   }
 
   List<Color> colorList = [...Colors.accents];
   List<String> subjects = ["Toán", "Lý", "Hóa", "Sinh", "Văn", "Anh", "Sử", "Địa", "GDCD"];
 
-  Future<void> loadLearningDataBaseOnParam({String subject, String type, int page}) async {
-    Map<String, dynamic> params = {"subject": subject, "type": type, "page": page};
+  Future<void> loadLearningDataBaseOnParam({String subject, String type, int take}) async {
+    Map<String, dynamic> params = {"subject": subject, "type": type, "page": take};
     try {
       emit(DetailedLearningLoading());
-      List<Data> data = await _repository.fetchLearningBaseOnParams(params);
-      learningData = [...learningData, ...data];
+      learningData = await _repository.fetchLearningBaseOnParams(params);
       emit(DetailedLearningDataLoaded(learningData));
     } on NetworkException {
       emit(DetailedLearningError("Couldn't fetch data. Is the device online?"));
@@ -34,11 +33,11 @@ class DetailLearningCubit extends Cubit<DetailedLearningState> {
   }
 
   void pull() {
-    ++_page;
-    loadLearningDataBaseOnParam(subject: params.subject, type: params.type, page: _page);
+    _take += 5;
+    loadLearningDataBaseOnParam(subject: params.subject, type: params.type, take: _take);
   }
 
   void reset() {
-    _page = 1;
+    _take = 5;
   }
 }

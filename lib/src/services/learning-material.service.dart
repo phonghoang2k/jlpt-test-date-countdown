@@ -13,11 +13,11 @@ class LearningMaterialService {
     return Application.api.post("/documents", params);
   }
 
-  static Future<dynamic> editMaterial(Map<String, dynamic> query, Map<String, dynamic> params) {
-    return Application.api.put("/documents", query, params);
+  static Future<dynamic> editMaterial(String id, Map<String, dynamic> params) {
+    return Application.api.put("/documents/$id", params);
   }
 
-  static Future<dynamic> deleteMaterial(Map<String, dynamic> params) {
-    return Application.api.delete("/students", params);
+  static Future<dynamic> deleteMaterial(String id) {
+    return Application.api.delete("/documents/$id");
   }
 }

@@ -51,7 +51,6 @@ class AddLearningCubit extends Cubit<AddLearningState> {
   }
 
   Future<void> editMaterial(Map<String, dynamic> data, {String id}) async {
-    Map<String, dynamic> query = {"id": id};
     Map<String, dynamic> params = {
       "name": data["name"],
       "link": data["link"],
@@ -62,7 +61,7 @@ class AddLearningCubit extends Cubit<AddLearningState> {
     };
     try {
       emit(AddLearningDataSubmitting());
-      if (await _repository.editMaterial(query, params)) {
+      if (await _repository.editMaterial(id, params)) {
         emit(AddLearningSubmitted());
       } else {
         Fluttertoast.showToast(

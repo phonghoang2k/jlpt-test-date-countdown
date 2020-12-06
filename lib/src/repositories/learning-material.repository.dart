@@ -32,8 +32,8 @@ class LearningMaterialRepository {
     return (response.data == "Imported!") ? true : throw NetworkException;
   }
 
-  Future<bool> editMaterial(Map<String, dynamic> query, Map<String, dynamic> params) async {
-    final response = await LearningMaterialService.editMaterial(query, params);
+  Future<bool> editMaterial(String id, Map<String, dynamic> params) async {
+    final response = await LearningMaterialService.editMaterial(id, params);
     print(response);
     if (response.statusCode == 200) {
       Fluttertoast.showToast(
@@ -46,11 +46,11 @@ class LearningMaterialRepository {
         fontSize: 16.0,
       );
     }
-    return (response.data == "Updated!") ? true : throw NetworkException;
+    return (response.data == "updated") ? true : throw NetworkException;
   }
 
-  Future<bool> deleteMaterial(Map<String, dynamic> params) async {
-    final response = await LearningMaterialService.deleteMaterial(params);
+  Future<bool> deleteMaterial(String id) async {
+    final response = await LearningMaterialService.deleteMaterial(id);
     print(response);
     if (response.statusCode == 200) {
       Fluttertoast.showToast(

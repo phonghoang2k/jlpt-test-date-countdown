@@ -118,7 +118,17 @@ class _DetailLearningDataState extends State<DetailLearningData> {
                           buildWhen: (prev, now) => now is DetailedLearningDataLoaded,
                           builder: (context, state) => state is DetailedLearningDataLoaded
                               ? Column(
-                                  children: List.generate(state.data.length, (index) => buildCategoryItem(state.data.elementAt(index), context)),
+                                  children: List.generate(
+                                      state.data.length,
+                                      (index) => buildCategoryItem(
+                                            state.data.elementAt(index),
+                                            context,
+                                            onEventEmitted: () => _cubit.loadLearningDataBaseOnParam(
+                                              take: 5,
+                                              type: widget.params.type,
+                                              subject: widget.params.subject,
+                                            ),
+                                          )),
                                 )
                               : CircularProgressIndicator())
                     ],

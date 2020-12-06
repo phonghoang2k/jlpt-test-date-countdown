@@ -8,9 +8,9 @@ import 'package:jlpt_testdate_countdown/src/models/learning_data/learning_data.d
 import 'package:jlpt_testdate_countdown/src/utils/sizeconfig.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-Widget buildCategoryItem(learning_data.Data data, BuildContext context) {
+Widget buildCategoryItem(learning_data.Data data, BuildContext context, {VoidCallback onEventEmitted}) {
   return FlatButton(
-    onLongPress: () => _showAlert(context, data: data),
+    onLongPress: () => _showAlert(context, data: data, onEventDone: onEventEmitted),
     padding: EdgeInsets.symmetric(vertical: SizeConfig.safeBlockVertical),
     onPressed: () async => (await canLaunch(data.link))
         ? launch(data.link)
@@ -45,7 +45,7 @@ Widget buildCategoryItem(learning_data.Data data, BuildContext context) {
   );
 }
 
-void _showAlert(BuildContext context, {learning_data.Data data}) {
+void _showAlert(BuildContext context, {learning_data.Data data, VoidCallback onEventDone}) {
   showCupertinoModalPopup(
       context: context,
       builder: (context) => CupertinoActionSheet(
@@ -75,5 +75,5 @@ void _showAlert(BuildContext context, {learning_data.Data data}) {
               child: Text("Huỷ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
               onPressed: () => Navigator.pop(context),
             ),
-          ));
+          )).then((value) => onEventDone());
 }
