@@ -35,3 +35,15 @@ class DataConfig {
 
   static final testDate = DateTime(2021, 6, 25);
 }
+
+class AppColor {
+  static final Color coffee = Color(0xFF4B371C);
+  static final Color mocha = Color(0xFF3C280D);
+  static final Color peanut = Color(0xFF795C34);
+  static final Color tortilla = Color(0xFF9A7B4F);
+  static final Color cinnamon = Color(0xFF652A0E);
+  static final Color tawny = Color(0xFF80471C);
+  static final Color gingerBread = Color(0xFF5E2C04);
+  static final Color chocolate = Color(0xFF2E1503);
+
+}

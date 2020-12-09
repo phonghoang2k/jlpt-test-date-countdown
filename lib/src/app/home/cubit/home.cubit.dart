@@ -21,7 +21,12 @@ class HomeCubit extends Cubit<HomeState> {
   void loadNewBackgroundImage() {
     emit(BackgroundImageChanged(DataConfig.imageAssetsLink[imageIndex], false));
     Future.delayed(Duration(seconds: 1), () {
-      imageIndex = Random().nextInt(DataConfig.imageAssetsLink.length);
+      if(imageIndex < DataConfig.imageAssetsLink.length - 1) {
+        imageIndex ++;
+      }else {
+        DataConfig.imageAssetsLink.shuffle();
+        imageIndex = 0;
+      }
       Application.sharePreference.putInt("imageIndex", imageIndex);
       emit(BackgroundImageChanged(DataConfig.imageAssetsLink[imageIndex], true));
     });

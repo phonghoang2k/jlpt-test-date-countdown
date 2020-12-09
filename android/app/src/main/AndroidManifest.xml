@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="jlpt_testdate_countdown"
+        android:label="Đếm"
         android:icon="@mipmap/ic_launcher">
         android:usesCleartextTraffic="true">
         <activity
