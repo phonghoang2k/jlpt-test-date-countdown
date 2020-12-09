@@ -28,144 +28,170 @@ class _HomeWidgetState extends State<HomeWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
-          children: <Widget>[
-            BlocBuilder<HomeCubit, HomeState>(
-                cubit: _homeCubit,
-                buildWhen: (prev, now) => now is BackgroundImageChanged,
-                builder: (context, state) => state is BackgroundImageChanged
-                    ? AnimatedOpacity(
-                        opacity: state.isChangedImage ? 1 : 0.2,
-                        duration: Duration(milliseconds: 1000),
-                        child: Container(
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                          colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
-                          image: DataConfig.imageAssetsLink[_homeCubit.imageIndex],
-                          fit: BoxFit.cover,
-                        ))))
-                    : SizedBox()),
+        body: Stack(children: <Widget>[
+          BlocBuilder<HomeCubit, HomeState>(
+              cubit: _homeCubit,
+              buildWhen: (prev, now) => now is BackgroundImageChanged,
+              builder: (context, state) => state is BackgroundImageChanged
+                  ? AnimatedOpacity(
+                      opacity: state.isChangedImage ? 1 : 0.2,
+                      duration: Duration(milliseconds: 500),
+                      child: Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                        colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
+                        image: DataConfig.imageAssetsLink[_homeCubit.imageIndex],
+                        fit: BoxFit.cover,
+                      ))))
+                  : SizedBox()),
+          Container(
+              child: Column(children: <Widget>[
+            SizedBox(height: SizeConfig.safeBlockVertical * 5),
+            Row(
+              children: <Widget>[
+                SizedBox(width: SizeConfig.safeBlockHorizontal * 5),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  child: Image.asset('assets/app_icon.PNG', width: SizeConfig.safeBlockHorizontal * 10),
+                  decoration: BoxDecoration(border: Border.all(color: Colors.white, width: 3)),
+                ),
+                // IconButton(
+                //     icon: Icon(Icons.image, color: Colors.white, size: 25),
+                //     onPressed: () {
+                //       _homeCubit.loadNewBackgroundImage();
+                //     }),
+                Spacer(),
+                SizedBox(width: SizeConfig.safeBlockHorizontal * 5),
+              ],
+            ),
+            SizedBox(height: SizeConfig.safeBlockVertical * 5),
             Container(
-              child: Column(
-                children: <Widget>[
-                  SizedBox(height: SizeConfig.safeBlockVertical * 5),
-                  Row(
-                    children: <Widget>[
-                      Spacer(),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text("Đếm ngược ngày thi", style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600)),
-                          Text("Kì thi Trung học phổ thông Quốc gia 2021", style: TextStyle(color: Colors.white, fontSize: 15)),
-                        ],
+                child: Column(children: <Widget>[
+              Text("CÒN", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white)),
+              Container(
+                width: SizeConfig.screenWidth,
+                height: SizeConfig.safeBlockVertical * 25,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    FlatButton(
+                      child: BlocBuilder<CounterCubit, CounterState>(
+                        cubit: _counterCubit,
+                        builder: (context, state) => (state is OneSecondPassed)
+                            ? buildCarouselSlider(state.dateCount)
+                            : Center(child: CircularProgressIndicator()),
                       ),
-                      Spacer(flex: 6),
-                      IconButton(
-                          icon: Icon(Icons.image, color: Colors.white, size: 25),
-                          onPressed: () {
-                            _homeCubit.loadNewBackgroundImage();
-                          }),
-                      Spacer(),
-                    ],
-                  ),
-                  SizedBox(height: SizeConfig.safeBlockVertical * 5),
-                  Container(
-                    child: Column(
-                      children: <Widget>[
-                        Text("CÒN", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white)),
-                        FlatButton(
-                          child: BlocBuilder<CounterCubit, CounterState>(
-                            cubit: _counterCubit,
-                            builder: (context, state) =>
-                                (state is OneSecondPassed) ? buildCarouselSlider(state.dateCount) : Center(child: CircularProgressIndicator()),
-                          ),
-                          splashColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-                          onPressed: () => Modular.link.pushNamed(HomeModule.detailCountdown),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(Icons.timer, color: Colors.white, size: 25),
-                            SizedBox(width: SizeConfig.safeBlockHorizontal * 2),
-                            Text(
-                              "Ngày thi: ${DateFormat('dd-MM-yyyy').format(DataConfig.testDate)}",
-                              style: TextStyle(color: Colors.white, fontSize: 17),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: SizeConfig.safeBlockVertical * 3),
-                        GestureDetector(
-                          child: Icon(Icons.chat, color: Colors.white, size: 30),
-                          onTap: () => _homeCubit.loadNewQuote(),
-                        ),
-                        SizedBox(height: SizeConfig.safeBlockVertical),
-                        BlocBuilder<HomeCubit, HomeState>(
-                            cubit: _homeCubit,
-                            buildWhen: (prev, now) => now is QuoteChanged,
-                            builder: (context, state) => Padding(
-                                padding: EdgeInsets.only(left: SizeConfig.blockSizeHorizontal * 5, right: SizeConfig.blockSizeHorizontal * 5),
-                                child: Text(
-                                  DataConfig.quoteString[_homeCubit.quoteIndex],
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white, fontSize: 17),
-                                ))),
-                      ],
+                      splashColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+                      onPressed: () => Modular.link.pushNamed(HomeModule.detailCountdown),
                     ),
+                    Row(
+                      children: [
+                        IconButton(icon: Icon(Icons.arrow_left, color: Colors.white), iconSize: 50, onPressed: () {}),
+                        Spacer(),
+                        IconButton(icon: Icon(Icons.arrow_right, color: Colors.white), iconSize: 50, onPressed: () {})
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(Icons.timer, color: Colors.white, size: 25),
+                  SizedBox(width: SizeConfig.safeBlockHorizontal * 2),
+                  Text(
+                    "Ngày thi: ${DateFormat('dd-MM-yyyy').format(DataConfig.testDate)}",
+                    style: TextStyle(color: Colors.white, fontSize: 17),
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
+              SizedBox(height: SizeConfig.safeBlockVertical * 10),
+              // GestureDetector(
+              //   child: Icon(Icons.chat, color: Colors.white, size: 30),
+              //   onTap: () => _homeCubit.loadNewQuote(),
+              // ),
+              // SizedBox(height: SizeConfig.safeBlockVertical),
+              BlocBuilder<HomeCubit, HomeState>(
+                  cubit: _homeCubit,
+                  buildWhen: (prev, now) => now is QuoteChanged,
+                  builder: (context, state) => GestureDetector(
+                        child: Padding(
+                            padding: EdgeInsets.only(
+                                left: SizeConfig.blockSizeHorizontal * 5, right: SizeConfig.blockSizeHorizontal * 5),
+                            child: Text(
+                              DataConfig.quoteString[_homeCubit.quoteIndex],
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white, fontSize: 17),
+                            )),
+                        onTap: () => _homeCubit.loadNewQuote(),
+                        // onPanUpdate: (details) {
+                        //   if (details.delta.dx > 0) {
+                        //     _homeCubit.loadNewQuote();
+                        //   } else {
+                        //     _homeCubit.loadNewQuote();
+                        //   }
+                        // }
+                      ))
+            ]))
+          ]))
+        ]),
         floatingActionButton: SpeedDial(
             animatedIcon: AnimatedIcons.view_list,
             animatedIconTheme: IconThemeData(size: 22.0, color: Colors.white),
-            backgroundColor: Colors.deepOrange,
+            backgroundColor: AppColor.mocha,
             overlayColor: Colors.transparent,
             visible: true,
             curve: Curves.bounceIn,
             children: [
               SpeedDialChild(
+                child: Icon(Icons.share, color: Colors.white),
+                backgroundColor: AppColor.coffee,
+                labelBackgroundColor: AppColor.coffee,
+                label: 'Chia sẻ',
+                labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
+                onTap: () => Share.share('check out my new Facebook page https://www.facebook.com/dudidauthatngau',
+                    subject: 'See yaa'),
+              ),
+              SpeedDialChild(
                 child: Icon(Icons.alarm, color: Colors.white),
-                backgroundColor: Colors.deepOrange,
+                backgroundColor: AppColor.peanut,
                 label: 'Đếm ngược chi tiết',
                 onTap: () => Modular.link.pushNamed(HomeModule.detailCountdown),
                 labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
-                labelBackgroundColor: Colors.deepOrangeAccent,
-              ),
-              SpeedDialChild(
-                child: Icon(Icons.article_outlined, color: Colors.white),
-                backgroundColor: Colors.green,
-                label: 'Tài liệu học tập',
-                onTap: () => Modular.link.pushNamed(HomeModule.learningMaterial),
-                labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
-                labelBackgroundColor: Colors.green,
-              ),
-              SpeedDialChild(
-                child: Icon(Icons.share, color: Colors.white),
-                backgroundColor: Colors.blue,
-                labelBackgroundColor: Colors.blue,
-                label: 'Chia sẻ',
-                labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
-                onTap: () => Share.share('check out my new Facebook page https://www.facebook.com/dudidauthatngau', subject: 'See yaa'),
-              ),
-              SpeedDialChild(
-                child: Icon(Icons.music_note_outlined, color: Colors.white),
-                backgroundColor: Colors.pinkAccent,
-                onTap: () => Modular.link.pushNamed(HomeModule.music),
-                label: 'Âm nhạc',
-                labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
-                labelBackgroundColor: Colors.pinkAccent,
+                labelBackgroundColor: AppColor.peanut,
               ),
               SpeedDialChild(
                 child: Icon(Icons.paste, color: Colors.white),
-                backgroundColor: Colors.yellow[800],
+                backgroundColor: AppColor.tortilla,
                 onTap: () => Modular.link.pushNamed(HomeModule.note),
                 label: 'Ghi chú của tôi',
                 labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
-                labelBackgroundColor: Colors.yellow[800],
-              )
+                labelBackgroundColor: AppColor.tortilla,
+              ),
+              SpeedDialChild(
+                child: Icon(Icons.article_outlined, color: Colors.white),
+                backgroundColor: AppColor.chocolate,
+                label: 'Tài liệu học tập',
+                onTap: () => Modular.link.pushNamed(HomeModule.learningMaterial),
+                labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
+                labelBackgroundColor: AppColor.chocolate,
+              ),
+              SpeedDialChild(
+                child: Icon(Icons.music_note_outlined, color: Colors.white),
+                backgroundColor: AppColor.cinnamon,
+                onTap: () => Modular.link.pushNamed(HomeModule.music),
+                label: 'Âm nhạc',
+                labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
+                labelBackgroundColor: AppColor.cinnamon,
+              ),
+              SpeedDialChild(
+                  child: Icon(Icons.photo_library_outlined, color: Colors.white),
+                  backgroundColor: AppColor.tawny,
+                  labelBackgroundColor: AppColor.tawny,
+                  label: 'Thay đổi ảnh nền',
+                  labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
+                  onTap: () => _homeCubit.loadNewBackgroundImage())
             ]));
   }
 
@@ -192,7 +218,8 @@ class _HomeWidgetState extends State<HomeWidget> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text("${counting(date, type)}", style: TextStyle(color: Colors.white, fontSize: 60, fontWeight: FontWeight.w600)),
+        Text("${counting(date, type)}",
+            style: TextStyle(color: Colors.white, fontSize: 60, fontWeight: FontWeight.w600)),
         SizedBox(height: SizeConfig.blockSizeVertical * 3),
         Text(type, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600)),
       ],

@@ -21,7 +21,6 @@ class MusicLoading extends MusicState {
 
 class MusicImage extends MusicState {
   final AssetImage image;
-
   MusicImage(this.image);
 
   @override

@@ -19,6 +19,14 @@ class NoteLoading extends NoteState {
   List<Object> get props => [];
 }
 
+class NoteLoaded extends NoteState {
+  final List<Event>events;
+  const NoteLoaded(this.events);
+
+  @override
+  List<Object> get props => [events];
+}
+
 class NoteCreate extends NoteState {
   final String header, body, time, color;
   final List<Event> events;
@@ -27,14 +35,6 @@ class NoteCreate extends NoteState {
 
   @override
   List<Object> get props => [header, body, time, color,events];
-}
-
-class NoteDelete extends NoteState {
-  final  List<Event>events;
-  NoteDelete(this.events);
-
-  @override
-  List<Object> get props => [events];
 }
 
 class ColorChange extends NoteState {
@@ -65,12 +65,4 @@ class ChangeSelectedIndex extends NoteState {
 
   @override
   List<Object> get props => [];
-}
-
-class ChangeSelectedEvent extends NoteState {
-  final List<Event> events;
-  const ChangeSelectedEvent(this.events);
-
-  @override
-  List<Object> get props => [events];
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
-
+import 'dart:ui';
+import 'package:jlpt_testdate_countdown/src/env/application.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
@@ -94,11 +95,20 @@ class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
       body: Stack(
         children: [
           Container(
-            width: double.infinity,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Colors.black, Colors.red[600]]),
+              image: DecorationImage(
+                colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
+                image: DataConfig.imageAssetsLink[Application.sharePreference.getInt("imageIndex") ?? 0],
+                fit: BoxFit.cover,
+              ),
             ),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+              child: Container(decoration: BoxDecoration(color: Colors.white.withOpacity(0.0))),
+            ),
+          ),
+          Container(
+            width: double.infinity,
             child: Padding(
               padding: EdgeInsets.only(top: 48),
               child: Container(

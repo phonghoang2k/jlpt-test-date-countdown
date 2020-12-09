@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,6 +50,10 @@ class _DetailCountdownState extends State<DetailCountdown> with SingleTickerProv
                 fit: BoxFit.cover,
               ),
             ),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+              child: Container(decoration: BoxDecoration(color: Colors.white.withOpacity(0.0))),
+            ),
           ),
           Positioned(
             top: 40,
@@ -91,7 +97,12 @@ class _DetailCountdownState extends State<DetailCountdown> with SingleTickerProv
                   ),
                 ),
                 SizedBox(height: SizeConfig.safeBlockVertical * 5),
-                _buildTableCalendarWithBuilders(),
+                Container(
+                    color: Colors.white.withOpacity(0.2),
+                    child: _buildTableCalendarWithBuilders(),
+                    margin: EdgeInsets.only(
+                        left: SizeConfig.safeBlockHorizontal * 5, right: SizeConfig.safeBlockHorizontal * 5),
+                    padding: EdgeInsets.all(SizeConfig.safeBlockHorizontal * 3)),
                 Expanded(child: SizedBox()),
               ],
             ),
