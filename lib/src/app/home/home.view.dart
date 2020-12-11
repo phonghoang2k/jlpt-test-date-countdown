@@ -77,9 +77,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                     FlatButton(
                       child: BlocBuilder<CounterCubit, CounterState>(
                         cubit: _counterCubit,
-                        builder: (context, state) => (state is OneSecondPassed)
-                            ? buildCarouselSlider(state.dateCount)
-                            : Center(child: CircularProgressIndicator()),
+                        builder: (context, state) =>
+                            (state is OneSecondPassed) ? buildCarouselSlider(state.dateCount) : Center(child: CircularProgressIndicator()),
                       ),
                       splashColor: Colors.transparent,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
@@ -117,21 +116,13 @@ class _HomeWidgetState extends State<HomeWidget> {
                   buildWhen: (prev, now) => now is QuoteChanged,
                   builder: (context, state) => GestureDetector(
                         child: Padding(
-                            padding: EdgeInsets.only(
-                                left: SizeConfig.blockSizeHorizontal * 5, right: SizeConfig.blockSizeHorizontal * 5),
+                            padding: EdgeInsets.only(left: SizeConfig.blockSizeHorizontal * 5, right: SizeConfig.blockSizeHorizontal * 5),
                             child: Text(
                               DataConfig.quoteString[_homeCubit.quoteIndex],
                               textAlign: TextAlign.center,
                               style: TextStyle(color: Colors.white, fontSize: 17),
                             )),
                         onTap: () => _homeCubit.loadNewQuote(),
-                        // onPanUpdate: (details) {
-                        //   if (details.delta.dx > 0) {
-                        //     _homeCubit.loadNewQuote();
-                        //   } else {
-                        //     _homeCubit.loadNewQuote();
-                        //   }
-                        // }
                       ))
             ]))
           ]))
@@ -150,8 +141,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                 labelBackgroundColor: AppColor.coffee,
                 label: 'Chia sẻ',
                 labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
-                onTap: () => Share.share('check out my new Facebook page https://www.facebook.com/dudidauthatngau',
-                    subject: 'See yaa'),
+                onTap: () => Share.share('check out my new Facebook page https://www.facebook.com/dudidauthatngau', subject: 'See yaa'),
               ),
               SpeedDialChild(
                 child: Icon(Icons.alarm, color: Colors.white),
@@ -218,8 +208,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text("${counting(date, type)}",
-            style: TextStyle(color: Colors.white, fontSize: 60, fontWeight: FontWeight.w600)),
+        Text("${counting(date, type)}", style: TextStyle(color: Colors.white, fontSize: 60, fontWeight: FontWeight.w600)),
         SizedBox(height: SizeConfig.blockSizeVertical * 3),
         Text(type, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600)),
       ],
