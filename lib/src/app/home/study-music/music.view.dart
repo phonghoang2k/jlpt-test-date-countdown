@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:jlpt_testdate_countdown/src/env/application.dart';
+
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
@@ -78,8 +78,6 @@ class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
         position = p;
       });
     });
-    print(position);
-    print(musicLength);
   }
 
   @override
@@ -92,121 +90,89 @@ class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
-                image: DataConfig.imageAssetsLink[Application.sharePreference.getInt("imageIndex") ?? 0],
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-              child: Container(decoration: BoxDecoration(color: Colors.white.withOpacity(0.0))),
-            ),
-          ),
-          Container(
-            width: double.infinity,
-            child: Padding(
-              padding: EdgeInsets.only(top: 48),
-              child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Text(
-                        'Music Beats',
-                        style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    Center(
-                      child: Text(
-                        'Listen to my favorite song',
-                        style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w300),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    BlocBuilder<MusicCubit, MusicState>(
-                        cubit: _musicCubit,
-                        buildWhen: (prev, now) => now is MusicImage,
-                        builder: (context, state) => Center(
-                            child:
-                            // playing
-                            //     ? SpinningWheel(
-                            //         DataConfig.musicList[_musicCubit.songIndex].songImage,
-                            //         height: 120.0,
-                            //         width: 120.0,
-                            //         duration: musicLength,
-                            //       )
-                            //     :
-                          CircleAvatar(
-                                    radius: 120,
-                                    backgroundImage: DataConfig.musicList[_musicCubit.songIndex].songImage,
-                                  ))),
-                    SizedBox(height: 18),
-                    Center(
-                      child: Text(
-                        DataConfig.musicList[_musicCubit.songIndex].songName,
-                        style: TextStyle(color: Colors.white, fontSize: 32),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 8),
-                      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                        Center(
-                          child: Text(
-                            DataConfig.musicList[_musicCubit.songIndex].artists,
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                        ),
-                      ]),
-                    ),
-                    Expanded(
-                      child: Container(
+      body: SizedBox(
+          height: SizeConfig.screenHeight,
+          width: SizeConfig.screenWidth,
+          child: Stack(
+            children: [
+              BlocBuilder<MusicCubit, MusicState>(
+                  cubit: _musicCubit,
+                  buildWhen: (prev, now) => now is MusicImage,
+                  builder: (context, state) => Container(
                         decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30),
-                            topRight: Radius.circular(30),
+                          image: DecorationImage(
+                            // colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
+                            image: DataConfig.musicList[_musicCubit.songIndex].songImage, fit: BoxFit.fitHeight,
+                          ),
+                          gradient: LinearGradient(
+                            begin: Alignment.topRight,
+                            end: Alignment.bottomLeft,
+                            stops: [0.1, 0.5, 0.7, 0.9],
+                            colors: [
+                              Colors.yellow[800],
+                              Colors.yellow[700],
+                              Colors.yellow[600],
+                              Colors.yellow[400],
+                            ],
                           ),
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: SizeConfig.screenWidth,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  // Text("${position.inMinutes}: ${position.inSeconds.remainder(60)}",
-                                  //     style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600)),
-                                  // slider(),
-                                  // Text("${musicLength.inMinutes}: ${musicLength.inSeconds.remainder(60)}",
-                                  //     style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600)),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                        height: SizeConfig.screenHeight,
+                      )),
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomCenter,
+                    stops: [0.1, 0.5, 0.8, 0.9],
+                    colors: [
+                      Colors.black38,
+                      Colors.black54,
+                      Colors.black87,
+                      Colors.black,
+                    ],
+                  ),
+                ),
+                height: SizeConfig.screenHeight,
+              ),
+              Positioned(
+                  bottom: SizeConfig.blockSizeVertical * 15,
+                  child: BlocBuilder<MusicCubit, MusicState>(
+                      cubit: _musicCubit,
+                      buildWhen: (prev, now) => now is MusicImage,
+                      builder: (context, state) => SizedBox(
+                          child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                IconButton(
-                                    iconSize: 30,
-                                    color: Colors.black,
-                                    icon: Icon(Icons.skip_previous),
-                                    onPressed: () {}),
-                                BlocBuilder<MusicCubit, MusicState>(
-                                    cubit: _musicCubit,
-                                    buildWhen: (prev, now) => now is MusicSong,
-                                    // ignore: missing_return
-                                    builder: (context, state) => IconButton(
+                                SizedBox(
+                                    width: SizeConfig.blockSizeHorizontal * 70,
+                                    child: FittedBox(
+                                        child: Text(
+                                          DataConfig.musicList[_musicCubit.songIndex].songName,
+                                          style:
+                                              TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w600),
+                                        ),
+                                        fit: BoxFit.fitWidth)),
+                                SizedBox(
+                                    width: SizeConfig.blockSizeHorizontal * 50,
+                                    child: FittedBox(
+                                        child: Text(
+                                          DataConfig.musicList[_musicCubit.songIndex].artists,
+                                          style:
+                                              TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+                                        ),
+                                        fit: BoxFit.fitWidth))
+                              ],
+                            ),
+                            BlocBuilder<MusicCubit, MusicState>(
+                                cubit: _musicCubit,
+                                buildWhen: (prev, now) => now is MusicSong,
+                                // ignore: missing_return
+                                builder: (context, state) => CircleAvatar(
+                                    backgroundColor: AppColor.darkPink,
+                                    child: IconButton(
                                         iconSize: 40,
-                                        color: Colors.black,
+                                        color: Colors.white,
                                         icon: Icon(playBtn),
                                         onPressed: () {
                                           if (!playing) {
@@ -222,36 +188,28 @@ class _MusicAppState extends State<MusicApp> with TickerProviderStateMixin {
                                               playing = false;
                                             });
                                           }
-                                        })),
-                                IconButton(
-                                    iconSize: 30,
-                                    color: Colors.black,
-                                    icon: Icon(Icons.skip_next),
-                                    onPressed: () {
-                                      _musicCubit.loadNewSong();
-                                    }),
-                              ],
-                            )
-                          ],
-                        ),
+                                        }),
+                                    radius: 30))
+                          ]),
+                          width: SizeConfig.screenWidth))),
+              Positioned(
+                  left: 10,
+                  top: 45,
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.arrow_back_ios_outlined, color: Colors.white),
+                        iconSize: 25,
+                        onPressed: () => Navigator.pop(context),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            left: 10,
-            top: 45,
-            child: IconButton(
-              icon: Icon(Icons.arrow_back_ios_outlined, color: Colors.white),
-              iconSize: 25,
-              onPressed: () => Navigator.pop(context),
-            ),
-          )
-        ],
-      ),
+                      Text(
+                        "Âm nhạc",
+                        style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ))
+            ],
+          )),
     );
   }
 }
@@ -276,12 +234,10 @@ class _SpinningWheelState extends State<SpinningWheel> with SingleTickerProvider
   void initState() {
     super.initState();
 
-    _animationController = AnimationController(
-      vsync: this,
-      duration:Duration(seconds: 20)
-    );
+    _animationController = AnimationController(vsync: this, duration: Duration(seconds: 20));
     _animation =
-        Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _animationController, curve: Curves.linear));}
+        Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _animationController, curve: Curves.linear));
+  }
 
   void _startOrStop() {
     print(widget.duration);
