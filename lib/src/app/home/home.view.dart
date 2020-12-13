@@ -77,8 +77,9 @@ class _HomeWidgetState extends State<HomeWidget> {
                     FlatButton(
                       child: BlocBuilder<CounterCubit, CounterState>(
                         cubit: _counterCubit,
-                        builder: (context, state) =>
-                            (state is OneSecondPassed) ? buildCarouselSlider(state.dateCount) : Center(child: CircularProgressIndicator()),
+                        builder: (context, state) => (state is OneSecondPassed)
+                            ? buildCarouselSlider(state.dateCount)
+                            : Center(child: CircularProgressIndicator()),
                       ),
                       splashColor: Colors.transparent,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
@@ -94,16 +95,23 @@ class _HomeWidgetState extends State<HomeWidget> {
                   ],
                 ),
               ),
+              SizedBox(height: SizeConfig.safeBlockVertical * 1),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Icon(Icons.timer, color: Colors.white, size: 25),
                   SizedBox(width: SizeConfig.safeBlockHorizontal * 2),
                   Text(
-                    "Ngày thi: ${DateFormat('dd-MM-yyyy').format(DataConfig.testDate)}",
-                    style: TextStyle(color: Colors.white, fontSize: 17),
+                    "Ngày thi THPT Quốc gia 2021:",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w700),
                   ),
                 ],
+              ),
+              Text(
+                "${DateFormat('dd-MM-yyyy').format(DataConfig.testDate)}",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
               ),
               SizedBox(height: SizeConfig.safeBlockVertical * 10),
               // GestureDetector(
@@ -116,13 +124,21 @@ class _HomeWidgetState extends State<HomeWidget> {
                   buildWhen: (prev, now) => now is QuoteChanged,
                   builder: (context, state) => GestureDetector(
                         child: Padding(
-                            padding: EdgeInsets.only(left: SizeConfig.blockSizeHorizontal * 5, right: SizeConfig.blockSizeHorizontal * 5),
+                            padding: EdgeInsets.only(
+                                left: SizeConfig.blockSizeHorizontal * 5, right: SizeConfig.blockSizeHorizontal * 5),
                             child: Text(
                               DataConfig.quoteString[_homeCubit.quoteIndex],
                               textAlign: TextAlign.center,
                               style: TextStyle(color: Colors.white, fontSize: 17),
                             )),
                         onTap: () => _homeCubit.loadNewQuote(),
+                        onPanUpdate: (details) {
+                          if (details.delta.dx > 0) {
+                            _homeCubit.loadNewQuote();
+                          } else {
+                            _homeCubit.loadNewQuote();
+                          }
+                        }
                       ))
             ]))
           ]))
@@ -130,55 +146,56 @@ class _HomeWidgetState extends State<HomeWidget> {
         floatingActionButton: SpeedDial(
             animatedIcon: AnimatedIcons.view_list,
             animatedIconTheme: IconThemeData(size: 22.0, color: Colors.white),
-            backgroundColor: AppColor.mocha,
+            backgroundColor: AppColor.brown2,
             overlayColor: Colors.transparent,
             visible: true,
             curve: Curves.bounceIn,
             children: [
               SpeedDialChild(
                 child: Icon(Icons.share, color: Colors.white),
-                backgroundColor: AppColor.coffee,
-                labelBackgroundColor: AppColor.coffee,
+                backgroundColor: AppColor.brown1,
+                labelBackgroundColor: AppColor.brown1,
                 label: 'Chia sẻ',
                 labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
-                onTap: () => Share.share('check out my new Facebook page https://www.facebook.com/dudidauthatngau', subject: 'See yaa'),
+                onTap: () => Share.share('check out my new Facebook page https://www.facebook.com/dudidauthatngau',
+                    subject: 'See yaa'),
               ),
               SpeedDialChild(
                 child: Icon(Icons.alarm, color: Colors.white),
-                backgroundColor: AppColor.peanut,
+                backgroundColor: AppColor.brown1,
                 label: 'Đếm ngược chi tiết',
                 onTap: () => Modular.link.pushNamed(HomeModule.detailCountdown),
                 labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
-                labelBackgroundColor: AppColor.peanut,
+                labelBackgroundColor: AppColor.brown1,
               ),
               SpeedDialChild(
                 child: Icon(Icons.paste, color: Colors.white),
-                backgroundColor: AppColor.tortilla,
+                backgroundColor: AppColor.brown1,
                 onTap: () => Modular.link.pushNamed(HomeModule.note),
                 label: 'Ghi chú của tôi',
                 labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
-                labelBackgroundColor: AppColor.tortilla,
+                labelBackgroundColor: AppColor.brown1,
               ),
               SpeedDialChild(
                 child: Icon(Icons.article_outlined, color: Colors.white),
-                backgroundColor: AppColor.chocolate,
+                backgroundColor: AppColor.brown1,
                 label: 'Tài liệu học tập',
                 onTap: () => Modular.link.pushNamed(HomeModule.learningMaterial),
                 labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
-                labelBackgroundColor: AppColor.chocolate,
+                labelBackgroundColor: AppColor.brown1,
               ),
               SpeedDialChild(
                 child: Icon(Icons.music_note_outlined, color: Colors.white),
-                backgroundColor: AppColor.cinnamon,
+                backgroundColor: AppColor.brown1,
                 onTap: () => Modular.link.pushNamed(HomeModule.music),
                 label: 'Âm nhạc',
                 labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
-                labelBackgroundColor: AppColor.cinnamon,
+                labelBackgroundColor: AppColor.brown1,
               ),
               SpeedDialChild(
                   child: Icon(Icons.photo_library_outlined, color: Colors.white),
-                  backgroundColor: AppColor.tawny,
-                  labelBackgroundColor: AppColor.tawny,
+                  backgroundColor: AppColor.brown1,
+                  labelBackgroundColor: AppColor.brown1,
                   label: 'Thay đổi ảnh nền',
                   labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
                   onTap: () => _homeCubit.loadNewBackgroundImage())
@@ -208,7 +225,8 @@ class _HomeWidgetState extends State<HomeWidget> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text("${counting(date, type)}", style: TextStyle(color: Colors.white, fontSize: 60, fontWeight: FontWeight.w600)),
+        Text("${counting(date, type)}",
+            style: TextStyle(color: Colors.white, fontSize: 60, fontWeight: FontWeight.w600)),
         SizedBox(height: SizeConfig.blockSizeVertical * 3),
         Text(type, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600)),
       ],
