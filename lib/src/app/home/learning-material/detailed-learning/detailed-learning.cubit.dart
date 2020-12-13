@@ -22,7 +22,7 @@ class DetailLearningCubit extends Cubit<DetailedLearningState> {
   List<String> subjects = ["Toán", "Lý", "Hóa", "Sinh", "Văn", "Anh", "Sử", "Địa", "GDCD"];
 
   Future<void> loadLearningDataBaseOnParam({String subject, String type, int take}) async {
-    Map<String, dynamic> params = {"subject": subject, "type": type, "page": take};
+    Map<String, dynamic> params = {"subject": subject, "type": type, "take": take};
     try {
       emit(DetailedLearningLoading());
       learningData = await _repository.fetchLearningBaseOnParams(params);

@@ -23,7 +23,6 @@ class API {
     dio.interceptors.add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
       print(options.uri);
       // print(options.data);
-      // print(options.headers['Abp.userId']);
       // Do something before request is sent
       return options; //continue
       // If you want to resolve the request with some custom data，
