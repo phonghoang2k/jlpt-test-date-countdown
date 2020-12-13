@@ -52,7 +52,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                 SizedBox(width: SizeConfig.safeBlockHorizontal * 5),
                 Container(
                   padding: EdgeInsets.all(10),
-                  child: Image.asset('assets/app_icon.PNG', width: SizeConfig.safeBlockHorizontal * 10),
+                  child: Image.asset('assets/app_icon.png', width: SizeConfig.safeBlockHorizontal * 10),
                   decoration: BoxDecoration(border: Border.all(color: Colors.white, width: 3)),
                 ),
                 // IconButton(

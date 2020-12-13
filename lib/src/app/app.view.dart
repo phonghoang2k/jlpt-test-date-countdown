@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:i18n_extension/i18n_widget.dart';
 import 'package:jlpt_testdate_countdown/src/app/intro/intro.view.dart';
 import 'package:jlpt_testdate_countdown/src/env/application.dart';
 import 'package:jlpt_testdate_countdown/src/utils/api.dart';
@@ -20,7 +19,6 @@ class AppWidget extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [const Locale('en', "US"), const Locale('vi', "VN")],
       title: 'JLPT Testdate Countdown',
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -29,10 +27,7 @@ class AppWidget extends StatelessWidget {
         accentColor: Colors.redAccent,
         fontFamily: "Quicksand",
       ),
-      home: I18n(
-        child: Introduction(),
-        initialLocale: Locale('vi', "VN"),
-      ),
+      home: Introduction(),
       navigatorKey: Modular.navigatorKey,
       // add Modular to manage the routing system
       onGenerateRoute: Modular.generateRoute,

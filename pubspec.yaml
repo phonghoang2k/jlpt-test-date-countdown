@@ -33,7 +33,6 @@ dependencies:
   bloc: ^6.1.0
   flutter_bloc: ^6.1.1
   equatable: ^1.2.5
-  i18n_extension: ^1.4.5
   flutter_modular: ^2.0.1
   fluttertoast: ^7.1.5
   shared_preferences: ^0.5.12+4
@@ -50,18 +49,20 @@ dependencies:
   dio: ^3.0.10
   pull_to_refresh: ^1.6.3
   animations: ^1.1.2
-#  flutter_lyric: ^1.0.2
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   intl: any
+  flutter_launcher_icons: ^0.8.1
 
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icon.PNG"
+  image_path: "assets/icon.png"
+  adaptive_icon_background: "#000000"
+  adaptive_icon_foreground: "assets/icon1.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
