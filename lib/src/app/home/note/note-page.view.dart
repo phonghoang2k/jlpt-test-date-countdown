@@ -11,7 +11,6 @@ import 'package:jlpt_testdate_countdown/src/resources/data.dart';
 import 'package:jlpt_testdate_countdown/src/utils/sizeconfig.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-
 class NotePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -20,7 +19,6 @@ class NotePage extends StatefulWidget {
 }
 
 class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin {
-  HomeCubit _homeCubit = HomeCubit();
   NoteCubit _noteCubit = NoteCubit();
 
   bool deleteMode = true;
@@ -92,8 +90,7 @@ class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin
           ),
         ),
         Container(
-            margin:
-                EdgeInsets.fromLTRB(SizeConfig.blockSizeHorizontal * 6, 100, SizeConfig.blockSizeHorizontal * 6, 20),
+            margin: EdgeInsets.fromLTRB(SizeConfig.blockSizeHorizontal * 6, 100, SizeConfig.blockSizeHorizontal * 6, 20),
             child: Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
               SizedBox(height: SizeConfig.safeBlockVertical * 5),
               _buildTableCalendarWithBuilders(),
@@ -112,8 +109,7 @@ class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin
                       iconSize: 25,
                       onPressed: () => Navigator.pop(context),
                     ),
-                    Text("Ghi chú của tôi",
-                        style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.w600)),
+                    Text("Ghi chú của tôi", style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.w600)),
                     Expanded(child: SizedBox()),
                     BlocBuilder<NoteCubit, NoteState>(
                         cubit: _noteCubit,
@@ -124,8 +120,7 @@ class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin
                                     activeColor: Colors.red,
                                     checkColor: Colors.white,
                                     onChanged: (value) => _noteCubit.addAll()),
-                                Text('Tất cả',
-                                    style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.w600))
+                                Text('Tất cả', style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.w600))
                               ])
                             : SizedBox()),
                     SizedBox(
@@ -157,18 +152,14 @@ class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin
                             Expanded(child: SizedBox()),
                             Icon(Icons.delete, color: Colors.white, size: 25),
                             SizedBox(width: 10),
-                            Text("Xoá",
-                                style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.w600)),
+                            Text("Xoá", style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.w600)),
                             Expanded(child: SizedBox()),
                           ],
                         ),
                       ),
                     ))
                 : Positioned(
-                    child: FloatingActionButton(
-                        child: Icon(Icons.add),
-                        backgroundColor: AppColor.brown2,
-                        onPressed: () => _showDialog(context)),
+                    child: FloatingActionButton(child: Icon(Icons.add), backgroundColor: AppColor.brown2, onPressed: () => _showDialog(context)),
                     bottom: 25,
                     right: 25,
                   ))
@@ -319,10 +310,7 @@ class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin
                 ? Container(
                     child: SingleChildScrollView(
                       child: Column(
-                        children: [
-                          ...List.generate(
-                              state.events.length, (index) => _note(index: index, event: state.events[index]))
-                        ],
+                        children: [...List.generate(state.events.length, (index) => _note(index: index, event: state.events[index]))],
                       ),
                     ),
                   )
@@ -382,9 +370,7 @@ class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin
                                               height: (_colors.indexOf(color) == _noteCubit.colorIndex)
                                                   ? SizeConfig.safeBlockHorizontal * 10
                                                   : SizeConfig.safeBlockHorizontal * 8,
-                                              decoration: BoxDecoration(
-                                                  color: Color(color),
-                                                  borderRadius: BorderRadius.circular(5)),
+                                              decoration: BoxDecoration(color: Color(color), borderRadius: BorderRadius.circular(5)),
                                             ),
                                           ))
                                       .toList(),
@@ -402,17 +388,17 @@ class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin
                     height: SizeConfig.safeBlockVertical * 5,
                     child: Text(
                       event != null ? 'Sửa' : 'Lưu',
-                      style: TextStyle(color: Colors.black87, fontSize: 16,fontWeight: FontWeight.w500),
+                      style: TextStyle(color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                   ),
                   color: Colors.white,
                   onPressed: () {
                     if (_formBuilderKey.currentState.saveAndValidate()) {
                       event != null
-                          ? _noteCubit.updateNote(Map<String, String>.from(_formBuilderKey.currentState.value),
-                              _noteCubit.selectedDay.toString(), _colors[_noteCubit.colorIndex].toString(), event.index)
-                          : _noteCubit.addNote(Map<String, String>.from(_formBuilderKey.currentState.value),
-                              _noteCubit.selectedDay.toString(), _colors[_noteCubit.colorIndex].toString());
+                          ? _noteCubit.updateNote(Map<String, String>.from(_formBuilderKey.currentState.value), _noteCubit.selectedDay.toString(),
+                              _colors[_noteCubit.colorIndex].toString(), event.index)
+                          : _noteCubit.addNote(Map<String, String>.from(_formBuilderKey.currentState.value), _noteCubit.selectedDay.toString(),
+                              _colors[_noteCubit.colorIndex].toString());
                       Navigator.of(context).pop();
                     }
                   }),
@@ -443,7 +429,7 @@ class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin
         builder: (context, state) => GestureDetector(
             onTap: () {
               state is DeleteMode || state is ChangeSelectedIndex
-                  ?  setState(() => _noteCubit.changeSelectedIndex(index))
+                  ? setState(() => _noteCubit.changeSelectedIndex(index))
                   : _showDialog(context, event: event);
             },
             onLongPress: () {
@@ -451,8 +437,7 @@ class _NotePageState extends State<NotePage> with SingleTickerProviderStateMixin
               _noteCubit.changeSelectedIndex(index);
             },
             child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12.0), color: Color(event.color).withOpacity(0.6)),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.0), color: Color(event.color).withOpacity(0.6)),
                 margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                 child: Stack(children: [
                   ListTile(

@@ -20,7 +20,7 @@ class CounterCubit extends Cubit<CounterState> {
 
   void loadCountTime() {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      DateCount dateCount = dateRepository.fetchTime(DataConfig.testDate);
+      DateCount dateCount = dateRepository.fetchTime(DataConfig.testDate.date);
       emit(OneSecondPassed(dateCount));
     });
   }

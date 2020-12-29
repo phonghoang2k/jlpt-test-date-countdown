@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jlpt_testdate_countdown/src/models/music/music.dart';
+import 'package:jlpt_testdate_countdown/src/models/target_date/target_date.dart';
 
 class DataConfig {
   static final List<AssetImage> imageAssetsLink = <AssetImage>[
@@ -8,7 +9,6 @@ class DataConfig {
     AssetImage("assets/background/meo12.jfif"),
     AssetImage("assets/background/meo13.jfif"),
     AssetImage("assets/background/blink.gif"),
-
   ];
 
   static final List<Music> musicList = <Music>[
@@ -33,7 +33,7 @@ class DataConfig {
     "Đường lên đại học thì xa.. đường ra ruộng lúa thì: Ah! đây rồi",
   ];
 
-  static final testDate = DateTime(2021, 6, 25);
+  static TargetDate testDate = TargetDate(date: DateTime(2021, 25, 6), name: "Kì thi THPTQG - 2021");
 }
 
 class AppColorBrownVintage {
@@ -45,7 +45,6 @@ class AppColorBrownVintage {
   static final Color tawny = Color(0xFF80471C);
   static final Color gingerBread = Color(0xFF5E2C04);
   static final Color chocolate = Color(0xFF2E1503);
-
 }
 
 class AppColor {
@@ -67,4 +66,3 @@ class AppColor {
   static final Color brown2 = Color(0xFF463333);
   static final Color darkBlue = Color(0xFF3282b8);
 }
-

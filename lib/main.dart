@@ -12,6 +12,7 @@ Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
   Application.sharePreference = await SpUtil.getInstance();
   runApp(ModularApp(module: AppModule()));
 }
